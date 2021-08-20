@@ -2,7 +2,8 @@
 
 
 <h2>Changelogs</h2>
-Give a brief description of your task here (ex: Coded Navigation Bar, Fixed Home text font size, etc.)
+
+**Give a brief description of your task here (ex: Coded Navigation Bar, Fixed Home text font size, etc.)**
 <!-- Put subtasks here (These are examples you can replace) -->
 <h4>Subtasks</h4>
 
