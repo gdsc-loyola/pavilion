@@ -1,14 +1,14 @@
 import React from 'react'
 import logo from "../assets/pav_logo.svg"
-import "../../stylesheets/org/NavDashboard.scss"
+import "../../stylesheets/org/DashboardNav.scss"
 
 const NavDashboard = () => {
     return (
         <nav className="side-nav">
             <img src={logo} alt="Logo" className="logo" />
-            <div className="nav-item"><a>Dashboard</a></div>
-            <div className="nav-item"><a>Events</a></div>
-            <div className="nav-item"><a>Settings</a></div>
+            <a href="#" className="nav-item"><span>Dashboard</span></a>
+            <a href="#" className="nav-item"><span>Events</span></a>
+            <a href="#" className="nav-item"><span>Settings</span></a>
         </nav>
     )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import NavDashboard from '../components/NavDashboard'
+import NavDashboard from '../components/DashboardNav'
 import "../../stylesheets/org/Dashboard.scss"
 
 const Dashboard = () => {
