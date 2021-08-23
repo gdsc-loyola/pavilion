@@ -39,6 +39,7 @@
 
 <h2>Affects</h2>
 <!-- Include branches that are affected by your changes -->
+
 - [ ] Branch 1
 - [ ] Branch 2
 - [ ] Branch 3
