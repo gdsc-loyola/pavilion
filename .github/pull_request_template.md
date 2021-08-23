@@ -39,7 +39,8 @@
 
 <h2>Affects</h2>
 <!-- Include branches that are affected by your changes -->
+<!-- To connect a branch/pull request to this pull request, type in "#<pull request number>" -->
 
-- [ ] Branch 1
+- [ ] #1
 - [ ] Branch 2
 - [ ] Branch 3
