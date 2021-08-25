@@ -4,7 +4,7 @@ from .serializers import EventsSerializer
 
 # Lead Viewset
 class EventsViewSet(viewsets.ModelViewSet):
-    queryset = Events.objects.all()
+    queryset = Event.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
