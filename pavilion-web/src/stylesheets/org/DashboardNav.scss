@@ -1,0 +1,26 @@
+@import "../variables.scss";
+
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    background-color: $blue-300;
+    height: 100%;
+    width: 200px;
+    position: absolute;
+    left: 0;
+
+    .logo {
+        margin: 80px 60px 80px 32px;
+    }
+
+    .nav-item {
+        font-family: $text-base-med-font-family;
+        font-size: $text-base-med-font-size;
+        font-weight: $text-base-med-font-weight;
+        line-height: $text-base-med-line-height;
+        text-decoration: none;
+        color: #FFFFFF;
+        height: 72px;
+        padding-left: 32px;
+    }
+}
