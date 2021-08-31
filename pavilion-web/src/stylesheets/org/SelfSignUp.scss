@@ -1,0 +1,20 @@
+@import "../variables.scss";
+
+.side-bar {
+    background-color: $gray-100;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    height: 100vh;
+}
+
+/*hard coded coordinates for now */
+.blue-ellipse {
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    left: -260px;
+    top: 699px;
+    background: linear-gradient(90deg, $blue-100 0%, $blue-300 100%);
+}
