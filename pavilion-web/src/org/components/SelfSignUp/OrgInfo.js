@@ -7,14 +7,14 @@ import PrimaryButton from '../PrimaryButton.js'
 
 const OrgInfoForm = () => {
     return (
-        <div class="org-info-form">
-            <h1>Tell us more about your organization.</h1>
-            {/* 3 dots or progress bar */}
+        <div className="org-info-form">
+            {/* 3 dots or progress bar, this can be turned into a component if time permits */}
             <ul>
                 <li></li>
                 <li></li>
                 <li></li>
             </ul>
+            <h1>Tell us more about your organization.</h1>
             <form method="POST" target="">
                 <input type="text" name="org_name" placeholder="Organization Name*" />
                 <input type="text" name="org_shorthand" placeholder="Shorthand Name (ex. GDSC-L)*" />
