@@ -7,7 +7,7 @@ import PrimaryButton from '../PrimaryButton.js'
 
 const SignUpForm = () => {
     return (
-        <div class="welcome-form">
+        <div className="welcome-form">
             <h1>Welcome to the Pavilion.</h1>
             <form method="POST" target="">
                 <input type="text" name="email" placeholder="Organization email" />
