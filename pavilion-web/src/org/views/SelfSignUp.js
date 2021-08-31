@@ -1,13 +1,13 @@
 import React from 'react' 
-import WelcomeForm from '../components/WelcomeForm'
+import LogInForm from "../components/SelfSignUp/LogIn"
 import "../../stylesheets/org/SelfSignUp.scss"
 
-const SelfSignUp = () => {
+const SSUOrgSide = () => {
     return (
         <div className="self-sign-up">
-            <WelcomeForm />
+            <LogInForm />
         </div>
     )
 }
 
-export default SelfSignUp
+export default SSUOrgSide

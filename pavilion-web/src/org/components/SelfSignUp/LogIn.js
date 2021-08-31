@@ -3,7 +3,7 @@ import React from 'react'
 
 // import stylesheets
 import "../../stylesheets/org/SecondaryButton.scss"
-import PrimaryButton from './PrimaryButton.js'
+import PrimaryButton from '../PrimaryButton.js'
 
 const LogInForm = () => {
     return (
