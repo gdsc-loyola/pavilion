@@ -1,4 +1,4 @@
-from orgs.models import Event
+from orgs.models import Event, Org
 from rest_framework import viewsets, permissions
 from .serializers import EventsSerializer
 

@@ -1,7 +1,10 @@
 from rest_framework import routers
+from django.urls import path, include
 from .api import EventsViewSet
 
 router = routers.DefaultRouter()
-router.register("api/orgs", EventsViewSet, "orgs")
+router.register(r"orgs", EventsViewSet, "orgs")
 
-urlpatterns = router.urls
+urlpatterns = [
+    path("api/", include(router.urls))
+]
