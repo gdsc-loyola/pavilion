@@ -1,0 +1,418 @@
+@import url(https://fonts.googleapis.com/css2?family=Rubik&display=swap);
+
+$blue-100: #e8f0fe;
+$blue-200: #d2e3fc;
+$blue-300: #498af4;
+$blue-400: #1a73e8;
+$blue-500: #1967d2;
+$blue-600: #2160bf;
+$blue-700: #174ea6;
+$default-black: #000000;
+$default-white: #ffffff;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$green-100: #e6f4ea;
+$green-200: #ceead6;
+$green-300: #4fb36a;
+$green-400: #1e8e3e;
+$green-500: #188038;
+$green-600: #1c783b;
+$green-700: #0d652d;
+$red-100: #fce8e6;
+$red-200: #fad2cf;
+$red-300: #eb4a3d;
+$red-400: #d93025;
+$red-500: #c5221f;
+$red-600: #b61d1b;
+$red-700: #a50e0e;
+$yellow-100: #fef7e0;
+$yellow-200: #feefc3;
+$yellow-300: #fbbf0e;
+$yellow-400: #f9ab00;
+$yellow-500: #f29900;
+$yellow-600: #eb8b0a;
+$yellow-700: #e37400;
+
+/**** Colors ****/
+$blue-100: #e8f0fe;
+$blue-200: #d2e3fc;
+$blue-300: #498af4;
+$blue-400: #1a73e8;
+$blue-500: #1967d2;
+$blue-600: #2160bf;
+$blue-700: #174ea6;
+$default-black: #000000;
+$default-white: #ffffff;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$green-100: #e6f4ea;
+$green-200: #ceead6;
+$green-300: #4fb36a;
+$green-400: #1e8e3e;
+$green-500: #188038;
+$green-600: #1c783b;
+$green-700: #0d652d;
+$red-100: #fce8e6;
+$red-200: #fad2cf;
+$red-300: #eb4a3d;
+$red-400: #d93025;
+$red-500: #c5221f;
+$red-600: #b61d1b;
+$red-700: #a50e0e;
+$yellow-100: #fef7e0;
+$yellow-200: #feefc3;
+$yellow-300: #fbbf0e;
+$yellow-400: #f9ab00;
+$yellow-500: #f29900;
+$yellow-600: #eb8b0a;
+$yellow-700: #e37400;
+
+/**** Fonts ****/
+/** text-2xl-bold **/
+$text-2xl-bold-font-family: 'Rubik', 'Rubik-Bold';
+$text-2xl-bold-font-size: 40px;
+$text-2xl-bold-letter-spacing: 0px;
+$text-2xl-bold-line-height: 56px;
+$text-2xl-bold-font-weight: 700;
+$text-2xl-bold-color: black;
+
+@mixin text-2xl-bold() {
+  font-family: $text-2xl-bold-font-family;
+  font-size: $text-2xl-bold-font-size;
+  letter-spacing: $text-2xl-bold-letter-spacing;
+  line-height: $text-2xl-bold-line-height;
+  font-weight: $text-2xl-bold-font-weight;
+  color: $text-2xl-bold-color;
+}
+/** text-2xl-med **/
+$text-2xl-med-font-family: 'Rubik', 'Rubik-Medium';
+$text-2xl-med-font-size: 40px;
+$text-2xl-med-letter-spacing: 0px;
+$text-2xl-med-line-height: 56px;
+$text-2xl-med-font-weight: 500;
+$text-2xl-med-color: black;
+
+@mixin text-2xl-med() {
+  font-family: $text-2xl-med-font-family;
+  font-size: $text-2xl-med-font-size;
+  letter-spacing: $text-2xl-med-letter-spacing;
+  line-height: $text-2xl-med-line-height;
+  font-weight: $text-2xl-med-font-weight;
+  color: $text-2xl-med-color;
+}
+/** text-2xl-reg **/
+$text-2xl-reg-font-family: 'Rubik', 'Rubik-Regular';
+$text-2xl-reg-font-size: 40px;
+$text-2xl-reg-letter-spacing: 0px;
+$text-2xl-reg-line-height: 56px;
+$text-2xl-reg-font-weight: 400;
+$text-2xl-reg-color: black;
+
+@mixin text-2xl-reg() {
+  font-family: $text-2xl-reg-font-family;
+  font-size: $text-2xl-reg-font-size;
+  letter-spacing: $text-2xl-reg-letter-spacing;
+  line-height: $text-2xl-reg-line-height;
+  font-weight: $text-2xl-reg-font-weight;
+  color: $text-2xl-reg-color;
+}
+/** text-base-bold **/
+$text-base-bold-font-family: 'Rubik', 'Rubik-Bold';
+$text-base-bold-font-size: 16px;
+$text-base-bold-letter-spacing: 0px;
+$text-base-bold-line-height: 24px;
+$text-base-bold-font-weight: 700;
+$text-base-bold-color: black;
+
+@mixin text-base-bold() {
+  font-family: $text-base-bold-font-family;
+  font-size: $text-base-bold-font-size;
+  letter-spacing: $text-base-bold-letter-spacing;
+  line-height: $text-base-bold-line-height;
+  font-weight: $text-base-bold-font-weight;
+  color: $text-base-bold-color;
+}
+/** text-base-med **/
+$text-base-med-font-family: 'Rubik', 'Rubik-Medium';
+$text-base-med-font-size: 16px;
+$text-base-med-letter-spacing: 0px;
+$text-base-med-line-height: 24px;
+$text-base-med-font-weight: 500;
+$text-base-med-color: black;
+
+@mixin text-base-med() {
+  font-family: $text-base-med-font-family;
+  font-size: $text-base-med-font-size;
+  letter-spacing: $text-base-med-letter-spacing;
+  line-height: $text-base-med-line-height;
+  font-weight: $text-base-med-font-weight;
+  color: $text-base-med-color;
+}
+/** text-base-reg **/
+$text-base-reg-font-family: 'Rubik', 'Rubik-Regular';
+$text-base-reg-font-size: 16px;
+$text-base-reg-letter-spacing: 0px;
+$text-base-reg-line-height: 24px;
+$text-base-reg-font-weight: 400;
+$text-base-reg-color: black;
+
+@mixin text-base-reg() {
+  font-family: $text-base-reg-font-family;
+  font-size: $text-base-reg-font-size;
+  letter-spacing: $text-base-reg-letter-spacing;
+  line-height: $text-base-reg-line-height;
+  font-weight: $text-base-reg-font-weight;
+  color: $text-base-reg-color;
+}
+/** text-lg-bold **/
+$text-lg-bold-font-family: 'Rubik', 'Rubik-Bold';
+$text-lg-bold-font-size: 24px;
+$text-lg-bold-letter-spacing: 0px;
+$text-lg-bold-line-height: 40px;
+$text-lg-bold-font-weight: 700;
+$text-lg-bold-color: black;
+
+@mixin text-lg-bold() {
+  font-family: $text-lg-bold-font-family;
+  font-size: $text-lg-bold-font-size;
+  letter-spacing: $text-lg-bold-letter-spacing;
+  line-height: $text-lg-bold-line-height;
+  font-weight: $text-lg-bold-font-weight;
+  color: $text-lg-bold-color;
+}
+/** text-lg-med **/
+$text-lg-med-font-family: 'Rubik', 'Rubik-Medium';
+$text-lg-med-font-size: 24px;
+$text-lg-med-letter-spacing: 0px;
+$text-lg-med-line-height: 40px;
+$text-lg-med-font-weight: 500;
+$text-lg-med-color: black;
+
+@mixin text-lg-med() {
+  font-family: $text-lg-med-font-family;
+  font-size: $text-lg-med-font-size;
+  letter-spacing: $text-lg-med-letter-spacing;
+  line-height: $text-lg-med-line-height;
+  font-weight: $text-lg-med-font-weight;
+  color: $text-lg-med-color;
+}
+/** text-lg-reg **/
+$text-lg-reg-font-family: 'Rubik', 'Rubik-Regular';
+$text-lg-reg-font-size: 24px;
+$text-lg-reg-letter-spacing: 0px;
+$text-lg-reg-line-height: 40px;
+$text-lg-reg-font-weight: 400;
+$text-lg-reg-color: black;
+
+@mixin text-lg-reg() {
+  font-family: $text-lg-reg-font-family;
+  font-size: $text-lg-reg-font-size;
+  letter-spacing: $text-lg-reg-letter-spacing;
+  line-height: $text-lg-reg-line-height;
+  font-weight: $text-lg-reg-font-weight;
+  color: $text-lg-reg-color;
+}
+/** text-md-bold **/
+$text-md-bold-font-family: 'Rubik', 'Rubik-Bold';
+$text-md-bold-font-size: 20px;
+$text-md-bold-letter-spacing: 0px;
+$text-md-bold-line-height: 32px;
+$text-md-bold-font-weight: 700;
+$text-md-bold-color: black;
+
+@mixin text-md-bold() {
+  font-family: $text-md-bold-font-family;
+  font-size: $text-md-bold-font-size;
+  letter-spacing: $text-md-bold-letter-spacing;
+  line-height: $text-md-bold-line-height;
+  font-weight: $text-md-bold-font-weight;
+  color: $text-md-bold-color;
+}
+/** text-md-med **/
+$text-md-med-font-family: 'Rubik', 'Rubik-Medium';
+$text-md-med-font-size: 20px;
+$text-md-med-letter-spacing: 0px;
+$text-md-med-line-height: 32px;
+$text-md-med-font-weight: 500;
+$text-md-med-color: black;
+
+@mixin text-md-med() {
+  font-family: $text-md-med-font-family;
+  font-size: $text-md-med-font-size;
+  letter-spacing: $text-md-med-letter-spacing;
+  line-height: $text-md-med-line-height;
+  font-weight: $text-md-med-font-weight;
+  color: $text-md-med-color;
+}
+/** text-md-reg **/
+$text-md-reg-font-family: 'Rubik', 'Rubik-Regular';
+$text-md-reg-font-size: 20px;
+$text-md-reg-letter-spacing: 0px;
+$text-md-reg-line-height: 32px;
+$text-md-reg-font-weight: 400;
+$text-md-reg-color: black;
+
+@mixin text-md-reg() {
+  font-family: $text-md-reg-font-family;
+  font-size: $text-md-reg-font-size;
+  letter-spacing: $text-md-reg-letter-spacing;
+  line-height: $text-md-reg-line-height;
+  font-weight: $text-md-reg-font-weight;
+  color: $text-md-reg-color;
+}
+/** text-sm-bold **/
+$text-sm-bold-font-family: 'Rubik', 'Rubik-Bold';
+$text-sm-bold-font-size: 14px;
+$text-sm-bold-letter-spacing: 0px;
+$text-sm-bold-line-height: 24px;
+$text-sm-bold-font-weight: 700;
+$text-sm-bold-color: black;
+
+@mixin text-sm-bold() {
+  font-family: $text-sm-bold-font-family;
+  font-size: $text-sm-bold-font-size;
+  letter-spacing: $text-sm-bold-letter-spacing;
+  line-height: $text-sm-bold-line-height;
+  font-weight: $text-sm-bold-font-weight;
+  color: $text-sm-bold-color;
+}
+/** text-sm-med **/
+$text-sm-med-font-family: 'Rubik', 'Rubik-Medium';
+$text-sm-med-font-size: 14px;
+$text-sm-med-letter-spacing: 0px;
+$text-sm-med-line-height: 24px;
+$text-sm-med-font-weight: 500;
+$text-sm-med-color: black;
+
+@mixin text-sm-med() {
+  font-family: $text-sm-med-font-family;
+  font-size: $text-sm-med-font-size;
+  letter-spacing: $text-sm-med-letter-spacing;
+  line-height: $text-sm-med-line-height;
+  font-weight: $text-sm-med-font-weight;
+  color: $text-sm-med-color;
+}
+/** text-sm-reg **/
+$text-sm-reg-font-family: 'Rubik', 'Rubik-Regular';
+$text-sm-reg-font-size: 14px;
+$text-sm-reg-letter-spacing: 0px;
+$text-sm-reg-line-height: 24px;
+$text-sm-reg-font-weight: 400;
+$text-sm-reg-color: black;
+
+@mixin text-sm-reg() {
+  font-family: $text-sm-reg-font-family;
+  font-size: $text-sm-reg-font-size;
+  letter-spacing: $text-sm-reg-letter-spacing;
+  line-height: $text-sm-reg-line-height;
+  font-weight: $text-sm-reg-font-weight;
+  color: $text-sm-reg-color;
+}
+/** text-xl-bold **/
+$text-xl-bold-font-family: 'Rubik', 'Rubik-Bold';
+$text-xl-bold-font-size: 32px;
+$text-xl-bold-letter-spacing: 0px;
+$text-xl-bold-line-height: 48px;
+$text-xl-bold-font-weight: 700;
+$text-xl-bold-color: black;
+
+@mixin text-xl-bold() {
+  font-family: $text-xl-bold-font-family;
+  font-size: $text-xl-bold-font-size;
+  letter-spacing: $text-xl-bold-letter-spacing;
+  line-height: $text-xl-bold-line-height;
+  font-weight: $text-xl-bold-font-weight;
+  color: $text-xl-bold-color;
+}
+/** text-xl-med **/
+$text-xl-med-font-family: 'Rubik', 'Rubik-Medium';
+$text-xl-med-font-size: 32px;
+$text-xl-med-letter-spacing: 0px;
+$text-xl-med-line-height: 48px;
+$text-xl-med-font-weight: 500;
+$text-xl-med-color: black;
+
+@mixin text-xl-med() {
+  font-family: $text-xl-med-font-family;
+  font-size: $text-xl-med-font-size;
+  letter-spacing: $text-xl-med-letter-spacing;
+  line-height: $text-xl-med-line-height;
+  font-weight: $text-xl-med-font-weight;
+  color: $text-xl-med-color;
+}
+/** text-xl-reg **/
+$text-xl-reg-font-family: 'Rubik', 'Rubik-Regular';
+$text-xl-reg-font-size: 32px;
+$text-xl-reg-letter-spacing: 0px;
+$text-xl-reg-line-height: 48px;
+$text-xl-reg-font-weight: 400;
+$text-xl-reg-color: black;
+
+@mixin text-xl-reg() {
+  font-family: $text-xl-reg-font-family;
+  font-size: $text-xl-reg-font-size;
+  letter-spacing: $text-xl-reg-letter-spacing;
+  line-height: $text-xl-reg-line-height;
+  font-weight: $text-xl-reg-font-weight;
+  color: $text-xl-reg-color;
+}
+/** text-xs-bold **/
+$text-xs-bold-font-family: 'Rubik', 'Rubik-Bold';
+$text-xs-bold-font-size: 12px;
+$text-xs-bold-letter-spacing: 0px;
+$text-xs-bold-line-height: 16px;
+$text-xs-bold-font-weight: 700;
+$text-xs-bold-color: black;
+
+@mixin text-xs-bold() {
+  font-family: $text-xs-bold-font-family;
+  font-size: $text-xs-bold-font-size;
+  letter-spacing: $text-xs-bold-letter-spacing;
+  line-height: $text-xs-bold-line-height;
+  font-weight: $text-xs-bold-font-weight;
+  color: $text-xs-bold-color;
+}
+/** text-xs-med **/
+$text-xs-med-font-family: 'Rubik', 'Rubik-Medium';
+$text-xs-med-font-size: 12px;
+$text-xs-med-letter-spacing: 0px;
+$text-xs-med-line-height: 16px;
+$text-xs-med-font-weight: 500;
+$text-xs-med-color: black;
+
+@mixin text-xs-med() {
+  font-family: $text-xs-med-font-family;
+  font-size: $text-xs-med-font-size;
+  letter-spacing: $text-xs-med-letter-spacing;
+  line-height: $text-xs-med-line-height;
+  font-weight: $text-xs-med-font-weight;
+  color: $text-xs-med-color;
+}
+/** text-xs-reg **/
+$text-xs-reg-font-family: 'Rubik', 'Rubik-Regular';
+$text-xs-reg-font-size: 12px;
+$text-xs-reg-letter-spacing: 0px;
+$text-xs-reg-line-height: 16px;
+$text-xs-reg-font-weight: 400;
+$text-xs-reg-color: black;
+
+@mixin text-xs-reg() {
+  font-family: $text-xs-reg-font-family;
+  font-size: $text-xs-reg-font-size;
+  letter-spacing: $text-xs-reg-letter-spacing;
+  line-height: $text-xs-reg-line-height;
+  font-weight: $text-xs-reg-font-weight;
+  color: $text-xs-reg-color;
+}
+
+
