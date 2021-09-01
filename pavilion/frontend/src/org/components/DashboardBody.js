@@ -2,14 +2,14 @@
 import React from 'react'
 
 // import assets
-import dashboard_empty from "../assets/dashboard_empty.svg"
+import dashboard_empty from "../../../static/assets/dashboard_empty.svg"
 
 // import components
-import PrimaryButton from "../components/PrimaryButton"
-import SecondaryButton from "../components/SecondaryButton"
+import PrimaryButton from "./PrimaryButton"
+import SecondaryButton from "./SecondaryButton"
 
 // import stylesheets
-import "../../stylesheets/org/DashboardBody.scss"
+import "../../../stylesheets/org/DashboardBody.scss"
 
 const BodyDashboard = () => {
     return (

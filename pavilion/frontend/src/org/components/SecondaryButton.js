@@ -2,7 +2,7 @@
 import React from 'react'
 
 // import stylesheets
-import "../../stylesheets/org/SecondaryButton.scss"
+import "../../../stylesheets/org/SecondaryButton.scss"
 
 const SecondaryButton = ({button_copy}) => {
     return (

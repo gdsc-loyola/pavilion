@@ -1,6 +1,6 @@
 import React from 'react'
 // import logo from "../../../static/assets/pav_logo.svg"
-import "../../stylesheets/org/DashboardNav.scss"
+import "../../../stylesheets/org/DashboardNav.scss"
 
 const NavDashboard = () => {
     return (
