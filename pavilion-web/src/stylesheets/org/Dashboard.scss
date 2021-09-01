@@ -117,7 +117,7 @@
     position: absolute;
     align-items: center;
     top: 0;
-    border-bottom: 1px dotted $gray-400;
+    border-bottom: 1px dotted $gray-300;
     justify-content: flex-end;
 
     .chevron {
@@ -125,6 +125,7 @@
         align-items: center;
         margin: 0 5%;
         justify-content: flex-end;
+        cursor: pointer;
     }
 
     #org-logo {
@@ -136,8 +137,38 @@
         transition-duration: 0.5s;
     }
 
-    #chevron:active {
-        transform: rotate(180deg);
+    .active {
+        #chevron {
+            transform: rotate(180deg);
+            transition-duration: 0.5s;
+        }
+    }
+
+    ul {
+        display: none;
+        position: absolute;
+        flex-direction: column;
+        width: 200px;
+        right: 5%;
+        top: 60px;
+        height: 96px;
+        padding: 0;
+        margin: 0;
+        background-color: $default-white;
+        justify-content: center;
+        align-items: center;
         transition-duration: 0.5s;
+        box-shadow: 0px 4px 10px 0px #00000014;
+        li {
+            list-style-type: none;
+            align-self: center;
+            padding: 12px;
+            font-size: $text-sm-bold-font-size;
+            font-family: $text-sm-bold-font-family;
+        }
+        li:nth-child(2) {
+            color: $red-400;
+        }
+        z-index: 999;
     }
 }
