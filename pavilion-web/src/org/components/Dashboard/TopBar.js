@@ -18,7 +18,7 @@ const TopBar = () => {
 
     return (
         <section className="top-bar">
-            <div className={`chevron ${dropdownOpen ? "active" : ""}`} onClick={show_dropdown}  onBlur={show_dropdown} tabIndex="0">
+            <div className={`chevron ${dropdownOpen ? "active" : ""}`} onClick={show_dropdown} /* onBlur={show_dropdown} */ tabIndex="0">
                 {/* This functions as a placeholder
                 TODO: Replace this with dynamic code that changes the logo based on who is logged in */}
                 <img src={org_logo} id="org-logo"alt="Org Logo" />
