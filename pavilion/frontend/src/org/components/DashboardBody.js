@@ -2,14 +2,14 @@
 import React from 'react'
 
 // import assets
-import dashboard_empty from "../../../static/assets/dashboard_empty.svg"
+import dashboard_empty from "../../assets/dashboard_empty.svg"
 
 // import components
-import PrimaryButton from "./PrimaryButton"
-import SecondaryButton from "./SecondaryButton"
+import PrimaryButton from "../PrimaryButton"
+import SecondaryButton from "../SecondaryButton"
 
 // import stylesheets
-import "../../../stylesheets/org/DashboardBody.scss"
+import "../../../stylesheets/org/Dashboard.scss"
 
 const BodyDashboard = () => {
     return (
@@ -17,8 +17,10 @@ const BodyDashboard = () => {
             <img src={dashboard_empty} alt=""/>
             <h1>Your dashboard's coming soon 😉</h1>
             <p>We’re still working on creating a big experience for you and your organization. For now, try adding a past event to your organization’s web page!</p>
-            <PrimaryButton button_copy="Create an event"/>
-            <SecondaryButton button_copy="View my webpage"/>
+            <div className="CTA">
+                <PrimaryButton button_copy="Create an event"/>
+                <SecondaryButton button_copy="View my webpage"/>
+            </div>
         </section>
     )
 }
