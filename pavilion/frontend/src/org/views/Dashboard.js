@@ -1,8 +1,8 @@
 import React from 'react' 
-import NavDashboard from '../components/Dashboard/DashboardNav'
-import BodyDashboard from '../components/Dashboard/DashboardBody'
-import TopBar from '../components/Dashboard/TopBar'
-import "../../stylesheets/org/Dashboard.scss"
+import NavDashboard from '../components/DashboardNav'
+import BodyDashboard from '../components/DashboardBody'
+import TopBar from '../components/TopBar'
+import "../../../stylesheets/org/Dashboard.scss"
 
 const Dashboard = () => {
     return (
