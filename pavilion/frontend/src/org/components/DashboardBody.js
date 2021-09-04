@@ -2,11 +2,11 @@
 import React from 'react'
 
 // import assets
-import dashboard_empty from "../../assets/dashboard_empty.svg"
+import dashboard_empty from "../../../static/assets/dashboard_empty.svg"
 
 // import components
-import PrimaryButton from "../PrimaryButton"
-import SecondaryButton from "../SecondaryButton"
+import PrimaryButton from "./PrimaryButton"
+import SecondaryButton from "./SecondaryButton"
 
 // import stylesheets
 import "../../../stylesheets/org/Dashboard.scss"
