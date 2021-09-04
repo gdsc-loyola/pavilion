@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import org_logo from "../../assets/gdsc_logo.svg"
-import expand from "../../assets/expand_more.png"
+import org_logo from "../../../static/assets/gdsc_logo.svg"
+import expand from "../../../static/assets/expand_more.png"
 import "../../../stylesheets/org/Dashboard.scss"
 
 const TopBar = () => {

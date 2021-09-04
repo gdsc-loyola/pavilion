@@ -17,9 +17,13 @@ module.exports = {
         }
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.s[ac]ss/i,
         exclude: /node_modules/,
         use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader','css-loader', 'file-loader']
       },
       {
         test: /\.svg$/,
@@ -31,6 +35,10 @@ module.exports = {
             },
           }
         ]
+      },
+      {
+        test: /\.png$/,
+        loader: 'file-loader'
       }
     ]
   },
