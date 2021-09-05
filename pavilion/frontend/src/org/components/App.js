@@ -5,9 +5,10 @@ import { useRoutes } from 'hookrouter'
 import routes from './Router';
 
 const App = () => {
-  const routeResult = useRoutes(routes)
+  const routeResult = useRoutes(routes) // enable routes
   return (
     <>
+      {/* If authenticate, route to login page */}
       {routeResult}
     </>
   )

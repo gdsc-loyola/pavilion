@@ -4,10 +4,10 @@ import TopBar from './TopBar'
 
 const DashboardBase = () => {
     return (
-        <div>
+        <>
             <TopBar />
             <NavDashboard />
-        </div>
+        </>
     )
 }
 

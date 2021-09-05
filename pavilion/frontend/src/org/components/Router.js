@@ -4,6 +4,8 @@ import Events from "../views/Events";
 
 const routes = {
     "/": () => <Dashboard />,
+    // "/login": () => <Login />,
+    // "/signup": () => <Signup />,
     "/events": () => <Events />
 }
 
