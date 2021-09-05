@@ -1,18 +1,16 @@
 import Dashboard from '../views/Dashboard';
 import React, { Component } from 'react';
-import { render } from 'react-dom';
+// import { render } from 'react-dom';
+import { useRoutes } from 'hookrouter'
+import routes from './Router';
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Dashboard />
-      </div>
-    );
-  }
+const App = () => {
+  const routeResult = useRoutes(routes)
+  return (
+    <>
+      {routeResult}
+    </>
+  )
 }
 
 export default App;
-
-const container = document.getElementById('app');
-render(<App />, container)
