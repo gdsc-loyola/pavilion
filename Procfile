@@ -1,1 +1,1 @@
-web: gunicorn pavilion/pavilion.wsgi --log-file -
+web: gunicorn pavilion.wsgi --log-file -
