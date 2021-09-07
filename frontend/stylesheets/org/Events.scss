@@ -1,0 +1,38 @@
+@import "../variables.scss";
+
+.title {
+    font-size: $text-lg-bold-font-size;
+    font-family: $text-lg-bold-font-family;
+    font-weight: $text-lg-bold-font-weight;
+    letter-spacing: $text-lg-bold-letter-spacing;
+    margin: 120px 0 0 256px;
+}
+
+.events {
+    margin: 100px 0 0 300px;
+
+    .dropdown {
+        display: none;
+        flex-direction: column;
+        width: 200px;
+        height: 96px;
+        padding: 0;
+        margin: 0;
+        background-color: $default-white;
+        justify-content: center;
+        align-items: center;
+        transition-duration: 0.5s;
+        box-shadow: 0px 4px 10px 0px #00000014;
+        li {
+            list-style-type: none;
+            align-self: center;
+            padding: 12px;
+            font-size: $text-sm-bold-font-size;
+            font-family: $text-sm-bold-font-family;
+        }
+        li:nth-child(3) {
+            color: $red-400;
+        }
+        z-index: 999;
+    }
+}
