@@ -13,7 +13,7 @@ class EventsSerializer(serializers.ModelSerializer):
         model = Event
         fields = ("name", "start_date", "end_date", "last_updated", "status")
 
-class OrgsSerializer(serializers.ModelSerializer):
+class OrgsSerializer(serializers.HyperlinkedModelSerializer):
     events = EventsSerializer(read_only=True, many=True)
     user = UserSerializer(read_only=True)
 
