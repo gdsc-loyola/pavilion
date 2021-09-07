@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-x#gqwv%$lo82r0_zo*-d4ls#a(2hnd%e)&h3&vkp5$5kyksqze
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['gpavilion-staging.herokuapp.com', 'staging-app.gpavilion.org']
+ALLOWED_HOSTS = ['gpavilion-staging.herokuapp.com', 'staging-app.gpavilion.org', '127.0.0.1']
 
 
 # Application definition
