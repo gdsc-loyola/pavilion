@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-x#gqwv%$lo82r0_zo*-d4ls#a(2hnd%e)&h3&vkp5$5kyksqze'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['dev-app.gpavilion.org', 'staging-app.gpavilion.org', '127.0.0.1']
 
