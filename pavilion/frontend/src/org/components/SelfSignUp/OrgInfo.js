@@ -2,34 +2,98 @@
 import React from 'react'
 
 // import stylesheets
-import "../../stylesheets/org/SecondaryButton.scss"
-import PrimaryButton from '../PrimaryButton.js'
+import "../../../../stylesheets/PrimaryButton.scss" 
+import PrimaryButton from '../../components/PrimaryButton.js'
+import SideBar from './SideBar'
+import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
+
+// const useStyles = makeStyles((theme) => ({
+//     formControl: {
+//       margin: theme.spacing(20%),
+//       minWidth: 120,
+//     },
+//     selectEmpty: {
+//       marginTop: theme.spacing(2),
+//     },
+//   }));
+  
+// const classes = useStyles();
 
 const OrgInfoForm = () => {
+    const [orgName, setOrgName] = React.useState('');
+
+    const handleOrgNameChange = (e) => {
+        setOrgName(e.target.value);
+    }
+
+    const handleOrgShorthandChange = (e) => {
+        set_org_name(e.target.value);
+    }
+
     return (
-        <div className="org-info-form">
-            {/* 3 dots or progress bar, this can be turned into a component if time permits */}
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-            <h1>Tell us more about your organization.</h1>
-            <form method="POST" target="">
-                <input type="text" name="org_name" placeholder="Organization Name*" />
-                <input type="text" name="org_shorthand" placeholder="Shorthand Name (ex. GDSC-L)*" />
-                <input type="textarea" name="org_short_desc" placeholder="Short Description*" />
-                <select name="org_body">
-                    <option value="COA">COA</option>
-                    <option value="LIONS">LIONS</option>
-                    <option value="Sanggu">Sanggu</option>
-                </select>
-                <p className="error_msg">Please fill out the fields.</p>
-                <PrimaryButton button_copy="Next"/>
-            </form>
+        <div>
+            <SideBar />
+            <div className="org-info-form">
+                <Progress />
+                <h1>Tell us more about your organization.</h1>
+                <TextField
+                    // className={}
+                    size={'small'}
+                    margin={'dense'}
+                    label={'Organization Name*'}
+                    variant={'outlined'}
+                    value={orgName}
+                    style = {{width: '464px'}}
+                    // onChange={(e): void => {
+                    // }}
+                />
+                <TextField
+                    // className={}
+                    size={'small'}
+                    margin={'dense'}
+                    label={'Shorthand Name (ex. GDSC-L)*'}
+                    variant={'outlined'}
+                    style = {{width: '464px'}}
+                    // value={org_name}
+                    // onChange={(e): void => {
+                    // }}
+                />
+                <TextField
+                    // className={}
+                    size={'small'}
+                    margin={'dense'}
+                    label={'Short Description*'}
+                    variant={'outlined'}
+                    style = {{width: '464px'}}
+                    multiline
+                    rows={8}
+                    // value={org_name}
+                    // onChange={(e): void => {
+                    // }}
+                />
+                <FormControl variant="outlined">
+                <InputLabel>Org body*</InputLabel>
+                    <Select
+                        variant={'outlined'}
+                        // value={age}
+                        // onChange={handleChange}
+                        label={'Org Body*'}
+                        style = {{width: '464px'}}
+                    >
+                        <MenuItem value="COA">COA</MenuItem>
+                        <MenuItem value="LIONS">LIONS</MenuItem>
+                        <MenuItem value="Sanggu">Sanggu</MenuItem>
+                    </Select>
+                </FormControl>
+                <Button variant="outlined" align="right">Next</Button>
+            </div>
         </div>
     )
 }
 
 export default OrgInfoForm;
-
