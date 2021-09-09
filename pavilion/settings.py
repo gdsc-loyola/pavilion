@@ -35,7 +35,7 @@ SECURE_HSTS_PRELOAD = True
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['dev-app.gpavilion.org', 'staging-app.gpavilion.org', '127.0.0.1']
+ALLOWED_HOSTS = ['dev.gpavilion.org', 'staging.gpavilion.org', '127.0.0.1']
 
 
 # Application definition
