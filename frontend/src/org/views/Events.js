@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import DashboardBase from '../components/DashboardBase'
+import EventsDataService from '../../services/events.service'
+import OrgsDataService from '../../services/orgs.service'
 import axios from 'axios'
 
 const Events = () => {
     const [events, getEvents] = useState([])
     const user_loggedin = "gdsc"
 
-    const url = 'http://localhost:8000/api/'
+    //const url = 'http://localhost:8000/api/'
 
     useEffect(() => {
-        axios.get(`${url}orgs`).then(res => {
+        OrgsDataService.getAll().then(res => {
             const user = (x) => res.data[x].user.username
             for (var x=0; user(x) === user_loggedin; x++) {
                 if (user(x) === user_loggedin) {

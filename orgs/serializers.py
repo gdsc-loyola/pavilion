@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ("name", "start_date", "end_date", "last_updated", "status")
+        fields = ("id", "name", "start_date", "end_date", "last_updated", "status")
 
 class OrgsSerializer(serializers.HyperlinkedModelSerializer):
     events = EventsSerializer(read_only=True, many=True)
@@ -19,4 +19,4 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Org
-        fields = ("name", "short_name", "desc", "org_body", "user", "events")
+        fields = ("id", "name", "short_name", "desc", "org_body", "user", "events")
