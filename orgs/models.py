@@ -27,8 +27,8 @@ class Org(models.Model):
     short_name = models.CharField(max_length=100)
     desc = models.CharField(max_length=500)
     org_body = models.CharField(max_length=100, choices=org_body_choices)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    events = models.ManyToManyField(Event)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True) #an org pertains to only one user?
+    events = models.ManyToManyField(Event, related_name='orgs')
 
     def __str__(self):
         return "{}({}), {}. {}".format(self.name, self.short_name, self.org_body, self.user)

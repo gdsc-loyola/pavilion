@@ -5,22 +5,27 @@ import OrgsDataService from '../../services/orgs.service'
 import axios from 'axios'
 
 const Events = () => {
+    
     const [events, getEvents] = useState([])
-    const user_loggedin = "gdsc"
-
-    //const url = 'http://localhost:8000/api/'
+    const [user_loggedin, setUser] = useState(2)
 
     useEffect(() => {
-        OrgsDataService.getAll().then(res => {
-            const user = (x) => res.data[x].user.username
-            for (var x=0; user(x) === user_loggedin; x++) {
-                if (user(x) === user_loggedin) {
-                    return getEvents(res.data[x]?.events)
-                }
-            }
-            // console.log(res.data[0])
-        })
+        setEvents()
     }, [])
+
+    const setEvents = () => {
+        OrgsDataService.get(user_loggedin) //filter happens in the backend
+        // OrgsDataService.getAll()//get all might be problematic. slow
+        .then(res => {
+            // const org = res.data.find(({ user }) => user.username === user_loggedin) //replace with user.id??
+            const org = res.data[0]
+            console.log(res.data[0]) //for testing
+            return getEvents(org.events)
+        })
+        .catch((e) => 
+            console.log(e)
+        )
+    }
 
     const loadEvents = () => {
         console.log(events)
