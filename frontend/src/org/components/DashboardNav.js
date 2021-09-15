@@ -6,9 +6,9 @@ const NavDashboard = () => {
     return (
         <nav className="side-nav">
             <img src={logo} alt="Logo" className="logo" />
-            <a href="/" className="nav-item"><span>Dashboard</span></a>
-            <a href="/events" className="nav-item"><span>Events</span></a>
-            <a href="/settings" className="nav-item"><span>Settings</span></a>
+            <a href="/admin/" className="nav-item"><span>Dashboard</span></a>
+            <a href="/admin/events/" className="nav-item"><span>Events</span></a>
+            <a href="/admin/settings/" className="nav-item"><span>Settings</span></a>
         </nav>
     )
 }

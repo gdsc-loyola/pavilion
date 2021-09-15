@@ -8,7 +8,7 @@ const Events = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [events, getEvents] = useState([])
     const [user_loggedin, setUser] = useState("gdsc")
-    const url = 'http://127.0.0.1:8000/api/'
+    const url = 'http://localhost:8000/api/'
 
     function show_dropdown(e) {
         console.log(e.target)
@@ -28,15 +28,15 @@ const Events = () => {
     const setEvents = () => {
         axios.get(`${url}orgs`)
         .then(res => {
-            const user = res.data.find(({ user }) => user.username === user_loggedin)
-            return getEvents(user.events)
+            const org = res.data.find(({ user }) => user.username === user_loggedin)
+            return getEvents(org.events)
         })
         .catch((e) => 
             console.log(e)
         )
     }
 
-    const Table = () => {
+    const tableData = () => {
         return events.map((val, i) => {
             return (
                 <tr key={i} value={val.id}>
@@ -71,7 +71,7 @@ const Events = () => {
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>{Table()}</tbody>
+                <tbody>{tableData()}</tbody>
             </table>
         </div>
     )
