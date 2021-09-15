@@ -7,7 +7,7 @@ import axios from 'axios'
 const Events = () => {
     
     const [events, getEvents] = useState([])
-    const [user_loggedin, setUser] = useState(2)
+    const [user_loggedin, setUser] = useState("sample@email.com")
 
     useEffect(() => {
         setEvents()

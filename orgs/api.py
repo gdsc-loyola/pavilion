@@ -23,7 +23,7 @@ class OrgsViewSet(viewsets.ModelViewSet):
         This view should return a list of all the orgs
         for the currently authenticated user.
         """
-        return Org.objects.filter(user__id=self.request.GET.get("user"))
+        return Org.objects.filter(user=self.request.GET.get("user"))
 
     #override post to include events
     # def create(self, request, *args, **kwargs):

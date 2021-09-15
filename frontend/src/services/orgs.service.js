@@ -2,7 +2,7 @@ import http from "../http-common"
 
 class OrgsDataService {
     
-    get = (userId) => http.get(`orgs/?user=${userId}`);
+    get = (user) => http.get(`orgs/?user=${user}`);
     
     create = (data) => http.post("orgs/", data);
 
