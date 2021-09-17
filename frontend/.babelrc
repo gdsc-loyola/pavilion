@@ -1,4 +1,12 @@
 {
+    "plugins": [
+        [
+            "@babel/plugin-transform-runtime",
+            {
+                "corejs": false
+            }
+        ]
+    ],
     "presets": [
         "@babel/preset-env", "@babel/preset-react"
     ]
