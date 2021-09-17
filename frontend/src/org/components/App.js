@@ -26,7 +26,7 @@ const App = () => {
             path='/admin/login' 
             formID={'form_default'}
             type='EMAIL'
-            authMethod='MAGIC_LINK'
+            authMethod='OTP'
             onSuccess={onLoginSuccess}
             onError={onLoginError}
             onBegin={onSignupBegin}
