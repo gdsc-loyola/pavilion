@@ -8,11 +8,16 @@ class Event(models.Model):
     ]
 
     name = models.CharField(max_length=100)
+    cover_photo = models.CharField(max_length=100)
     start_date = models.DateField(auto_now=False, auto_now_add=False, blank=False)
     end_date = models.DateField(auto_now=False, auto_now_add=False, blank=False)
-    last_updated = models.DateField(auto_now=True, auto_now_add=False)
     location = models.CharField(max_length=100)
     desc = models.CharField(max_length=500)
+    event_photo1 = models.CharField(max_length=100)
+    event_photo2 = models.CharField(max_length=100)
+    event_photo3 = models.CharField(max_length=100)
+    event_photo4 = models.CharField(max_length=100)
+    last_updated = models.DateField(auto_now=True, auto_now_add=False)
     status = models.CharField(max_length=50, choices=status_choices)
 
     def __str__(self):
@@ -29,14 +34,16 @@ class Org(models.Model):
     short_name = models.CharField(max_length=100)
     desc = models.CharField(max_length=500)
     org_body = models.CharField(max_length=100, choices=org_body_choices)
-    user = models.CharField(max_length=100)
-    #user =  models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    events = models.ManyToManyField(Event, related_name='orgs')
+    logo = models.CharField(max_length=100)
     facebook = models.CharField(max_length=100, null=True)
     instagram = models.CharField(max_length=100, null=True)
     twitter = models.CharField(max_length=100, null=True)
     linkedin = models.CharField(max_length=100, null=True)
     website = models.CharField(max_length=100, null=True)
+    user = models.CharField(max_length=100)
+    #user =  models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    events = models.ManyToManyField(Event, related_name='orgs')
+    
 
 
     def __str__(self):

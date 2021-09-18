@@ -16,12 +16,17 @@ class EventsSerializer(serializers.ModelSerializer):
         model = Event
         fields = (
             "id", 
-            "name", 
+            "name",
+            "cover_photo",
             "start_date", 
             "end_date", 
-            "last_updated"
             "location",
-            "desc", 
+            "desc",
+            "event_photo1",
+            "event_photo2",
+            "event_photo3",
+            "event_photo4",
+            "last_updated",
             "status", 
             "orgs")
 
@@ -36,11 +41,12 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
             "name", 
             "short_name", 
             "desc", 
-            "org_body", 
-            "user",
-            "events", 
+            "org_body",
+            "logo",
             "facebook", 
             "instagram", 
             "twitter", 
             "linkedin", 
-            "website")
+            "website",
+            "user",
+            "events")
