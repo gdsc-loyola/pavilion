@@ -5,13 +5,14 @@
 
 .side-bar {
     background-color: $gray-100;
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: column;
     width: 30%;
     height: 100vh;
     align-items: center;
     justify-content: center;
+    left: 0;
     img {
         width: 383px;
     }
@@ -38,32 +39,101 @@ h1 {
     margin: 32px 0;
 }
 
-.org-info-form {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
+.form-container {
     width: 70%;
     height: 100%;
     left: 30%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
     align-items: center;
     justify-content: center;
     font-family: $text-sm-reg-font-family;
-    .progress {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        div {
-            background-color: $gray-300;
-            width: 16px;
-            height: 16px;
-            border-radius: 16px;
-            margin: 0 16px;
-        }
-        .three {
-            background-color: $blue-300;
-        }
-        .two {
-            div:
-        }
+}
+
+.org-info-form {
+    display: flex;
+    flex-direction: column;
+    width: 464px;
+    // button {
+    align-items: flex-end;
+    justify-content: flex-end;
+    //     display: flex;
+    //     justify-content: end;
+    //     align-items: flex-end;
+    // }
+}
+
+.progress {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    div {
+        background-color: $gray-300;
+        width: 16px;
+        height: 16px;
+        border-radius: 16px;
+        margin: 0 16px;
     }
+}
+.three {
+    #three, #two, #one{
+        background-color: $blue-300;
+    }
+}
+.two {
+    #two, #one{
+        background-color: $blue-300;
+    }
+}
+.one {
+    #one{
+        background-color: $blue-300;
+    }
+}
+
+/* Org Links Form */
+
+.org-links-form {
+    display: flex;
+    flex-direction: column;
+    width: 464px;
+    // button {
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+p {
+    margin-top: 16px;
+    font-weight: $text-sm-bold-font-weight;
+    font-size: $text-sm-bold-font-size;
+}
+
+.cta {
+    margin-top: 16px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    button {
+        margin-left: 16px;
+    }
+}
+
+/* Org Logo Form */
+.org-logo-form {
+    height: 240px;
+    width: 464px;
+}
+
+.org_logo_upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 240px;
+    width: 464px;
+    border: 1px dashed blue ;
+    border-radius: 2px;
 }

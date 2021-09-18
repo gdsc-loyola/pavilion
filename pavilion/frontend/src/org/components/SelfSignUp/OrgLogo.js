@@ -2,33 +2,52 @@
 import React from 'react'
 
 // import stylesheets
-import "../../stylesheets/org/SecondaryButton.scss"
-import PrimaryButton from '../PrimaryButton.js'
-import SecondaryButton from '../SecondaryButton'
+import Button from '@material-ui/core/Button';
+import SideBar from './SideBar';
+import Progress from './Progress';
+import TextField from '@material-ui/core';
 
-const OrgInfoForm = () => {
+const OrgLogoForm = () => {
+
+    // const [orgLogo, setOrgLogo] = React.useState('');
+
+    // const handleOrgLogoChange = (e) => {
+    //     setOrgLogo(e.target.value);
+    // }
+
     return (
-        <div className="org-logo-form">
-            {/* 3 dots or progress bar, this can be turned into a component if time permits */}
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
+        <div className="form-container">
+            <SideBar />
+            <Progress progress_state="two"/>
             <h1>Upload your org's logo!</h1>
-            <form method="POST" target="">
-                <div className="draggable-area">
-                    <input type="file" name="org_name" placeholder="Organization Name*" />
-                </div>
-                <p>Suggested ratio - 1:1 (ex. 800x800px)</p>
-                <p className="error_msg">Please fill out the fields.</p>
-                <SecondaryButton button_copy="Back" />
-                {/* Need to make this the submit button */}
-                <PrimaryButton button_copy="Next"/>
-            </form>
+            {/* <TextField
+                size={'small'}
+                margin={'dense'}
+                label={'Organization Logo*'}
+                variant={'outlined'}
+                // value={orgLogo}
+                style = {{width: '464px'}}
+                // onChange={ (e) => {
+                //     handleOrgLogoChange
+                // }}
+            /> */}
+            <section className="org-logo-form">
+                <input
+                    type="file"
+                    accept="image/*"
+                    style={{display: 'none'}}
+                    id="org_logo_input"
+                />
+                <label htmlFor="org_logo_input">
+                    <div className="org_logo_upload">
+                    <img src="../../static/assets/image.png" alt=""/>
+                        <p>Browse through your files</p>
+                    </div>
+                </label>
+            </section>
         </div>
     )
 }
 
-export default OrgInfoForm;
+export default OrgLogoForm;
 

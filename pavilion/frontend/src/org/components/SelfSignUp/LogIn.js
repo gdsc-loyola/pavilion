@@ -8,11 +8,24 @@ import PrimaryButton from '../PrimaryButton.js'
 const LogInForm = () => {
     return (
         <div className="welcome-form">
+            <div className="blue-bg"></div>
             <h1>Log in to the Pavilion.</h1>
             <form method="POST" target="">
-                <input type="text" name="email" placeholder="Organization email*" />
+                {/* <input type="text" name="email" placeholder="Organization email*" />
                 <input type="password" name="password" placeholder="Password*" />
-                <p className="error_msg">Please fill out the fields to log in to the Pavilion.</p>
+                <p className="error_msg">Please fill out the fields to log in to the Pavilion.</p> */}
+                <TextField
+                    // className={}
+                    size={'small'}
+                    margin={'dense'}
+                    label={'Organization Name*'}
+                    variant={'outlined'}
+                    value={orgName}
+                    style = {{width: '464px'}}
+                    onChange={(e) => {
+                        handleOrgNameChange
+                    }}
+                />
                 <PrimaryButton button_copy="Log In"/>
             </form>
         </div>
