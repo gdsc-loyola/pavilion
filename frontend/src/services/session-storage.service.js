@@ -22,7 +22,7 @@ class SessionStorageService {
   }
   
   getToken = () => {
-    return JSON.parse(sessionStorage.getItem(USER_TOKEN) || '{}');
+    return sessionStorage.getItem(USER_TOKEN);
   }
 }
 
