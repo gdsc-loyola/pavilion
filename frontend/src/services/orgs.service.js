@@ -1,10 +1,14 @@
 import http from "../http-common"
 
 class OrgsDataService {
+
+    getAll = () => http.get(`orgs/`)
+
+    get = (id) => http.get(`orgs/${id}/`);
     
-    get = (user) => http.get(`orgs/?user=${user}`);
+    getByOrgUser = (user) => http.get(`orgs/?user=${user}`);
     
-    create = (data) => http.post("orgs/", data);
+    create = (data) => http.post(`orgs/`, data);
 
     update = (id, data) => http.put(`orgs/${id}/`, data);
 

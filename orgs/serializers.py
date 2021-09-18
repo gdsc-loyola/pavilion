@@ -6,12 +6,24 @@ from django.contrib.auth.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "username")
+        fields = (
+            "id", 
+            "username", 
+            "password")
 
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ("id", "name", "start_date", "end_date", "last_updated", "status", "orgs")
+        fields = (
+            "id", 
+            "name", 
+            "start_date", 
+            "end_date", 
+            "last_updated"
+            "location",
+            "desc", 
+            "status", 
+            "orgs")
 
 class OrgsSerializer(serializers.HyperlinkedModelSerializer):
     events = EventsSerializer(read_only=True, many=True)
@@ -19,4 +31,16 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Org
-        fields = ("id", "name", "short_name", "desc", "org_body", "user", "events")
+        fields = (
+            "id",
+            "name", 
+            "short_name", 
+            "desc", 
+            "org_body", 
+            "user",
+            "events", 
+            "facebook", 
+            "instagram", 
+            "twitter", 
+            "linkedin", 
+            "website")

@@ -1,49 +1,60 @@
 from orgs.models import Event, Org
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
-from .serializers import EventsSerializer, OrgsSerializer
+from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
 # Lead Viewset
 class EventsViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     permission_classes = [
-        permissions.AllowAny
+        IsGetOrIsAuthenticated
     ]
     serializer_class = EventsSerializer
 
 class OrgsViewSet(viewsets.ModelViewSet):
     queryset = Org.objects.all()
-    permission_classes = [
-        permissions.AllowAny
+    permission_classes = [  
+        IsGetOrIsAuthenticated
     ]
     serializer_class = OrgsSerializer
 
-    def get_queryset(self):
-        """
-        This view should return a list of all the orgs
-        for the currently authenticated user.
-        """
-        return Org.objects.filter(user=self.request.GET.get("user"))
+    
+    def list(self, *args, **kwargs):
+        #getAll
+        if (self.request.GET.get("user") == None):
+            queryset = Org.objects.all()
+            serializer = [OrgsSerializer(query).data for query in queryset]
 
-    #override post to include events
-    # def create(self, request, *args, **kwargs):
-    #     data = request.data
+            return Response(serializer)
 
-    #     new_org = Org.objects.create(
-    #         name        = data["name"], 
-    #         short_name  = data["short_name"], 
-    #         desc        = data["desc"], 
-    #         org_body    = data["org_body"], 
-    #         user        = data["user"], 
-    #     )
+        #getByOrgUser
+        else: 
+            query = Org.objects.filter(user=self.request.GET.get("user"))
+            serializer = OrgsSerializer(query[0])
 
-    #     new_org.save()
+            return Response(serializer.data)
+    
+class RegisterViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = [  
+        IsPostAndIsNotAuthenticated
+    ]
+    serializer_class = UserSerializer
 
-    #     #ask to clarify logic
-    #     for event in data["events"]:
-    #         event_obj = Event.objects.get(id=event["id"]) 
-    #         new_org.events.add(event_obj) #only adds existing events into orgs
+    def create(self, request):
+        username = request.POST["username"]
+        password = "9,2Nli1H:C&Vmyl<9:Y)VV1t[jQN7rS7Laf|sip*]X_Fi)IX5"
 
-    #     serializer = OrgsSerializer(new_org)
+        new_user = User.objects.create(
+            username = username,
+            password = make_password(password)
+        )
 
-    #     return Response(serializer.data)
+        new_user.save()
+        serializer = UserSerializer(new_user)
+
+        return Response(serializer.data)

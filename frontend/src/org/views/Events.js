@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import DashboardBase from '../components/DashboardBase'
-import EventsDataService from '../../services/events.service'
 import OrgsDataService from '../../services/orgs.service'
-import axios from 'axios'
 
 const Events = () => {
     
@@ -14,12 +12,11 @@ const Events = () => {
     }, [])
 
     const setEvents = () => {
-        OrgsDataService.get(user_loggedin) //filter happens in the backend
-        // OrgsDataService.getAll()//get all might be problematic. slow
+        OrgsDataService.getByOrgUser(user_loggedin) //filter happens in the backend
         .then(res => {
-            // const org = res.data.find(({ user }) => user.username === user_loggedin) //replace with user.id??
-            const org = res.data[0]
-            console.log(res.data[0]) //for testing
+            // const org = res.data.find(({ user }) => user.username === user_loggedin) 
+            const org = res.data
+            console.log(res.data) //for testing
             return getEvents(org.events)
         })
         .catch((e) => 
