@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
 import Dashboard from "../views/Dashboard";
 import Events from "../views/Events";
-import { Route } from "react-router-dom"
+import { Route, Redirect } from "react-router-dom"
+import auth from "../authentication/auth";
 
 // const privateRoutes = () => {
 //     return(
@@ -36,17 +37,21 @@ import { Route } from "react-router-dom"
 
 // export default privateRoutes
 // export default publicRoutes
-const Admin = () => {
+export const Admin = ({component: Component, ...rest}) => {
     return(
         <>
-            <Route exact path="/admin/">
-                <Dashboard />
-            </Route>
-            <Route exact path="/admin/events/">
-                <Events />
-            </Route>
+            {/* <Route exact path="/admin/" component={Dashboard} />
+            <Route exact path="/admin/events/" component={Events} /> */}
+            <Route 
+                {...rest}
+                render={props => {
+                    if (auth.isAuthenticate()) {
+                        return <Component {...props} />
+                    } else {
+                        return <Redirect to="/admin/login/" /> 
+                    }
+                }}
+            />
         </>
     )
 }
-
-export default Admin
