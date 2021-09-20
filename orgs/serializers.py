@@ -11,6 +11,13 @@ class UserSerializer(serializers.ModelSerializer):
             "username", 
             "password")
 
+class UsernameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username")
+
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event

@@ -1,8 +1,8 @@
 from orgs.models import Event, Org
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
-from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated
-from .serializers import UserSerializer, EventsSerializer, OrgsSerializer
+from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -37,6 +37,19 @@ class OrgsViewSet(viewsets.ModelViewSet):
             serializer = OrgsSerializer(query[0])
 
             return Response(serializer.data)
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = [  
+        IsGet
+    ]
+    serializer_class = UsernameSerializer
+
+    def list(self, *args, **kwargs):
+        query = User.objects.filter(username=self.request.GET.get("user"))
+        serializer = UsernameSerializer(query[0])
+
+        return Response(serializer.data)
     
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

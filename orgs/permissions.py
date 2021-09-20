@@ -22,7 +22,6 @@ class IsPostAndIsAuthenticated(BasePermission):
         else:
             return False
 
-
 class IsPostAndIsNotAuthenticated(BasePermission): 
     """
     Allow access unauthenticated users AND if request method is POST.
@@ -33,3 +32,16 @@ class IsPostAndIsNotAuthenticated(BasePermission):
             return True
         elif request.user.is_authenticated:
             return False
+
+class IsGet(BasePermission):
+    """
+    Allow access if request method is GET.
+    """
+    def has_permission(self, request, view):
+
+        if request.method == 'GET':
+            return True
+        else:
+            return False
+
+
