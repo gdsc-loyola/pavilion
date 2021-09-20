@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import DashboardBase from '../components/DashboardBase'
-import axios from 'axios'
+import OrgsDataService from '../../services/orgs.service'
 import more_options from '../../../static/assets/more_options.svg'
 import '../../../stylesheets/org/Events.scss'
 
@@ -26,9 +26,11 @@ const Events = () => {
     }, [])
     
     const setEvents = () => {
-        axios.get(`${url}orgs`)
+        OrgsDataService.getByOrgUser(user_loggedin) //filter happens in the backend
         .then(res => {
-            const org = res.data.find(({ user }) => user.username === user_loggedin)
+            // const org = res.data.find(({ user }) => user.username === user_loggedin) 
+            const org = res.data
+            console.log(res.data) //for testing
             return getEvents(org.events)
         })
         .catch((e) => 

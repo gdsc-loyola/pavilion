@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import Cotter from 'cotter';
 import auth from './auth';
+import authService from '../../service/orgs.service'
 
 const Login = props => {
     useEffect(() => {
@@ -12,6 +13,15 @@ const Login = props => {
           .then(res => {
             console.log(res) // show the response in our state
             
+            // If not in user list then signup
+            // Signup
+            authService.register(res.email)
+            authService.login(res.email)
+                .then(res => {
+                    auth.saveToken(res.access)
+                })
+
+            // If in user list then login
             auth.login(() => {
                 props.history.push("/admin/")
             })
