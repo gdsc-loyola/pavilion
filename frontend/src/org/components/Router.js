@@ -1,12 +1,20 @@
 import React from "react";
-import Dashboard from "../views/Dashboard";
-import Events from "../views/Events";
+import { Route, Redirect } from "react-router-dom"
+import auth from "../authentication/auth";
 
-const routes = {
-    "/": () => <Dashboard />,
-    // "/login": () => <Login />,
-    // "/signup": () => <Signup />,
-    "/events": () => <Events />
+export const Admin = ({component: Component, ...rest}) => {
+    return(
+        <>
+            <Route 
+                {...rest}
+                render={props => {
+                    if (auth.isAuthenticate()) {
+                        return <Component {...props} />
+                    } else {
+                        return <Redirect to="/admin/login/" /> 
+                    }
+                }}
+            />
+        </>
+    )
 }
-
-export default routes
