@@ -5,7 +5,7 @@ import { CotterProvider, LoginForm } from 'cotter-react'
 import SessionStorageService from '../authentication/SessionStorageService';
 import Dashboard from '../views/Dashboard';
 import Events from '../views/Events';
-import Login from './Login'
+import Login from '../authentication/Login'
 
 const App = () => {
   // const onLoginSuccess = async (payload) => {
