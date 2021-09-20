@@ -5,6 +5,7 @@ import React from 'react'
 import Button from '@material-ui/core/Button';
 import SideBar from './SideBar';
 import Progress from './Progress';
+import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core';
 
 const OrgLogoForm = () => {
@@ -15,36 +16,45 @@ const OrgLogoForm = () => {
     //     setOrgLogo(e.target.value);
     // }
 
+    const [orgLogoFile, setOrgLogoFile] = React.useState({file: "../../static/assets/image.png"});
+
+    const [logoUploaded, setLogoUploaded] = React.useState(false);
+
+    function uploadChange(evt) {
+        setOrgLogoFile({
+            file: URL.createObjectURL(evt.target.files[0])
+        })
+        setLogoUploaded(true)
+    }
+
     return (
         <div className="form-container">
             <SideBar />
             <Progress progress_state="two"/>
             <h1>Upload your org's logo!</h1>
-            {/* <TextField
-                size={'small'}
-                margin={'dense'}
-                label={'Organization Logo*'}
-                variant={'outlined'}
-                // value={orgLogo}
-                style = {{width: '464px'}}
-                // onChange={ (e) => {
-                //     handleOrgLogoChange
-                // }}
-            /> */}
             <section className="org-logo-form">
                 <input
                     type="file"
                     accept="image/*"
                     style={{display: 'none'}}
                     id="org_logo_input"
+                    onChange={(evt) => uploadChange(evt)}
                 />
                 <label htmlFor="org_logo_input">
-                    <div className="org_logo_upload">
-                    <img src="../../static/assets/image.png" alt=""/>
-                        <p>Browse through your files</p>
+                    <div className="org_logo_upload" onClick={clear()}>
+                        <img src={`${logoUploaded ? orgLogoFile.file : "../../static/assets/image.png"}`} alt=""/>
+                        <p style={{
+                            display: logoUploaded ? 'none' : 'flex'
+                        }}>
+                            Browse through your files
+                        </p>
                     </div>
                 </label>
             </section>
+            <Button variant="outlined">Back</Button>
+            <Box mt={3}>
+                <Button variant="outlined" color="primary">Next</Button>
+            </Box>
         </div>
     )
 }

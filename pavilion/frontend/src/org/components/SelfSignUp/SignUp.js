@@ -7,6 +7,7 @@ import PrimaryButton from '../PrimaryButton.js'
 
 const SignUpForm = () => {
     return (
+        // Will return to this. For now it's pushed back and will focus on Log In.
         <div className="welcome-form">
             <h1>Welcome to the Pavilion.</h1>
             <form method="POST" target="">
