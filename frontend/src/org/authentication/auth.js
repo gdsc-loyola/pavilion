@@ -5,7 +5,7 @@ class Auth {
 
     login(cb) {
         this.authenticated = true
-        window.localStorage.setItem("isAuth", this.authenticated)
+        window.sessionStorage.setItem("isAuth", this.authenticated)
         cb()
     }
 
@@ -15,8 +15,8 @@ class Auth {
     }
 
     isAuthenticate() {
-        console.log("ISAUTH: ", window.localStorage.getItem("isAuth"))
-        return window.localStorage.getItem("isAuth")
+        console.log("ISAUTH: ", window.sessionStorage.getItem("isAuth"))
+        return window.sessionStorage.getItem("isAuth")
     }
 }
 

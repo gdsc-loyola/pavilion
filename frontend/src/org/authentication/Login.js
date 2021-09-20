@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import Cotter from 'cotter';
-import auth from '../authentication/auth';
+import auth from './auth';
 
 const Login = props => {
     useEffect(() => {
@@ -11,6 +11,7 @@ const Login = props => {
           .showEmailForm()  // use .showPhoneForm() to send magic link to a phone number 
           .then(res => {
             console.log(res) // show the response in our state
+            
             auth.login(() => {
                 props.history.push("/admin/")
             })
