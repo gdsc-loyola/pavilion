@@ -14,7 +14,7 @@ const LogInForm = () => {
                 {/* <input type="text" name="email" placeholder="Organization email*" />
                 <input type="password" name="password" placeholder="Password*" />
                 <p className="error_msg">Please fill out the fields to log in to the Pavilion.</p> */}
-                <TextField
+                {/* <TextField
                     // className={}
                     size={'small'}
                     margin={'dense'}
@@ -25,8 +25,9 @@ const LogInForm = () => {
                     onChange={(e) => {
                         handleOrgNameChange
                     }}
-                />
-                <PrimaryButton button_copy="Log In"/>
+                /> */}
+                <div id="cotter-form-container" style={{ width: 300, height: 300 }} />
+                {/* <PrimaryButton button_copy="Log In"/> */}
             </div>
         </div>
     )
