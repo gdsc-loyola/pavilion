@@ -1,18 +1,24 @@
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import {Admin} from './Router';
 import Dashboard from '../views/Dashboard';
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import Events from '../views/Events';
+import Login from '../authentication/Login'
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Dashboard />
-      </div>
-    );
-  }
+const App = () => {
+  return (
+      <Switch>
+        <Route exact path="/admin/login/" component={Login}/>
+        <Admin 
+          exact path="/admin/"
+          component={Dashboard}
+        />
+        <Admin 
+          exact path="/admin/events"
+          component={Events}
+        />
+      </Switch>
+  )
 }
 
 export default App;
-
-const container = document.getElementById('app');
-render(<App />, container)
