@@ -1,4 +1,5 @@
 const TOKEN_KEY = "auth-token"
+const IS_AUTH = "isAuth"
 
 class Auth {
     constructor() {
@@ -7,18 +8,26 @@ class Auth {
 
     login(cb) {
         this.authenticated = true
-        window.sessionStorage.setItem("isAuth", this.authenticated)
+        window.sessionStorage.removeItem(IS_AUTH)
+        window.sessionStorage.setItem(IS_AUTH, this.authenticated)
         cb()
     }
 
     logout(cb) {
         this.authenticated = false
+        window.sessionStorage.setItem(IS_AUTH, this.authenticated)
+        cb()
+    }
+
+    signup(cb) {
+        this.authenticated = true
+        window.sessionStorage.removeItem(IS_AUTH)
+        window.sessionStorage.setItem(IS_AUTH, this.authenticated)
         cb()
     }
 
     isAuthenticate() {
-        console.log("ISAUTH: ", window.sessionStorage.getItem("isAuth"))
-        return window.sessionStorage.getItem("isAuth")
+        return window.sessionStorage.getItem(IS_AUTH)
     }
 
     saveToken = (token) => {
