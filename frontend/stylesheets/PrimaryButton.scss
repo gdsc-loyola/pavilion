@@ -5,17 +5,38 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 16px 32px;
+    padding: 8px 24px;
     position: static;
     width: 171px;
-    height: 56px;
+    height: 40px;
     left: 0px;
     top: 0px;
-
+    color: $default-white;
+    font-weight: 500;
+    font-family: $text-sm-med-font-family;
     /* gradient/left-right */
-    background: linear-gradient(90deg, $blue-300 0%, $blue-400 100%);
-    
-    /* shadows/black-1 */
+    // background: linear-gradient(90deg, $blue-300 0%, $blue-400 100%);
+    background-color: $blue-300;
+    border: none;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
     border-radius: 5px;
+    transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+}
+
+.primary_button:hover {
+    // background: linear-gradient(90deg, $blue-400 0%, $blue-300 100%);
+    background-color: $blue-400;
+    transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    cursor: pointer;
+}
+
+.primary_button:active {
+    background: $blue-500;
+    transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
 }

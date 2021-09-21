@@ -10,6 +10,8 @@ import SecondaryButton from "./SecondaryButton"
 
 // import stylesheets
 import "../../../stylesheets/org/Dashboard.scss"
+import "../../../stylesheets/PrimaryButton.scss"
+import "../../../stylesheets/SecondaryButton.scss"
 
 const BodyDashboard = () => {
     return (
