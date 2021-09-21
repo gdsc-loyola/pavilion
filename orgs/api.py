@@ -45,11 +45,15 @@ class UserViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = UsernameSerializer
 
+    #getByUsername
     def list(self, *args, **kwargs):
         query = User.objects.filter(username=self.request.GET.get("user"))
-        serializer = UsernameSerializer(query[0])
 
-        return Response(serializer.data)
+        if not query:
+            return Response("signup")
+        else:
+            serializer = UsernameSerializer(query[0])
+            return Response(serializer.data)
     
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -59,7 +63,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def create(self, request):
-        username = request.POST["username"]
+        username = request.data["username"]
         password = "9,2Nli1H:C&Vmyl<9:Y)VV1t[jQN7rS7Laf|sip*]X_Fi)IX5"
 
         new_user = User.objects.create(
