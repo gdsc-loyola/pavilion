@@ -73,12 +73,18 @@ Step by step process of how to setup the Development environment
 
 ### Local Machine
 1. Start your virtual environment (only if you have a virtual environment)
-    ```bash
-    <virtualenv>/scripts/activate
-    ```
+    * For Windows
+        ```bash
+        <virtualenv>/scripts/activate
+        ```
+    * For Linux
+        ```bash
+        source <virtualenv>/bin/activate
+        ```
+
 2. Run the django server (ensure you are in the main directory (ex: C:/users/jing/projects/pavilion)
     ```bash
-    python manage.py runserver --settings=dev_settings
+    python manage.py runserver --settings=pavilion.dev_settings
     ```
 3. Open a new terminal and cd to the frontend directory (ex: C:/users/jing/projects/pavilion/frontend)
     ```bash
