@@ -4,7 +4,7 @@ With the pandemic prohibiting students from attending onsite, organizations have
 ## Getting Started
 1. Run 
     ```bash
-    python manage.py runserver --settings=dev_settings
+    python manage.py runserver --settings=pavilion.dev_settings
     ```
     this is done to run the django local server (ensure that you are in the main pavilion directory)
 
