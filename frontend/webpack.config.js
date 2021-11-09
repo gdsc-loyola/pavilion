@@ -1,11 +1,15 @@
 const path = require("path");
-const webpack = require("webpack")
-
+const webpack = require("webpack");
 module.exports = {
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "./static/frontend"),
-    filename: "[name].js"
+    filename: "[name].js",
+  },
+  resolve: {
+    alias: {
+      $stylesheets: path.resolve(__dirname, "/stylesheets"),
+    },
   },
   module: {
     rules: [
@@ -13,17 +17,17 @@ module.exports = {
         test: /\.js|.jsx$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
+          loader: "babel-loader",
+        },
       },
       {
         test: /\.s[ac]ss/i,
         exclude: /node_modules/,
-        use: ["style-loader", "css-loader", "sass-loader"]
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /\.css$/,
-        use: ['style-loader','css-loader', 'file-loader']
+        use: ["style-loader", "css-loader", "file-loader"],
       },
       {
         test: /\.svg$/,
@@ -33,23 +37,24 @@ module.exports = {
             options: {
               limit: 10000,
             },
-          }
-        ]
+          },
+        ],
       },
       {
         test: /\.png$/,
-        loader: 'file-loader'
-      }
-    ]
+        loader: "file-loader",
+      },
+    ],
   },
   optimization: {
-    minimize: true
+    minimize: true,
   },
+
   plugins: [
     new webpack.DefinePlugin({
       "process.env": {
-        NODE_ENG: JSON.stringify("development")
-      }
-    })
-  ]
+        NODE_ENV: JSON.stringify("development"),
+      },
+    }),
+  ],
 };
