@@ -1,5 +1,6 @@
 // import essential dependencies
 import React from 'react'
+import auth from "../../authentication/auth"
 
 // import stylesheets
 import "../../../../stylesheets/PrimaryButton.scss";
@@ -15,6 +16,7 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import { spacing } from '@material-ui/system';
 
+
 // const useStyles = makeStyles((theme) => ({
 //     formControl: {
 //       margin: theme.spacing(20%),
@@ -27,15 +29,69 @@ import { spacing } from '@material-ui/system';
   
 // const classes = useStyles();
 
-const OrgInfoForm = () => {
+const OrgInfoForm = props => {
     const [orgName, setOrgName] = React.useState('');
+    const [orgShortName, setOrgShortName] = React.useState('');
+    const [desc, setDesc] = React.useState('');
+    const [orgBody, setOrgBody] = React.useState('');
+    const [orgForm, setOrgForm] = React.useState({
+        name: null, 
+        short_name: null, 
+        desc: null, 
+        org_body: null,
+        logo: null,
+        facebook: null, 
+        instagram: null, 
+        twitter: null, 
+        linkedin: null, 
+        website: null,
+    });
 
     const handleOrgNameChange = (e) => {
-        setOrgName(e.target.value);
-    }
+        setOrgName(e)
+        setOrgForm(prevState => {
+            return {
+                ...prevState,
+                name: e
+            }
+        })
+    };       
 
     const handleOrgShorthandChange = (e) => {
-        set_org_name(e.target.value);
+        setOrgShortName(e);
+        setOrgForm(prevState => {
+            return {
+                ...prevState,
+                short_name: e
+            }
+        })
+    }
+
+    const handleOrgDescChange = (e) => {
+        setDesc(e);
+        setOrgForm(prevState => {
+            return {
+                ...prevState,
+                desc: e
+            }
+        })
+    }
+
+    const handleOrgBodyChange = (e) => {
+        setOrgBody(e);
+        setOrgForm(prevState => {
+            return {
+                ...prevState,
+                org_body: e
+            }
+        })
+    }
+
+    const moveToOrgLogo = () => {
+        props.history.push({
+            pathname: "/org-logo/",
+            state: {detail: orgForm}
+        })
     }
 
     return (
@@ -52,9 +108,7 @@ const OrgInfoForm = () => {
                     variant={'outlined'}
                     value={orgName}
                     style = {{width: '464px'}}
-                    onChange={(e) => {
-                        handleOrgNameChange
-                    }}
+                    onChange={(e) => handleOrgNameChange(e.target.value)}
                 />
                 <TextField
                     // className={}
@@ -63,9 +117,9 @@ const OrgInfoForm = () => {
                     label={'Shorthand Name (ex. GDSC-L)*'}
                     variant={'outlined'}
                     style = {{width: '464px'}}
-                    // value={org_name}
+                    value={orgShortName}
                     onChange={(e) => {
-                        handleOrgShorthandChange
+                        handleOrgShorthandChange(e.target.value)
                     }}
                 />
                 <TextField
@@ -77,9 +131,10 @@ const OrgInfoForm = () => {
                     style = {{width: '464px'}}
                     multiline
                     rows={8}
-                    // value={org_name}
-                    // onChange={(e): void => {
-                    // }}
+                    value={desc}
+                    onChange={(e) => {
+                        handleOrgDescChange(e.target.value)
+                    }}
                 />
                 <FormControl variant="outlined" margin="dense">
                 <InputLabel>Org body*</InputLabel>
@@ -90,6 +145,8 @@ const OrgInfoForm = () => {
                         margin="dense"
                         label={'Org Body*'}
                         style = {{width: '464px'}}
+                        value = {orgBody}
+                        onChange = {(e) => handleOrgBodyChange(e.target.value)}
                     >
                         <MenuItem value="COA">COA</MenuItem>
                         <MenuItem value="LIONS">LIONS</MenuItem>
@@ -97,7 +154,7 @@ const OrgInfoForm = () => {
                     </Select>
                 </FormControl>
                 <Box mt={3}>
-                    <Button variant="outlined" color="primary">Next</Button>
+                    <Button variant="outlined" color="primary" onClick={moveToOrgLogo}>Next</Button>
                 </Box>
             </div>
         </div>

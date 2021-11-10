@@ -1,21 +1,27 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import { Admin } from "./Router";
+import { Admin, CreateOrg } from "./Router";
 import Dashboard from "../views/Dashboard";
 import Events from "../views/Events";
-import Login from "../authentication/Login";
-import SignUp from "./SelfSignUp/SignUp";
-import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "$lib/theme";
+import Login from "./SelfSignUp/LogIn";
+import OrgInfo from "./SelfSignUp/OrgInfo";
+import OrgLogo from "./SelfSignUp/OrgLogo";
+import OrgLinks from "./SelfSignUp/OrgLinks";
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Switch>
         <Route exact path="/admin/login/" component={Login} />
-        <Route exact path="/admin/signup" component={SignUp} />
+
+        {/* Protected admin routes */}
         <Admin exact path="/admin/" component={Dashboard} />
         <Admin exact path="/admin/events" component={Events} />
+
+        {/* SSU routes */}
+        <CreateOrg exact path="/org-info/" component={OrgInfo} />
+        <CreateOrg exact path="/org-logo/" component={OrgLogo} />
+        <CreateOrg exact path="/org-links/" component={OrgLinks} />
       </Switch>
     </ThemeProvider>
   );

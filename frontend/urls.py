@@ -8,5 +8,8 @@ urlpatterns = [
     path('admin/login/', views.index),
     
     # Catch-all for all other URLs
-    re_path(r'^admin/.*$', views.index)
+    re_path(r'^admin/.*$', views.index),
+    path('org-info/', views.index),
+    path('org-logo/', views.index),
+    path('org-links/', views.index)
 ]

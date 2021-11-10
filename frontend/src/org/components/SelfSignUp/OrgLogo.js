@@ -8,7 +8,7 @@ import Progress from './Progress';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core';
 
-const OrgLogoForm = () => {
+const OrgLogoForm = props => {
 
     // const [orgLogo, setOrgLogo] = React.useState('');
 
@@ -16,6 +16,7 @@ const OrgLogoForm = () => {
     //     setOrgLogo(e.target.value);
     // }
 
+    const [orgForm, setOrgForm] = React.useState(props.location.state.detail)
     const [orgLogoFile, setOrgLogoFile] = React.useState({file: "../../static/assets/image.png"});
 
     const [logoUploaded, setLogoUploaded] = React.useState(false);
@@ -26,6 +27,8 @@ const OrgLogoForm = () => {
         })
         setLogoUploaded(true)
     }
+
+    console.log(orgForm)
 
     return (
         <div className="form-container">
@@ -41,7 +44,8 @@ const OrgLogoForm = () => {
                     onChange={(evt) => uploadChange(evt)}
                 />
                 <label htmlFor="org_logo_input">
-                    <div className="org_logo_upload" onClick={clear()}>
+                    {/* <div className="org_logo_upload" onClick={clear()}> */}
+                    <div className="org_logo_upload">
                         <img src={`${logoUploaded ? orgLogoFile.file : "../../static/assets/image.png"}`} alt=""/>
                         <p style={{
                             display: logoUploaded ? 'none' : 'flex'
