@@ -4,9 +4,13 @@ import { Admin, CreateOrg } from "./Router";
 import Dashboard from "../views/Dashboard";
 import Events from "../views/Events";
 import Login from "./SelfSignUp/LogIn";
-import OrgInfo from "./SelfSignUp/OrgInfo";
+import { OrgInfo } from "$modules/SelfSignUp/routes";
+
+import OrgInfoOld from "./SelfSignUp/OrgInfo";
 import OrgLogo from "./SelfSignUp/OrgLogo";
 import OrgLinks from "./SelfSignUp/OrgLinks";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "$lib/theme";
 
 const App = () => {
   return (
@@ -19,9 +23,10 @@ const App = () => {
         <Admin exact path="/admin/events" component={Events} />
 
         {/* SSU routes */}
-        <CreateOrg exact path="/org-info/" component={OrgInfo} />
-        <CreateOrg exact path="/org-logo/" component={OrgLogo} />
-        <CreateOrg exact path="/org-links/" component={OrgLinks} />
+        <Route exact path="/org-info/" component={OrgInfo} />
+        <Route exact path="/org-info-old/" component={OrgInfoOld} />
+        <Route exact path="/org-logo/" component={OrgLogo} />
+        <Route exact path="/org-links/" component={OrgLinks} />
       </Switch>
     </ThemeProvider>
   );
