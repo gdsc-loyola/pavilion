@@ -37,6 +37,20 @@ class OrgsViewSet(viewsets.ModelViewSet):
             serializer = OrgsSerializer(query[0])
 
             return Response(serializer.data)
+    
+    def partial_update(self, request, id):
+        instance = Org.objects.get( id = id )
+
+        if not instance:
+            # return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response("Instance not found.", status=404)
+        print(request.data)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response("Serializer not valid.", status=401)
+        serializer.save()
+        return Response(serializer.data, status=200)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

@@ -9,11 +9,12 @@ export const Admin = ({component: Component, ...rest}) => {
             <Route 
                 {...rest}
                 render={props => {
-                    if (auth.isAuthenticate()) {
-                        return <Component {...props} />
-                    } else {
-                        return <Redirect to="/admin/login/" /> 
-                    }
+                    // if (auth.isAuthenticate()) {
+                    //     return <Component {...props} />
+                    // } else {
+                    //     return <Redirect to="/admin/login/" /> 
+                    // }
+                    return <Component {...props} />
                 }}
             />
         </>
