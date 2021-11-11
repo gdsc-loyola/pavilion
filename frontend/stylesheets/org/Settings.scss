@@ -1,0 +1,36 @@
+@import "../variables.scss";
+
+.title {
+    font-size: $text-lg-bold-font-size;
+    font-family: $text-lg-bold-font-family;
+    font-weight: $text-lg-bold-font-weight;
+    letter-spacing: $text-lg-bold-letter-spacing;
+    margin: 0 0 20px 0;
+}
+
+.body-title {
+    font-size: $text-lg-bold-font-size;
+    font-family: $text-lg-bold-font-family;
+    font-weight: $text-lg-bold-font-weight;
+    letter-spacing: $text-lg-bold-letter-spacing;
+    margin: 90px 0 20px 0;
+}
+.social-media-header {
+    font-family: $text-lg-bold-font-family;
+    margin: 15px 0 0 0;
+}
+.image-subtitle {
+    font-size: $text-sm-reg-font-size;
+    font-family: $text-lg-reg-font-family;
+    font-weight: $text-sm-reg-font-weight;
+    color: $gray-500;
+    width: 466px;
+    text-align: center;
+}
+.settings {
+    margin: 120px 0 0 256px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+}
