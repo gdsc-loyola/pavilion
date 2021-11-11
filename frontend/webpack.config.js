@@ -10,6 +10,8 @@ module.exports = {
     alias: {
       $stylesheets: path.resolve(__dirname, "/stylesheets"),
       $lib: path.resolve(__dirname, "./src/lib"),
+      $modules: path.resolve(__dirname, "./src/modules"),
+      $components: path.resolve(__dirname, "./src/components"),
     },
   },
   module: {

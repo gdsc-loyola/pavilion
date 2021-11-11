@@ -3,7 +3,9 @@
     "baseUrl": ".",
     "paths": {
       "$stylesheets/*": ["./stylesheets/*"],
-      "$lib/*": ["./src/lib/*"]
+      "$lib/*": ["./src/lib/*"],
+      "$modules/*": ["./src/modules/*"],
+      "$components/*": ["./src/components/*"]
     }
   }
 }
