@@ -13,6 +13,7 @@ import { persist } from "zustand/middleware";
  * @property {string} instagram
  * @property {string} linkedin
  * @property {string} website
+ * @property {number} step
  */
 
 export const useOrgFormStore = create(
@@ -29,6 +30,7 @@ export const useOrgFormStore = create(
         twitter: "",
         linkedin: "",
         website: "",
+        step: 1,
       },
       /**
        *

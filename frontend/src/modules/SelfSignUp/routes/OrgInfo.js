@@ -37,7 +37,10 @@ const OrgInfo = (props) => {
   });
 
   const onSubmit = (data) => {
-    setOrgForm(data);
+    setOrgForm({
+      ...data,
+      step: 2,
+    });
     props.history.push({
       pathname: "/org-logo/",
       state: { detail: orgForm },

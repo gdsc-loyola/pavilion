@@ -3,6 +3,7 @@ import { useOrgFormStore } from "../store/useOrgFormStore";
 import { Stack, Box, InputLabel, Button } from "@mui/material";
 import * as yup from "yup";
 import { styled } from "@mui/material/styles";
+import { Redirect } from "react-router-dom";
 import React from "react";
 import { useForm } from "react-hook-form";
 import Layout from "../components/Layout";
@@ -70,6 +71,11 @@ const OrgLinks = (props) => {
   const onSubmit = (data) => {
     setOrgForm(data);
   };
+
+  if (!orgForm.step || orgForm.step < 3) {
+    // Redirect to the previous step
+    return <Redirect to={`/org-logo`} />;
+  }
 
   return (
     <Layout step={3} title="Let’s link your other pages.">

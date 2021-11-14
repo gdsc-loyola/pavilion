@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import { styled } from "@mui/material/styles";
 import { Button, Stack } from "@mui/material";
 import { useOrgFormStore } from "../store/useOrgFormStore";
+import { Redirect } from "react-router-dom";
 
 const HelperText = styled("p")(({ theme }) => ({
   color: theme.colors.gray["500"],
@@ -43,6 +44,7 @@ const OrgLogo = (props) => {
     setLogo(url);
     setOrgForm({
       logo: url,
+      step: 3,
     });
   };
 
@@ -59,7 +61,12 @@ const OrgLogo = (props) => {
       handleLogoChange(file);
     }
   };
-  const { setOrgForm } = useOrgFormStore();
+  const { orgForm, setOrgForm } = useOrgFormStore();
+
+  if (!orgForm.step || orgForm.step < 2) {
+    // Redirect to the previous step
+    return <Redirect to={`/org-info`} />;
+  }
 
   return (
     <Layout step={2} title="Upload your org's logo!">
