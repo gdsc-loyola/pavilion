@@ -13,14 +13,14 @@ const ControlledTextField = (props) => {
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultValue}
       rules={rules}
-      render={({ field, fieldState: { error } }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <TextField
           name={name}
           error={!!error}
           helperText={error ? error.message : null}
-          {...field}
+          onChange={onChange}
+          value={value || ""}
           {...rest}
         />
       )}

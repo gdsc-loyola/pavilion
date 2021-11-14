@@ -1,12 +1,9 @@
-// import essential dependencies
 import React from "react";
 
-// import stylesheets
-import "$stylesheets/org/SelfSignUp.scss";
 import { styled } from "@mui/material/styles";
 import { colors } from "$lib/theme";
 
-const StyledSidebar = styled("aside")({
+const StyledSidebar = styled("aside")(({ theme }) => ({
   backgroundColor: colors.gray[100],
   display: "flex",
   flexDirection: "column",
@@ -15,10 +12,10 @@ const StyledSidebar = styled("aside")({
   alignItems: "center",
   justifyContent: "center",
   position: "relative",
-  "@media screen and (max-width: 950px)": {
+  [theme.breakpoints.down("md")]: {
     display: "none",
   },
-});
+}));
 
 const BlueEllipse = styled("div")(({}) => ({
   background: `linear-gradient(90deg, ${colors.blue[100]} 0%,${colors.blue[300]} 100%)`,
@@ -31,6 +28,7 @@ const BlueEllipse = styled("div")(({}) => ({
   maxHeight: "520px",
   borderRadius: "999px",
 }));
+
 const SideBar = () => {
   return (
     <StyledSidebar>

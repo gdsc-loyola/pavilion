@@ -1,8 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import React from "react";
 
 import Sidebar from "./Sidebar";
 import Progress from "./Progress";
+import { typography } from "$lib/theme";
 
 /**
  * @typedef {Object} Props
@@ -15,6 +16,7 @@ import Progress from "./Progress";
  * @returns {React.Component}
  */
 const Layout = (props) => {
+  const theme = useTheme();
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar />
@@ -24,6 +26,12 @@ const Layout = (props) => {
           placeItems: "center",
           flex: 1,
           padding: "4rem",
+          [theme.breakpoints.down("sm")]: {
+            padding: "4rem 2rem",
+            h1: {
+              fontSize: typography.fontSize["lg"],
+            },
+          },
         }}
       >
         <Box
@@ -35,7 +43,9 @@ const Layout = (props) => {
           }}
         >
           <Progress step={props.step} />
-          <Typography variant="h1">{props.title}</Typography>
+          <Typography variant="h1" align="center">
+            {props.title}
+          </Typography>
           {props.children}
         </Box>
       </Box>

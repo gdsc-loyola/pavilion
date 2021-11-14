@@ -8,12 +8,15 @@ const StyledProgress = styled("div")({
   alignItems: "center",
 });
 
-const StyledDot = styled("div")((props) => ({
-  backgroundColor: props["data-active"] ? colors.blue[300] : colors.gray[100],
+const StyledDot = styled("div")(() => ({
+  backgroundColor: colors.gray[100],
   width: "16px",
   height: "16px",
   borderRadius: "999px",
   margin: "0 1rem",
+  '&[data-active="true"]': {
+    backgroundColor: colors.blue[300],
+  },
 }));
 
 /**

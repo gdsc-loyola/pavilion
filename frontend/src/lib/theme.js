@@ -9,6 +9,7 @@ export const colors = {
     500: "#1967d2",
     600: "#2160bf",
     700: "#174ea6",
+    bg10: "#A9B8FF0A",
   },
   gray: {
     100: "#f3f4f6",
@@ -46,6 +47,7 @@ export const typography = {
     reg: 400,
   },
 };
+
 export const theme = createTheme({
   typography: {
     fontFamily: [
@@ -62,6 +64,7 @@ export const theme = createTheme({
       '"Segoe UI Symbol"',
     ].join(","),
   },
+  colors,
   palette: {},
   components: {
     MuiTextField: {
@@ -83,6 +86,9 @@ export const theme = createTheme({
         },
         containedSizeMedium: {
           padding: "1rem 2rem",
+        },
+        sizeSmall: {
+          padding: "0.5rem 1.5rem",
         },
       },
     },

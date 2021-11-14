@@ -1,8 +1,16 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import Box from "@mui/material/Box";
 
-import { Select, MenuItem, FormControl, InputLabel, Button, FormHelperText } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Button,
+  FormHelperText,
+  Box,
+  useTheme,
+} from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControlledTextField from "$components/ControlledTextField";
 import * as yup from "yup";
@@ -17,6 +25,7 @@ const ValidationSchema = yup.object().shape({
 });
 
 const OrgInfo = (props) => {
+  const theme = useTheme();
   const { orgForm, setOrgForm } = useOrgFormStore((state) => ({
     orgForm: state.orgForm,
     setOrgForm: state.setOrgForm,
@@ -51,14 +60,24 @@ const OrgInfo = (props) => {
           sx={{
             width: "100%",
             maxWidth: "468px",
+            [theme.breakpoints.down("sm")]: {
+              maxWidth: "unset",
+            },
           }}
         >
-          <ControlledTextField fullWidth label="Organization Name*" control={control} name="name" />
+          <ControlledTextField
+            fullWidth
+            label="Organization Name*"
+            control={control}
+            name="name"
+            size="medium"
+          />
           <ControlledTextField
             fullWidth
             label="Shorthand Name (ex. GDSC-L)*"
             control={control}
             name="shortName"
+            size="medium"
           />
 
           <ControlledTextField
@@ -87,7 +106,6 @@ const OrgInfo = (props) => {
           />
           <Button
             sx={{ marginTop: "2rem", marginLeft: "auto", display: "block" }}
-            variant="outlined"
             type="submit"
             color="primary"
           >
