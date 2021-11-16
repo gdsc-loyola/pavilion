@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import { Admin, CreateOrg } from "./Router";
 import Dashboard from "../views/Dashboard";
 import Events from "../views/Events";
+import Settings from '../views/Settings';
 import { OrgInfo, OrgLogo, OrgLinks, Login } from "$modules/SelfSignUp/routes";
 
 import OrgInfoOld from "./SelfSignUp/OrgInfo";
@@ -19,6 +20,11 @@ const App = () => {
         {/* Protected admin routes */}
         <Admin exact path="/admin/" component={Dashboard} />
         <Admin exact path="/admin/events" component={Events} />
+
+        <Admin 
+          exact path="/admin/settings"
+          component={Settings}
+        />
 
         {/* SSU routes */}
         <Route exact path="/org-info/" component={OrgInfo} />

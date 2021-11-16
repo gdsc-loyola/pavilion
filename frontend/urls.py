@@ -6,6 +6,7 @@ urlpatterns = [
     path('admin/', views.index),
     path('admin/events/', views.index),
     path('admin/login/', views.index),
+    path('admin/settings/', views.index),
     
     # Catch-all for all other URLs
     re_path(r'^admin/.*$', views.index),
