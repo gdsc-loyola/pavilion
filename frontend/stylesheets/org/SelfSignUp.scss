@@ -1,182 +1,210 @@
 @import "../variables.scss";
 * {
-    margin: 0;
+  margin: 0;
 }
 
 /* SSU Flow */
 .side-bar {
-    background-color: $gray-100;
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    width: 30%;
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
-    left: 0;
-    img {
-        width: 383px;
-    }
+  background-color: $gray-100;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  img {
+    width: 383px;
+  }
 
-    img[alt='Pavilion logo'] {
-        width: 170px;
-        margin-bottom: 40px;
-    }
+  img[alt="Pavilion logo"] {
+    width: 170px;
+    margin-bottom: 40px;
+  }
 }
 
 /*hard coded coordinates for now */
 .blue-ellipse {
-    position: fixed;
-    width: 512px;
-    height: 520px;
-    left: -260px;
-    bottom: -355px;
-    border-radius: 520px;
-    background: linear-gradient(90deg, $blue-100 0%, $blue-300 100%);
+  position: fixed;
+  width: 512px;
+  height: 520px;
+  left: -260px;
+  bottom: -355px;
+  border-radius: 520px;
+  background: linear-gradient(90deg, $blue-100 0%, $blue-300 100%);
 }
 
 h1 {
-    font-family: $text-lg-reg-font-family;
-    margin: 32px 0;
+  font-family: $text-lg-reg-font-family;
+  margin: 32px 0;
 }
 
 .form-container {
-    width: 70%;
-    height: 100%;
-    left: 30%;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    align-items: center;
-    justify-content: center;
-    font-family: $text-sm-reg-font-family;
+  width: 70%;
+  height: 100%;
+  left: 30%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  font-family: $text-sm-reg-font-family;
 }
 
 /* Login */
 .blue-bg {
-    position: fixed;
-    background-image: linear-gradient(to right, $blue-300 100%, $blue-200 100%);
-    clip-path: polygon( 0% 0%, 100% 0, 100% 20%, 0% 70% );
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
+  position: fixed;
+  background-image: linear-gradient(to right, $blue-300 100%, $blue-200 100%);
+  clip-path: polygon(0% 0%, 100% 0, 100% 20%, 0% 70%);
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
 }
 
 .login {
-    left: 0;
-    width: 100%;
+  left: 0;
+  width: 100%;
 }
 
 .login-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: $default-white;
-    border-radius: 4px;
-    padding: 24px;
-    box-shadow: 0px 4px 10px 0px #00000014;
-    h1 {
-        color: $blue-400;
-        font-weight: 700;
-        margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: $default-white;
+  border-radius: 4px;
+  padding: 24px;
+  box-shadow: 0px 4px 10px 0px #00000014;
+  gap: 2rem;
+  text-align: center;
+
+  h1 {
+    color: $blue-400;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  p,
+  span {
+    color: $gray-700;
+    font-size: $text-base-reg-font-size;
+    font-weight: $text-base-reg-font-weight;
+  }
+  .inputs {
+    display: grid;
+    flex: 1;
+    align-self: stretch;
+    gap: 1rem;
+    input {
+      .MuiTextField-root {
+        width: 100%;
+      }
     }
+  }
+  .checkboxes {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 }
 
 .org-info-form {
-    display: flex;
-    flex-direction: column;
-    width: 464px;
-    // button {
-    align-items: flex-end;
-    justify-content: flex-end;
-    //     display: flex;
-    //     justify-content: end;
-    //     align-items: flex-end;
-    // }
+  display: flex;
+  flex-direction: column;
+  width: 464px;
+  // button {
+  align-items: flex-end;
+  justify-content: flex-end;
+  //     display: flex;
+  //     justify-content: end;
+  //     align-items: flex-end;
+  // }
 }
 
 .progress {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    div {
-        background-color: $gray-300;
-        width: 16px;
-        height: 16px;
-        border-radius: 16px;
-        margin: 0 16px;
-    }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  div {
+    background-color: $gray-300;
+    width: 16px;
+    height: 16px;
+    border-radius: 16px;
+    margin: 0 16px;
+  }
 }
 .three {
-    #three, #two, #one{
-        background-color: $blue-300;
-    }
+  #three,
+  #two,
+  #one {
+    background-color: $blue-300;
+  }
 }
 .two {
-    #two, #one{
-        background-color: $blue-300;
-    }
+  #two,
+  #one {
+    background-color: $blue-300;
+  }
 }
 .one {
-    #one{
-        background-color: $blue-300;
-    }
+  #one {
+    background-color: $blue-300;
+  }
 }
 
 /* Org Links Form */
 
 .org-links-form {
-    display: flex;
-    flex-direction: column;
-    width: 464px;
-    // button {
-    align-items: flex-start;
-    justify-content: flex-end;
+  display: flex;
+  flex-direction: column;
+  width: 464px;
+  // button {
+  align-items: flex-start;
+  justify-content: flex-end;
 }
 
 p {
-    margin-top: 16px;
-    font-weight: $text-sm-bold-font-weight;
-    font-size: $text-sm-bold-font-size;
+  margin-top: 16px;
+  font-weight: $text-sm-bold-font-weight;
+  font-size: $text-sm-bold-font-size;
 }
 
 .cta {
-    margin-top: 16px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    button {
-        margin-left: 16px;
-    }
+  margin-top: 16px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  button {
+    margin-left: 16px;
+  }
 }
 
 /* Org Logo Form */
 .org-logo-form {
-    height: 208px;
-    width: 464px;
-
+  height: 208px;
+  width: 464px;
 }
 
 .org_logo_upload {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    height: 240px;
-    width: 464px;
-    border: 1px dashed $blue-400;
-    border-radius: 2px;
-    background-color: $blue-bg-10;
-    transition-duration: 200ms;
-    p {
-        color: $blue-400;
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  height: 240px;
+  width: 464px;
+  border: 1px dashed $blue-400;
+  border-radius: 2px;
+  background-color: $blue-bg-10;
+  transition-duration: 200ms;
+  p {
+    color: $blue-400;
+  }
 }
 
 .org_logo_upload:hover {
-    background-color: $gray-300;
-    transition-duration: 200ms;
+  background-color: $gray-300;
+  transition-duration: 200ms;
 }

@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const Login = props => {
     useEffect(() => {
-        const cotter = new Cotter('aa2398ab-3950-42dd-b3d1-4e383734a5ac')
+        const cotter = new Cotter('aa2398ab-3950-42dd-b3d1-4e383734a5ac') //process.env.ENV VARIABle
         cotter
           .withFormID("form_default") // Use customization for form "form_default"
           .signInWithLink() // use .signInWithOTP() to send an OTP
@@ -20,9 +20,9 @@ const Login = props => {
 
             // Signup
             if (isRegistered.data === "signup") {
-                registerBackend = await authService.register(res.email)
-                loginBackend = await authService.login(registerBackend.data.username)
-                await auth.saveToken(loginBackend.data.access)
+                registerBackend = await authService.register(res.email) // Store email in django backend
+                loginBackend = await authService.login(registerBackend.data.username) 
+                await auth.saveToken(loginBackend.data.access) // Sace token in session storage
                 
                 // Redirect to signup
                 auth.signup(() => {
@@ -32,7 +32,7 @@ const Login = props => {
             // Login
             } else {
                 loginBackend = await authService.login(isRegistered.data.username)
-                await auth.saveToken(loginBackend.data.access)
+                await auth.saveToken(loginBackend.data.access) // Save token in session storage
 
                 // Redirect to login
                 auth.login(() => {
