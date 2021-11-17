@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",
-    "axios": "^0.21.3",
+    "axios": "^0.21.4",
     "cotter-react": "^0.1.0",
     "css-loader": "^6.2.0",
     "file-loader": "^6.2.0",

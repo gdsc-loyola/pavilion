@@ -1,4 +1,4 @@
-from orgs.models import Event, Org
+from orgs.models import Event, Organization
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
@@ -16,36 +16,35 @@ class EventsViewSet(viewsets.ModelViewSet):
     serializer_class = EventsSerializer
 
 class OrgsViewSet(viewsets.ModelViewSet):
-    queryset = Org.objects.all()
+    queryset = Organization.objects.all()
     permission_classes = [  
         IsGetOrIsAuthenticated
     ]
     serializer_class = OrgsSerializer
 
-    
     def list(self, *args, **kwargs):
         #getAll
         if (self.request.GET.get("user") == None):
-            queryset = Org.objects.all()
+            queryset = Organization.objects.all()
             serializer = [OrgsSerializer(query).data for query in queryset]
 
             return Response(serializer)
 
         #getByOrgUser
         else: 
-            query = Org.objects.filter(user=self.request.GET.get("user"))
+            query = Organization.objects.filter(user=self.request.GET.get("user"))
             serializer = OrgsSerializer(query[0])
 
             return Response(serializer.data)
     
-    def partial_update(self, request, id):
-        instance = Org.objects.get( id = id )
+    def update(self, id, *args, **kwargs):
+        instance = Organization.objects.get( id = id )
 
         if not instance:
             # return Response(status=status.HTTP_404_NOT_FOUND)
             return Response("Instance not found.", status=404)
-        print(request.data)
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        print(self.request.data)
+        serializer = self.get_serializer(instance, data=self.request.data, partial=True)
 
         if not serializer.is_valid():
             return Response("Serializer not valid.", status=401)
