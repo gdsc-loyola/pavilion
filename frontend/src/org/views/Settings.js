@@ -1,4 +1,4 @@
-import React from 'react' 
+import React, {useEffect} from 'react' 
 import DashboardBase from '../components/DashboardBase'
 import "../../../stylesheets/org/Settings.scss"
 import TextField from '@material-ui/core/TextField';
@@ -6,7 +6,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-const Settings = () => {
+import OrgsDataService from "../../services/orgs.service"
+const Settings = (props) => {
 
     const [orgLogoFile, setOrgLogoFile] = React.useState({file: "../../static/assets/image.png"});
     const [logoUploaded, setLogoUploaded] = React.useState(false);
@@ -104,6 +105,7 @@ const Settings = () => {
 
     const handleWebsiteChange = (e) => {
         setOrgForm(prevState => {
+            console.log(orgForm)
             return {
                 ...prevState,
                 website: e
@@ -113,11 +115,13 @@ const Settings = () => {
 
     return (
         <div>
+            {console.log(props.orgdata.name)}
             <DashboardBase />
                 <div className="settings">
                     <h1 className="title">Org Information</h1>
                     <TextField
                         label={'Organization Name*'}
+                        defaultValue={props.orgdata.name}
                         margin="dense"
                         variant={'outlined'}
                         style = {{width: '464px'}}
@@ -230,4 +234,42 @@ const Settings = () => {
     )
 }
 
-export default Settings
+class orgService extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            orgInfo: {}
+        }
+    }
+
+    componentDidMount() {
+        OrgsDataService.get(1).then(res => {
+            this.setState({ orgInfo: {
+                name: res.data.name,
+                short_name: res.data.short_name, 
+                desc: res.data.desc, 
+                org_body: res.data.org_body,
+                logo: res.data.logo,
+                facebook: res.data.facebook, 
+                instagram: res.data.instagram, 
+                twitter: res.data.twitter, 
+                linkedin: res.data.linkedin, 
+                website: res.data.website
+            }
+            })
+        }).catch((e) => {
+            console.error(e)
+        })
+    }
+    render () {
+        return (
+            <div>
+                <Settings orgdata = {this.state.orgInfo}></Settings>
+            </div>
+        )
+    }
+}
+
+
+export default orgService
