@@ -11,10 +11,14 @@ import OrgLogoOld from "./SelfSignUp/OrgLogo";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "$lib/theme";
 
+import Landing from "../../student/views/Landing";
+
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Switch>
+        <Route exact path="/" component={Landing} />
+
         <Route exact path="/admin/login/" component={Login} />
 
         {/* Protected admin routes */}
