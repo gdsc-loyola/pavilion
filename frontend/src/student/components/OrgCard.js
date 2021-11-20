@@ -33,7 +33,7 @@ const OrgCard = ({ orgPhoto, orgBody, orgName }) => {
       }}
     >
       <CardActionArea
-        onClick={() => history.push(`/${orgName.toLowerCase()}`)}
+        onClick={() => history.push(`/organizations/${orgName.toLowerCase()}`)}
         sx={{
           display: 'flex',
           flexDirection: 'column',

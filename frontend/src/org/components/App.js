@@ -12,12 +12,14 @@ import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "$lib/theme";
 
 import Landing from "../../student/views/Landing";
+import OrgCatalog from "../../student/views/Organizations"
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Switch>
         <Route exact path="/" component={Landing} />
+        <Route exact path="/organizations" component={OrgCatalog} />
 
         <Route exact path="/admin/login/" component={Login} />
 

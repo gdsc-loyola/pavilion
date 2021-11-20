@@ -15,7 +15,7 @@ const EventCard = (props) => {
 
     return (
         <Card sx={{ width: '100%', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.08)'}}>
-          <CardActionArea onClick={() => history.push(`/${logoName.toLowerCase()}/${eventName.toLowerCase()}`)} >
+          <CardActionArea onClick={() => history.push(`/organizations/${logoName.toLowerCase()}/${eventName.toLowerCase()}`)} >
             <CardMedia
                 component="img"
                 height="92"
