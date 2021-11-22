@@ -3,7 +3,7 @@ import { Card, Box, Typography, Avatar, useTheme, IconButton } from "@mui/materi
 import { colors, typography } from '../lib/theme'
 
 const OrgTitleCard = (props) => {
-    const { orgBody, logoSrc, orgName, shortOrgName } = props;
+    const { orgBody, logoSrc, orgName, shortOrgName} = props;
     const theme = useTheme();
 
     const OrgBodyTag = ({ body }) => {
