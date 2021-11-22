@@ -11,19 +11,44 @@ const Settings = (props) => {
 
     const [orgLogoFile, setOrgLogoFile] = React.useState({file: "../../static/assets/image.png"});
     const [logoUploaded, setLogoUploaded] = React.useState(false);
+    const [name,setName] = React.useState()
     const [orgForm, setOrgForm] = React.useState({
-        name: null, 
-        short_name: null, 
-        desc: null, 
-        org_body: null,
-        logo: null,
-        facebook: null, 
-        instagram: null, 
-        twitter: null, 
-        linkedin: null, 
-        website: null,
+        name: '', 
+        short_name: '', 
+        desc: '', 
+        org_body: '',
+        logo: '',
+        facebook: '', 
+        instagram: '', 
+        twitter: '', 
+        linkedin: '', 
+        website: '',
     });
-    
+
+    useEffect(() => {
+        OrgsDataService.get(1).then(res => {
+//                 name: res.data.name,
+//                 short_name: res.data.short_name, 
+//                 desc: res.data.desc, 
+//                 org_body: res.data.org_body,
+//                 logo: res.data.logo,
+//                 facebook: res.data.facebook, 
+//                 instagram: res.data.instagram, 
+//                 twitter: res.data.twitter, 
+//                 linkedin: res.data.linkedin, 
+//                 website: res.data.website
+
+            setOrgForm({
+                name: res.data.name,
+                short_name: res.data.short_name,
+                desc: res.data.desc,
+                org_body: res.data.org_body,
+            })
+        })
+    }, []);
+
+
+
     const uploadChange = (evt) => {
         setOrgLogoFile({
             file: URL.createObjectURL(evt.target.files[0])
@@ -105,7 +130,6 @@ const Settings = (props) => {
 
     const handleWebsiteChange = (e) => {
         setOrgForm(prevState => {
-            console.log(orgForm)
             return {
                 ...prevState,
                 website: e
@@ -115,16 +139,15 @@ const Settings = (props) => {
 
     return (
         <div>
-            {console.log(props.orgdata.name)}
             <DashboardBase />
                 <div className="settings">
                     <h1 className="title">Org Information</h1>
                     <TextField
                         label={'Organization Name*'}
-                        defaultValue={props.orgdata.name}
                         margin="dense"
                         variant={'outlined'}
-                        style = {{width: '464px'}}
+                        value={orgForm.name}
+                        style={{width: '464px'}}
                         onChange={(e) => {
                             handleOrgNameChange(e.target.value)
                         }}
@@ -223,7 +246,7 @@ const Settings = (props) => {
                         label={'Website*'}
                         margin="dense"
                         variant={'outlined'}
-                        style = {{width: '464px'}}
+                        style = {{width: '464px', marginBottom: '64px'}}
                         onChange={(e) => {
                             handleWebsiteChange(e.target.value)
                         }}
@@ -234,42 +257,54 @@ const Settings = (props) => {
     )
 }
 
-class orgService extends React.Component {
-    constructor(props) {
-        super(props);
+// class orgService extends React.Component {
+//     constructor(props) {
+//         super(props);
 
-        this.state = {
-            orgInfo: {}
-        }
-    }
+//         this.state = {
+//             orgInfo: {
+//                 name: null,
+//                 short_name: null, 
+//                 desc: null, 
+//                 org_body: null,
+//                 logo: null,
+//                 facebook: null, 
+//                 instagram: null, 
+//                 twitter: null, 
+//                 linkedin: null, 
+//                 website: null
+//             }
+//         }
+//     }
 
-    componentDidMount() {
-        OrgsDataService.get(1).then(res => {
-            this.setState({ orgInfo: {
-                name: res.data.name,
-                short_name: res.data.short_name, 
-                desc: res.data.desc, 
-                org_body: res.data.org_body,
-                logo: res.data.logo,
-                facebook: res.data.facebook, 
-                instagram: res.data.instagram, 
-                twitter: res.data.twitter, 
-                linkedin: res.data.linkedin, 
-                website: res.data.website
-            }
-            })
-        }).catch((e) => {
-            console.error(e)
-        })
-    }
-    render () {
-        return (
-            <div>
-                <Settings orgdata = {this.state.orgInfo}></Settings>
-            </div>
-        )
-    }
-}
+//     componentDidMount() {
+//         OrgsDataService.get(1).then(res => {
+//             console.log(res)
+//             this.setState({ orgInfo: {
+//                 name: res.data.name,
+//                 short_name: res.data.short_name, 
+//                 desc: res.data.desc, 
+//                 org_body: res.data.org_body,
+//                 logo: res.data.logo,
+//                 facebook: res.data.facebook, 
+//                 instagram: res.data.instagram, 
+//                 twitter: res.data.twitter, 
+//                 linkedin: res.data.linkedin, 
+//                 website: res.data.website
+//             }
+//             })
+//         }).catch((e) => {
+//             console.error(e)
+//         })
+//     }
+//     render () {
+//         return (
+//             <div>
+//                 <Settings orgdata = {this.state.orgInfo}></Settings>
+//             </div>
+//         )
+//     }
+// }
 
 
-export default orgService
+export default Settings
