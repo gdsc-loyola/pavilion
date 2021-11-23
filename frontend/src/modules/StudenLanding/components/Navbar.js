@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router'
 import { Link } from 'react-router-dom';
-import { Box, createTheme } from "@mui/material";
+import { Box, createTheme, Button } from "@mui/material";
 
 import { colors } from '$lib/theme'
-import whiteLogo from '../../../static/assets/pav_logo.svg'
-import blueLogo from '../../../static/assets/pav_logo_blue.svg'
-import { Button } from "@mui/material";
+import whiteLogo from '../../../../static/assets/pav_logo.svg'
+import blueLogo from '../../../../static/assets/pav_logo_blue.svg'
 
 const NavBar = ({transparent}) => {
   const pathname = useLocation().pathname
