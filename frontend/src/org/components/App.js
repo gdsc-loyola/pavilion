@@ -11,7 +11,7 @@ import OrgLogoOld from "./SelfSignUp/OrgLogo";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "$lib/theme";
 
-import { Landing, OrgCatalog } from "$modules/StudenLanding/routes"
+import { Landing, OrgCatalog } from "$modules/StudentLanding/routes"
 
 const App = () => {
   return (

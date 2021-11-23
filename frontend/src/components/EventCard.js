@@ -2,11 +2,6 @@ import React from "react";
 import { useHistory } from "react-router"
 import { Card, CardActionArea, CardContent, CardMedia, Typography, CardHeader, Avatar } from "@mui/material";
 import {colors, typography } from '$lib/theme'
-/**
- * @description A MUI TextField with a react-hook-form Controller wrapper
- * @param {Omit<ControllerProps, 'render'> & React.ComponentPropsWithoutRef<typeof TextField>} props
- * @returns {React.Component}
- */
 
 const EventCard = (props) => {
     const { imgSrc, alt, eventName, startDate, endDate, logoSrc, logoName } = props;

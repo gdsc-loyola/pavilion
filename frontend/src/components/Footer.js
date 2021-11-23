@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { Box, Typography, createTheme } from "@mui/material";
 import { colors, typography } from '$lib/theme'
-import logo from '../../../../static/assets/pav_footer_logo.svg'
+import logo from '../../static/assets/pav_footer_logo.svg'
 
 const theme = createTheme({
   breakpoints: {
