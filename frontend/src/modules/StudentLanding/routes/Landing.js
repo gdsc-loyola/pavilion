@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Box, Typography, createTheme, InputBase } from "@mui/material"
-import { borderRadius, styled } from '@mui/system'
+import { Grid, Box, Typography, createTheme, InputBase, useMediaQuery } from "@mui/material"
+import { styled } from '@mui/system'
 
 import '../../../../stylesheets/student/Landing.scss'
 import { colors, typography } from '$lib/theme'
@@ -10,91 +10,6 @@ import EventCard from '../../../components/EventCard'
 import OrgCard from '../../../components/OrgCard'
 import { Link } from 'react-router-dom'
 import orgsService from '../../../services/orgs.service'
-
-// import axios from '../../http-common'
-import axios from 'axios'
-
-const eventsArr = [
-  {
-    eventName: 'HackFest',
-    startDate: 'Aug 24, 2020',
-    endDate: 'Aug 26, 2020',
-    logoName: 'GDSC-L'
-  },
-  {
-    eventName: 'FrostBYTE',
-    startDate: 'Oct 1, 2020',
-    endDate: 'Oct 7, 2020',
-    logoName: 'BYTE'
-  },
-  {
-    eventName: 'Intro to Git and Notion',
-    startDate: 'Nov 20, 2020',
-    endDate: 'Nov 21, 2020',
-    logoName: 'CompSAt'
-  },
-  {
-    eventName: 'UX & Chill',
-    startDate: 'Feb 10, 2020',
-    endDate: 'Feb 13, 2020',
-    logoName: 'UXSoc'
-  },
-  {
-    eventName: 'Tech Everywhere',
-    startDate: 'Feb 25, 2020',
-    endDate: 'Mar 1, 2020',
-    logoName: 'GDSC-L'
-  },
-  {
-    eventName: 'Blue-hacks',
-    startDate: 'Dec 7, 2020',
-    endDate: 'Dec 21, 2020',
-    logoName: 'CompSAt'
-  },
-]
-
-const orgsArr = [
-  {
-    name: "GDSC-L",
-    body: "lions",
-    photo: "#"
-  },
-  {
-    name: "BYTE",
-    body: "lions",
-    photo: "#"
-  },
-  {
-    name: "CompSAt",
-    body: "coa",
-    photo: "#"
-  },
-  {
-    name: "Sanggu",
-    body: "sanggu",
-    photo: "#"
-  },
-  {
-    name: "GDSC-L",
-    body: "lions",
-    photo: "#"
-  },
-  {
-    name: "BYTE",
-    body: "lions",
-    photo: "#"
-  },
-  {
-    name: "CompSAt",
-    body: "coa",
-    photo: "#"
-  },
-  {
-    name: "Sanggu",
-    body: "sanggu",
-    photo: "#"
-  }
-]
 
 const Landing = () => {
   const theme = createTheme({
@@ -108,6 +23,9 @@ const Landing = () => {
       }
     }
   })
+
+  const mdVW = useMediaQuery(theme.breakpoints.down('md'))
+  const smVW = useMediaQuery(theme.breakpoints.down(700))
 
   const StyledInputRoot = styled('div')`
     border-radius: 8px;
@@ -153,7 +71,7 @@ const Landing = () => {
           position: 'relative'
         }}
       >
-        <img src={hero} alt="" style={{ width: '100%' }} />
+        <img src={hero} alt="" style={{ width: '100%', minHeight: '230px', objectFit: 'cover' }} />
         <Box
           component="div"
           sx={{
@@ -213,16 +131,25 @@ const Landing = () => {
                 components={{Root: StyledInputRoot, Input: StyledInputElement}}
                 placeholder="Looking for any organization or event?"
               />
-              <svg style={{ position: 'absolute', top: '50%', right: '24px', transform: 'translateY(-50%)', cursor: 'pointer' }} width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="24" fill="url(#a)"/><path d="M33.71 32.29 30 28.61A9 9 0 1 0 28.61 30l3.68 3.68a1.002 1.002 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM23 30a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" fill="#fff"/><defs><linearGradient id="a" x1="0" y1="24" x2="48" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#498AF4"/><stop offset="1" stop-color="#1A73E8"/></linearGradient></defs></svg>
+              <svg style={{ position: 'absolute', top: '50%', right: '24px', transform: 'translateY(-50%)', cursor: 'pointer' }} width={smVW ? '28' : mdVW ? '38' : '48'} height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="24" fill="url(#a)"/><path d="M33.71 32.29 30 28.61A9 9 0 1 0 28.61 30l3.68 3.68a1.002 1.002 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM23 30a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" fill="#fff"/><defs><linearGradient id="a" x1="0" y1="24" x2="48" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#498AF4"/><stop offset="1" stop-color="#1A73E8"/></linearGradient></defs></svg>
             </Box>
           </Box>
           <Typography
             component="p"
             position="absolute"
+            width="100vw"
+            padding="0 10%"
+            boxSizing="border-box"
             bottom={15}
-            right={144}
+            left={0}
             color="white"
             fontSize={typography.fontSize.xs}
+            sx={{
+              [theme.breakpoints.down('sm')]: {
+                textAlign: 'center'
+              },
+              textAlign: 'end'
+            }}
           >
             Photo by Nina San Andres
           </Typography>
@@ -240,7 +167,7 @@ const Landing = () => {
           fontWeight={typography.fontWeight.bold}
           marginBottom="24px"
         >
-          Featured Events click me
+          Featured Events
         </Typography>
         {/* 6 random events */}
         {/* .map return event card component */}
