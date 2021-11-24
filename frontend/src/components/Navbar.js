@@ -185,6 +185,7 @@ const NavBar = ({transparent}) => {
             borderRadius: '4px',
             padding: '8px 24px',
             backgroundColor: 'linear-gradient(90deg, #498AF4 0%, #1A73E8 100%)',
+            textTransform: 'none',
             [theme.breakpoints.down('md')]: {
               fontSize: '12px',
               padding: '4px 16px'
