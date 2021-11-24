@@ -37,7 +37,7 @@ export const colors = {
     500: "#f29900",
     600: "#eb8b0a",
     700: "#e37400",
-  }
+  },
 };
 
 export const typography = {

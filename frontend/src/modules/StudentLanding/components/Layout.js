@@ -1,7 +1,7 @@
 import React from "react";
 
-import NavBar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from "../../../components/Navbar";
+import Footer from "../../../components/Footer";
 
 const Layout = ({ children, transparent_nav }) => {
   return (

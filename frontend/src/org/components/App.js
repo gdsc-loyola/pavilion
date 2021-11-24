@@ -13,7 +13,7 @@ import { theme } from "$lib/theme";
 
 import { OrgPageRoutes } from "$modules/OrgPage";
 
-import Landing from "../../student/views/Landing";
+import { Landing, OrgCatalog } from "$modules/StudentLanding/routes";
 
 const App = () => {
   return (

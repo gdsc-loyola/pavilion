@@ -159,7 +159,7 @@ const OrgPage = (props) => {
           >
             Past Events
           </Typography>
-          <Grid container spacing={2} lg={1} md={2} sm={3} xs={3} marginBottom="120px">
+          <Grid container spacing={2} columns={3} marginBottom="120px">
             {orgForm.events.map((event) => (
               <Grid item xs={3} sm={3} md={1} lg={1}>
                 <EventCard

@@ -1,234 +1,96 @@
-import React from "react";
-import DashboardBase from "../components/DashboardBase";
-import "../../../stylesheets/org/Settings.scss";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-const Settings = () => {
-  const [orgLogoFile, setOrgLogoFile] = React.useState({ file: "../../static/assets/image.png" });
-  const [logoUploaded, setLogoUploaded] = React.useState(false);
-  const [orgForm, setOrgForm] = React.useState({
-    name: null,
-    short_name: null,
-    desc: null,
-    org_body: null,
-    logo: null,
-    facebook: null,
-    instagram: null,
-    twitter: null,
-    linkedin: null,
-    website: null,
+import React, { useEffect, useState } from "react";
+import Layout from "$components/Layout";
+import EventTitleCard from "../../modules/Event/components/EventTitleCard";
+import EventCard from "$components/EventCard";
+import { Box, Typography, createTheme, Grid } from "@mui/material";
+import { colors, typography } from "$lib/theme";
+import { fontSize } from "@mui/system";
+const EventPage = () => {
+  const [eventForm, setEventForm] = React.useState({
+    eventName: "",
+    startDate: "",
+    endDate: "",
+    orgName: "",
+    description: "",
+    coverPhoto1: "",
+    coverPhoto2: "",
+    coverPhoto3: "",
+    coverPhoto4: "",
   });
-
-  const uploadChange = (evt) => {
-    setOrgLogoFile({
-      file: URL.createObjectURL(evt.target.files[0]),
-    });
-    setLogoUploaded(true);
-  };
-
-  const handleOrgNameChange = (e) => {
-    setOrgForm((prevState) => {
-      return {
-        ...prevState,
-        name: e,
-      };
-    });
-  };
-
-  const handleOrgShortHandChange = (e) => {
-    setOrgForm((prevState) => {
-      return {
-        ...prevState,
-        short_name: e,
-      };
-    });
-  };
-
-  const handleOrgDescChange = (e) => {
-    setOrgForm((prevState) => {
-      return {
-        ...prevState,
-        desc: e,
-      };
-    });
-  };
-
-  const handleOrgBodyChange = (e) => {
-    setOrgForm((prevState) => {
-      return {
-        ...prevState,
-        org_body: e,
-      };
-    });
-  };
-
-  const handleFacebookChange = (e) => {
-    setOrgForm((prevState) => {
-      return {
-        ...prevState,
-        facebook: e,
-      };
-    });
-  };
-
-  const handleTwitterChange = (e) => {
-    setOrgForm((prevState) => {
-      return {
-        ...prevState,
-        twitter: e,
-      };
-    });
-  };
-
-  const handleInstagramChange = (e) => {
-    setOrgForm((prevState) => {
-      return {
-        ...prevState,
-        instagram: e,
-      };
-    });
-  };
-
-  const handleLinkedInChange = (e) => {
-    setOrgForm((prevState) => {
-      return {
-        ...prevState,
-        linkedin: e,
-      };
-    });
-  };
-
-  const handleWebsiteChange = (e) => {
-    setOrgForm((prevState) => {
-      return {
-        ...prevState,
-        website: e,
-      };
-    });
-  };
-
+  const theme = createTheme({
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 700,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+      },
+    },
+  });
   return (
-    <div>
-      <DashboardBase />
-      <div className="settings">
-        <h1 className="title">Org Information</h1>
-        <TextField
-          label={"Organization Name*"}
-          margin="dense"
-          variant={"outlined"}
-          style={{ width: "464px" }}
-          onChange={(e) => {
-            handleOrgNameChange(e.target.value);
-          }}
+    <>
+      <Layout>
+        <img
+          height="360px"
+          width="100%"
+          style={{ position: "absolute", marginTop: "80px", zIndex: "-1" }}
+          src="http://placehold.jp/150x150.png"
         />
-        <TextField
-          label={"Shorthand Name*"}
-          margin="dense"
-          variant={"outlined"}
-          style={{ width: "464px" }}
-          onChange={(e) => {
-            handleOrgShortHandChange(e.target.value);
+        <Box
+          sx={{
+            paddingTop: "80px",
+            margin: "0 144px",
+            [theme.breakpoints.between("lg", "xl")]: {
+              margin: "0 112px",
+            },
+            [theme.breakpoints.between("md", "lg")]: {
+              margin: "0 80px",
+            },
+            [theme.breakpoints.between("sm", "md")]: {
+              margin: "0 48px",
+            },
+            [theme.breakpoints.between("xs", "sm")]: {
+              margin: "0 16px",
+            },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
-        />
-        <TextField
-          label={"Short Description*"}
-          margin="dense"
-          variant={"outlined"}
-          style={{ width: "464px" }}
-          multiline
-          rows={8}
-          onChange={(e) => {
-            handleOrgDescChange(e.target.value);
-          }}
-        />
-        <FormControl variant="outlined" margin="dense">
-          <InputLabel>Org body*</InputLabel>
-          <Select
-            variant={"outlined"}
-            margin="dense"
-            label={"Org Body*"}
-            style={{ width: "464px" }}
-            onChange={(e) => handleOrgBodyChange(e.target.value)}
+        >
+          <Box
+            sx={{
+              width: "100%",
+              maxWidth: "760px",
+              marginTop: "240px",
+              marginBottom: "80px",
+            }}
           >
-            <MenuItem value="COA">COA</MenuItem>
-            <MenuItem value="LIONS">LIONS</MenuItem>
-            <MenuItem value="Sanggu">Sanggu</MenuItem>
-          </Select>
-        </FormControl>
-        <h1 className="body-title">Org Logo</h1>
-        <input
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          id="org_logo_input"
-          onChange={(evt) => uploadChange(evt)}
-        />
-        <label htmlFor="org_logo_input">
-          <div className="org_logo_upload">
-            <img
-              src={`${logoUploaded ? orgLogoFile.file : "../../static/assets/image.png"}`}
-              alt=""
+            <EventTitleCard
+              eventName="Hackfest"
+              startDate="August 2"
+              endDate="August 3"
+              logoSrc="meg"
+              orgName="Googe Developer Student Club"
             />
-          </div>
-        </label>
-        <p class="image-subtitle">Suggested ratio — 1:1 (ex. 800x800px)</p>
-        <h1 className="body-title">Org Social Media</h1>
-        <h5 className="social-media-header">Facebook</h5>
-        <TextField
-          label={"Facebook"}
-          margin="dense"
-          variant={"outlined"}
-          style={{ width: "464px" }}
-          onChange={(e) => {
-            handleFacebookChange(e.target.value);
-          }}
-        />
-        <h5 className="social-media-header">Instagram</h5>
-        <TextField
-          label={"Instagram*"}
-          margin="dense"
-          variant={"outlined"}
-          style={{ width: "464px" }}
-          onChange={(e) => {
-            handleInstagramChange(e.target.value);
-          }}
-        />
-        <h5 className="social-media-header">Twitter</h5>
-        <TextField
-          label={"Twitter*"}
-          margin="dense"
-          variant={"outlined"}
-          style={{ width: "464px" }}
-          onChange={(e) => {
-            handleTwitterChange(e.target.value);
-          }}
-        />
-        <h5 className="social-media-header">LinkedIn</h5>
-        <TextField
-          label={"LinkedIn*"}
-          margin="dense"
-          variant={"outlined"}
-          style={{ width: "464px" }}
-          onChange={(e) => {
-            handleLinkedInChange(e.target.value);
-          }}
-        />
-        <h5 className="social-media-header">Website</h5>
-        <TextField
-          label={"Website*"}
-          margin="dense"
-          variant={"outlined"}
-          style={{ width: "464px" }}
-          onChange={(e) => {
-            handleWebsiteChange(e.target.value);
-          }}
-        />
-      </div>
-    </div>
+            <Typography
+              sx={{ marginTop: "40px" }}
+              color={colors.gray[700]}
+              fontWeight={typography.fontWeight.reg}
+              fontSize={typography.fontSize.base}
+            >
+              {eventForm.eventName}
+            </Typography>
+          </Box>
+          <Grid container spacing={2} columns={2} marginBottom="120px">
+            <Grid item xs={1} sm={1} md={2} lg={2}>
+              <img src="https://via.placeholder.com/150" />
+            </Grid>
+          </Grid>
+        </Box>
+      </Layout>
+    </>
   );
 };
 
-export default Settings;
+export default EventPage;
