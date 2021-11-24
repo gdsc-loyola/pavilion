@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router'
 import { Grid, Box, Typography, createTheme, InputBase, useMediaQuery, Button } from "@mui/material"
 import { styled } from '@mui/system'
 
@@ -12,6 +13,10 @@ import { Link } from 'react-router-dom'
 import orgsService from '../../../services/orgs.service'
 
 const Landing = () => {
+  const history = useHistory()
+
+  const [searchKey, setSearchKey] = useState('')
+
   const theme = createTheme({
     breakpoints: {
       values: {
@@ -63,6 +68,10 @@ const Landing = () => {
       setOrgs(response.data)
     })
   }, [])
+
+  const onSearchClick = () => {
+    history.push(`/organizations?search=${searchKey}`)
+  }
 
   return (
     <Layout transparent_nav>
@@ -127,12 +136,26 @@ const Landing = () => {
                 position: 'relative'
               }}
             >
-              <InputBase
-                theme={theme}
-                components={{Root: StyledInputRoot, Input: StyledInputElement}}
+              <input
                 placeholder="Looking for any organization or event?"
+                value={searchKey}
+                onChange={(e) => setSearchKey(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    history.push(`/organizations?search=${searchKey}`)
+                  }
+                }}
+                style={{
+                  borderRadius: '8px',
+                  border: 'none',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  backgroundColor: 'white',
+                  padding: smVW ? '16px' : mdVW ? '20px 16px' : '28px 24px',
+                  fontSize: smVW ? '12px' : '16px'
+                }}
               />
-              <svg style={{ position: 'absolute', top: '50%', right: '24px', transform: 'translateY(-50%)', cursor: 'pointer' }} width={smVW ? '28' : mdVW ? '38' : '48'} height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="24" fill="url(#a)"/><path d="M33.71 32.29 30 28.61A9 9 0 1 0 28.61 30l3.68 3.68a1.002 1.002 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM23 30a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" fill="#fff"/><defs><linearGradient id="a" x1="0" y1="24" x2="48" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#498AF4"/><stop offset="1" stop-color="#1A73E8"/></linearGradient></defs></svg>
+              <svg onClick={onSearchClick} style={{ position: 'absolute', top: '50%', right: '24px', transform: 'translateY(-50%)', cursor: 'pointer' }} width={smVW ? '28' : mdVW ? '38' : '48'} height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="24" fill="url(#a)"/><path d="M33.71 32.29 30 28.61A9 9 0 1 0 28.61 30l3.68 3.68a1.002 1.002 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM23 30a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" fill="#fff"/><defs><linearGradient id="a" x1="0" y1="24" x2="48" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#498AF4"/><stop offset="1" stop-color="#1A73E8"/></linearGradient></defs></svg>
             </Box>
           </Box>
           <Typography
