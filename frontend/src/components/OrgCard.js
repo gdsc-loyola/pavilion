@@ -4,7 +4,7 @@ import { Box, Avatar, Typography, Card, CardActionArea } from "@mui/material"
 import { theme, typography, colors } from '$lib/theme'
 
 
-const OrgCard = ({ orgPhoto, orgBody, orgName }) => {
+const OrgCard = ({ orgPhoto, orgBody, orgName, orgId }) => {
   const history= useHistory()
 
   const OrgBodyTag = ({ body }) => {
@@ -33,7 +33,7 @@ const OrgCard = ({ orgPhoto, orgBody, orgName }) => {
       }}
     >
       <CardActionArea
-        onClick={() => history.push(`/organizations/${orgName.toLowerCase()}`)}
+        onClick={() => history.push(`/organizations/${orgId}`)}
         sx={{
           display: 'flex',
           flexDirection: 'column',
