@@ -56,15 +56,13 @@ const Landing = () => {
   `
 
   const [orgs, setOrgs] = useState([])
-  const [events, setEvents] = useState([])
+  const [featuredEvents, setFeaturedEvents] = useState([])
 
   useEffect(() => {
     orgsService.getEvents().then(response => {
-      console.log(response)
-      setEvents(response.data)
+      setFeaturedEvents(response.data.slice(0,6))
     })
     orgsService.getAll().then(response => {
-      console.log(response)
       setOrgs(response.data)
     })
   }, [])
@@ -214,7 +212,7 @@ const Landing = () => {
         >
           Featured Events
         </Typography>
-        {/* 6 random events */}
+        {/* 6 random featuredEvents */}
         {/* .map return event card component */}
         <Grid container spacing={2} columns={3} sx={{
           marginBottom: '120px',
@@ -228,8 +226,8 @@ const Landing = () => {
             marginBottom: '48px'
           },
         }}>
-        { events.length > 0 &&
-          events.map(event => (
+        { featuredEvents.length > 0 &&
+          featuredEvents.map(event => (
             <Grid item xs={3} sm={3} md={1} lg={1}>
               <EventCard
                 imgSrc={event.cover_photo}
