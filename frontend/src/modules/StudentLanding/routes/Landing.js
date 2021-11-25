@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useHistory } from 'react-router'
 import { Grid, Box, Typography, createTheme, InputBase, useMediaQuery, Button } from "@mui/material"
 import { styled } from '@mui/system'
@@ -14,6 +14,8 @@ import orgsService from '../../../services/orgs.service'
 
 const Landing = () => {
   const history = useHistory()
+
+  const heroRef = useRef()
 
   const [searchKey, setSearchKey] = useState('')
 
@@ -76,6 +78,7 @@ const Landing = () => {
   return (
     <Layout transparent_nav>
       <Box
+        ref={heroRef}
         component="div"
         sx={{
           position: 'relative'
