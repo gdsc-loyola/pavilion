@@ -6,7 +6,7 @@ import Footer from '../../../components/Footer'
 const Layout = ({children, transparent_nav}) => {
   return (
     <>
-      <NavBar transparent={transparent_nav} />
+      <NavBar transparent={transparent_nav} heroRef={children}  />
         { children }
       <Footer />
     </>
