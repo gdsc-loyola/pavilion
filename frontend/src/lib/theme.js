@@ -37,7 +37,16 @@ export const colors = {
     500: "#f29900",
     600: "#eb8b0a",
     700: "#e37400",
-  }
+  },
+  green: {
+    100: "#E6F4EA",
+    200: "#CEEAD6",
+    300: "#4FB36A",
+    400: "#1E8E3E",
+    500: "#188038",
+    600: "#1C783B",
+    700: "#0D652D",
+  },
 };
 
 export const typography = {
