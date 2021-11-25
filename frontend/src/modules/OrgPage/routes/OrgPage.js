@@ -8,7 +8,6 @@ import OrgsDataService from "$services/orgs.service";
 
 const OrgPage = (props) => {
   const { id } = props.match.params;
-
   const theme = createTheme({
     breakpoints: {
       values: {

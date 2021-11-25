@@ -3,6 +3,22 @@ import { Box, Typography, Card, Avatar } from "@mui/material";
 import { colors, typography } from "$lib/theme";
 const EventTitleCard = (props) => {
   const { eventName, startDate, endDate, orgName, logoSrc } = props;
+
+  let formattedStartDate = new Date(startDate).toDateString();
+  let formattedStartDateArray = formattedStartDate
+    .substr(formattedStartDate.indexOf(" ") + 1)
+    .split(" ");
+  formattedStartDate =
+    formattedStartDateArray[0] +
+    " " +
+    formattedStartDateArray[1] +
+    ", " +
+    formattedStartDateArray[2];
+  let formattedEndDate = new Date(endDate).toDateString();
+  let formattedEndDateArray = formattedEndDate.substr(formattedEndDate.indexOf(" ") + 1).split(" ");
+  formattedEndDate =
+    formattedEndDateArray[0] + " " + formattedEndDateArray[1] + ", " + formattedEndDateArray[2];
+
   return (
     <Card sx={{ boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.08)" }}>
       <Box
@@ -27,7 +43,7 @@ const EventTitleCard = (props) => {
           fontWeight={typography.fontWeight.reg}
           sx={{ marginBottom: "24px" }}
         >
-          {startDate}-{endDate}
+          {formattedStartDate} - {formattedEndDate}
         </Typography>
         <Box
           sx={{

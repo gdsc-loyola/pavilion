@@ -1,12 +1,12 @@
 import React from "react";
 
-import NavBar from "./Navbar";
+import Navbar from "./Navbar";
 import Footer from "./Footer";
 
 const Layout = ({ children, transparent_nav }) => {
   return (
     <>
-      <NavBar transparent={transparent_nav} />
+      <Navbar transparent={transparent_nav} />
       {children}
       <Footer />
     </>

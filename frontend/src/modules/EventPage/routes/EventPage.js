@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "$components/Layout";
-import EventTitleCard from "../../modules/EventPage/components/EventTitleCard";
-import { Box, Typography, createTheme, Grid } from "@mui/material";
+import EventTitleCard from "../components/EventTitleCard";
+import { Box, Typography, createTheme } from "@mui/material";
 import { colors, typography } from "$lib/theme";
 import EventsDataService from "$services/events.service";
 import OrgsDataService from "$services/orgs.service";

@@ -11,8 +11,8 @@ import OrgLogoOld from "./SelfSignUp/OrgLogo";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "$lib/theme";
 
-import { OrgPageRoutes } from "$modules/OrgPage";
-
+import { OrgPageRoutes } from "$modules/OrgPage/routes/index";
+import { EventPagesRoutes } from "$modules/EventPage/routes/index";
 import { Landing, OrgCatalog } from "$modules/StudentLanding/routes";
 
 const App = () => {
@@ -23,7 +23,7 @@ const App = () => {
 
         <Route exact path="/admin/login/" component={Login} />
 
-        <Route exact path="/organizations/*" component={OrgPageRoutes} />
+        <Route path="/organizations" component={OrgPageRoutes} />
 
         {/* Protected admin routes */}
         <Admin exact path="/admin/" component={Dashboard} />

@@ -5,7 +5,7 @@ import { Box, createTheme, Button, useMediaQuery } from "@mui/material";
 
 import { colors } from "$lib/theme";
 
-const NavBar = ({ transparent }) => {
+const Navbar = ({ transparent }) => {
   const pathname = useLocation().pathname;
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -320,4 +320,4 @@ const NavBar = ({ transparent }) => {
   );
 };
 
-export default NavBar;
+export default Navbar;
