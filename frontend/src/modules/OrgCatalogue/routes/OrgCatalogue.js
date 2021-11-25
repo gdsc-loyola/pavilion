@@ -7,7 +7,6 @@ import Layout from '../../StudentLanding/components/Layout'
 
 const OrgCatalogue = () => {
   const [search, setSearch] = useState('')
-
   useEffect(() => {
     const search = window.location.search;
     const params = new URLSearchParams(search);
@@ -17,6 +16,11 @@ const OrgCatalogue = () => {
       setSearch(searchKey)
     }
   }, [])
+
+  const [searchFocus, setSearchFocus] = useState(false)
+  useEffect(() => {
+    console.log('searchFocus', searchFocus)
+  }, [searchFocus])
 
   const SearchIcon = () => {
     return (
@@ -47,7 +51,16 @@ const OrgCatalogue = () => {
       <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
         {/* <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} /> */}
         {/* <SearchIcon /> */}
-        <TextField id="input-with-sx" placeholder="Search for an organization..." label="Search" variant="outlined" value={search} onChange={handleSearchChange} />
+        <TextField
+          onFocus={() => setSearchFocus(true)}  
+          onBlur={() => setSearchFocus(false)}
+          id="input-with-sx"  
+          placeholder="Search for an organization..." 
+          label={searchFocus || search ? 'Search' : 'Search for an organization...'}
+          variant="outlined"  
+          value={search}  
+          onChange={handleSearchChange}
+        />
       </Box>
     </Layout>
   )

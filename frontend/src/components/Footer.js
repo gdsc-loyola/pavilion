@@ -92,7 +92,7 @@ const Footer = () => {
                 Home
             </Typography>
           </Link>
-          <Link style={linkStyles} to="/">
+          <Link style={linkStyles} to="/organizations">
             <Typography 
               paddingBottom="24px" 
               fontSize={typography.fontSize.sm} 
@@ -104,7 +104,7 @@ const Footer = () => {
                 Organizations
             </Typography>
           </Link>
-          <Link style={linkStyles} to="/">
+          <Link style={linkStyles} to="/admin">
             <Typography 
               paddingBottom="24px" 
               fontSize={typography.fontSize.sm} 

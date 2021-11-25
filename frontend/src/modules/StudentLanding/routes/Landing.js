@@ -70,7 +70,9 @@ const Landing = () => {
   }, [])
 
   const onSearchClick = () => {
-    history.push(`/organizations?search=${searchKey}`)
+    if (searchKey) {
+      history.push(`/organizations?search=${searchKey}`)
+    }
   }
 
   return (
@@ -141,7 +143,7 @@ const Landing = () => {
                 value={searchKey}
                 onChange={(e) => setSearchKey(e.target.value)}
                 onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === 'Enter' && searchKey) {
                     history.push(`/organizations?search=${searchKey}`)
                   }
                 }}
