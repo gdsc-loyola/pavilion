@@ -60,7 +60,7 @@ const Landing = () => {
 
   useEffect(() => {
     orgsService.getEvents().then(response => {
-      setFeaturedEvents(response.data.slice(0,6))
+      setFeaturedEvents(response.data.sort(() => 0.5 - Math.random()).slice(0,6))
     })
     orgsService.getAll().then(response => {
       setOrgs(response.data)
