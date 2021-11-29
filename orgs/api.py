@@ -21,6 +21,7 @@ class OrgsViewSet(viewsets.ModelViewSet):
         IsGetOrIsAuthenticated
     ]
     serializer_class = OrgsSerializer
+    lookup_field = 'slug'
 
     def list(self, *args, **kwargs):
         #getAll
@@ -58,9 +59,21 @@ class UserViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = UsernameSerializer
 
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        try:
+            checkIfOrg = Organization.objects.filter(user__id=pk)
+
+            serializer = OrgsSerializer(checkIfOrg[0]).data
+            return Response(serializer)
+        except:
+            serializer = UsernameSerializer(User.objects.get(id=pk)).data
+            return Response(serializer)
+
     #getByUsername
     def list(self, *args, **kwargs):
-        query = User.objects.filter(username=self.request.GET.get("user"))
+        #query = User.objects.filter(username=self.request.GET.get("user"))
+        
+        query = User.objects.all()
 
         if not query:
             return Response("signup")

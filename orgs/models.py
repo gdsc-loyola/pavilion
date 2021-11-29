@@ -33,6 +33,7 @@ class Organization(models.Model):
 
     name = models.CharField(max_length=100)
     short_name = models.CharField(max_length=100)
+    slug = models.CharField(max_length=15) 
     desc = models.CharField(max_length=500)
     org_body = models.CharField(max_length=100, choices=org_body_choices)
     logo = models.CharField(max_length=100)

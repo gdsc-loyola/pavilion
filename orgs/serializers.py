@@ -8,8 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "id", 
-            "username", 
-            "password")
+            "username")
 
 class UsernameSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,7 +38,7 @@ class EventsSerializer(serializers.ModelSerializer):
 
 class OrgsSerializer(serializers.HyperlinkedModelSerializer):
     events = EventsSerializer(read_only=True, many=True)
-    #user = UserSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Organization
@@ -57,3 +56,4 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
             "website",
             "user",
             "events")
+        lookup_field = 'slug'
