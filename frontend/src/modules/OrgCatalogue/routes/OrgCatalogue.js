@@ -43,9 +43,6 @@ const OrgCatalogue = () => {
   }, [])
 
   const [searchFocus, setSearchFocus] = useState(false)
-  useEffect(() => {
-    console.log('searchFocus', searchFocus)
-  }, [searchFocus])
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value)
