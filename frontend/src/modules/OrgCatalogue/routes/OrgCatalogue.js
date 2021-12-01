@@ -18,9 +18,6 @@ const OrgCatalogue = () => {
   }, [])
 
   const [searchFocus, setSearchFocus] = useState(false)
-  useEffect(() => {
-    console.log('searchFocus', searchFocus)
-  }, [searchFocus])
 
   const SearchIcon = () => {
     return (

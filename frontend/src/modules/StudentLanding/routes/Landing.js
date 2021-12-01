@@ -230,7 +230,11 @@ const Landing = () => {
           },
         }}>
         { featuredEvents.length > 0 &&
-          featuredEvents.map(event => (
+          featuredEvents.map(event => {
+            const org = orgs.find(org => org.events.some(orgEvent => {
+              return orgEvent.name === event.name
+            }))
+            return (
             <Grid item xs={3} sm={3} md={1} lg={1}>
               <EventCard
                 imgSrc={event.cover_photo}
@@ -238,12 +242,12 @@ const Landing = () => {
                 eventName={event.name}
                 startDate={event.start_date}
                 endDate={event.end_date}
-                logoSrc=""
-                logoName=""
+                logoSrc={org ? org.logo : ''}
+                logoName={org ? org.short_name : ''}
               />
             </Grid>
-          ))
-        }
+          )}
+        )}
         </Grid>
 
         <Box
