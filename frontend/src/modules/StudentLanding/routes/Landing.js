@@ -164,7 +164,7 @@ const Landing = () => {
           <Typography
             component="p"
             position="absolute"
-            width="100vw"
+            maxWidth="100vw"
             padding="0 10%"
             boxSizing="border-box"
             bottom={15}
@@ -172,6 +172,7 @@ const Landing = () => {
             color="white"
             fontSize={typography.fontSize.xs}
             sx={{
+              
               [theme.breakpoints.down('sm')]: {
                 textAlign: 'center'
               },
