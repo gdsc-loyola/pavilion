@@ -14,7 +14,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControlledTextField from "$components/ControlledTextField";
 import * as yup from "yup";
-import { useOrgFormStore } from "../store/useOrgFormStore";
+import { useOrgFormStore } from "../stores/useOrgFormStore";
 import Layout from "../components/Layout";
 
 const ValidationSchema = yup.object().shape({

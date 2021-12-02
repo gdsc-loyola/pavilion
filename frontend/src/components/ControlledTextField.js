@@ -28,6 +28,4 @@ const ControlledTextField = (props) => {
   );
 };
 
-<ControlledTextField />;
-
 export default ControlledTextField;

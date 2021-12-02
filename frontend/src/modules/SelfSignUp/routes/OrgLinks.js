@@ -1,5 +1,5 @@
 import ControlledTextField from "$components/ControlledTextField";
-import { useOrgFormStore } from "../store/useOrgFormStore";
+import { useOrgFormStore } from "../stores/useOrgFormStore";
 import { Stack, Box, InputLabel, Button } from "@mui/material";
 import * as yup from "yup";
 import { styled } from "@mui/material/styles";

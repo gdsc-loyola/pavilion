@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Layout from "../components/Layout";
 import { styled } from "@mui/material/styles";
 import { Button, Stack } from "@mui/material";
-import { useOrgFormStore } from "../store/useOrgFormStore";
+import { useOrgFormStore } from "../stores/useOrgFormStore";
 import { Redirect } from "react-router-dom";
 
 const HelperText = styled("p")(({ theme }) => ({
