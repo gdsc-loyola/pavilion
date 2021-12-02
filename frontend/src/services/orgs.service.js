@@ -4,6 +4,8 @@ class OrgsDataService {
 
     getAll = () => http.get(`orgs/`)
 
+    getEvents = () => http.get(`events/`)
+
     get = (id) => http.get(`orgs/${id}/`);
     
     getByOrgUser = (user) => http.get(`orgs/?user=${user}`);
