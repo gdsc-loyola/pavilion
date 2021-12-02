@@ -1,23 +1,14 @@
 import React from 'react'
 import { useHistory } from 'react-router'
-import { Box, Avatar, Typography, Card, CardActionArea, createTheme, useMediaQuery } from "@mui/material"
-import { theme, typography, colors } from '$lib/theme'
+import { Box, Avatar, Typography, Card, CardActionArea,  useMediaQuery } from "@mui/material"
+import { theme } from '$lib/theme'
 
+
+const {fontSize, fontWeight, colors, breakpoints, typography} = theme
 
 const OrgCard = ({ orgPhoto, orgBody, orgName }) => {
   const history= useHistory()
 
-  const theme = createTheme({
-    breakpoints: {
-      values: {
-        xs: 425,
-        sm: 700,
-        md: 900,
-        lg: 1200,
-        xl: 1536,
-      }
-    }
-  })
 
   const smVW = useMediaQuery(theme.breakpoints.down(700))
 
@@ -31,7 +22,7 @@ const OrgCard = ({ orgPhoto, orgBody, orgName }) => {
       }}>
         <Typography
           color={body === 'coa' ? colors.red[400] : body === 'lions' ? colors.yellow[500] : colors.blue[400]}
-          fontSize={typography.fontSize.xs}
+          fontSize={fontSize.xs}
         >
           {body.toUpperCase()}
         </Typography>
@@ -53,7 +44,7 @@ const OrgCard = ({ orgPhoto, orgBody, orgName }) => {
           flexDirection: 'column',
           alignItems: 'center',
           padding: '24px 0',
-          [theme.breakpoints.down('sm')]: {
+          [breakpoints.down('sm')]: {
             padding: '12px 0'
           }
         }}
@@ -61,15 +52,15 @@ const OrgCard = ({ orgPhoto, orgBody, orgName }) => {
         <Avatar src={orgPhoto} alt="" sx={{ width: 64, height: 64, mb: smVW ? '12px' : '24px' }} />
         <OrgBodyTag body={orgBody} />
         <Typography
-          fontFamily={theme.typography.fontFamily}
+          fontFamily={typography.fontFamily}
           color={colors.gray[700]}  
-          fontWeight={typography.fontWeight.reg}  
+          fontWeight={fontWeight.reg}  
           align="center"  
           component="p" 
           paddingTop="8px"
           sx={{
             fontSize: '20px',
-            [theme.breakpoints.down('sm')]: {
+            [breakpoints.down('sm')]: {
               fontSize: '14px'
             }
           }}
