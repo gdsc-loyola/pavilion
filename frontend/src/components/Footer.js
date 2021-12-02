@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Typography, createTheme } from "@mui/material";
-import { colors, typography } from '$lib/theme'
-import logo from '../../static/assets/pav_footer_logo.svg'
+import { Box, Typography, createTheme } from '@mui/material';
+import { colors, typography } from '$lib/theme';
+import logo from '../../static/assets/pav_footer_logo.svg';
+import { styled } from '@mui/styles';
 
 const theme = createTheme({
   breakpoints: {
@@ -12,25 +13,22 @@ const theme = createTheme({
       md: 900,
       lg: 1200,
       xl: 1536,
-    }
-  }
-})
+    },
+  },
+});
+
+const StyledFooter = styled('footer')(({}) => ({
+  backgroundColor: '#F8F9FF',
+  maxWidth: '100vw',
+  padding: '40px 10%',
+}));
 
 const linkStyles = {
   textDecoration: 'none',
-}
+};
 const Footer = () => {
-  
   return (
-    <Box
-      component="footer"
-      sx={{
-        backgroundColor: '#F8F9FF',
-        width: '100vw',
-        padding: '40px 10%',
-        boxSizing: 'border-box'
-      }}
-    >
+    <StyledFooter>
       <Box
         component="div"
         sx={{
@@ -40,8 +38,8 @@ const Footer = () => {
           [theme.breakpoints.down('md')]: {
             flexDirection: 'column',
             alignItems: 'center',
-            marginBottom: '20px'
-          }
+            marginBottom: '20px',
+          },
         }}
       >
         <Box
@@ -49,14 +47,17 @@ const Footer = () => {
           maxWidth="270px"
           sx={{
             [theme.breakpoints.down('md')]: {
-              marginBottom: '20px'
-            }
+              marginBottom: '20px',
+            },
           }}
-        > 
-          <Box sx={{ 
+        >
+          <Box
+            sx={{
               [theme.breakpoints.down('md')]: {
-              textAlign: 'center',
-            }}}>
+                textAlign: 'center',
+              },
+            }}
+          >
             <img src={logo} alt="" />
           </Box>
           <Typography
@@ -66,54 +67,55 @@ const Footer = () => {
             marginTop="16px"
             sx={{
               [theme.breakpoints.down('md')]: {
-                textAlign: 'center'
-              }
+                textAlign: 'center',
+              },
             }}
           >
             The all-in-one organization platform for university students.
           </Typography>
         </Box>
 
-        <Box
-          component="div"
-          display="flex"
-          flexDirection="column"
-          margin="auto 0"
-        >
+        <Box component="div" display="flex" flexDirection="column" margin="auto 0">
           <Link style={linkStyles} to="/">
-            <Typography 
-              paddingBottom="24px" 
-              fontSize={typography.fontSize.sm} 
+            <Typography
+              paddingBottom="24px"
+              fontSize={typography.fontSize.sm}
               color={colors.gray[500]}
-              sx={{ 
-              [theme.breakpoints.down('md')]: {
-              textAlign: 'center',
-            },}}>
-                Home
+              sx={{
+                [theme.breakpoints.down('md')]: {
+                  textAlign: 'center',
+                },
+              }}
+            >
+              Home
             </Typography>
           </Link>
           <Link style={linkStyles} to="/organizations">
-            <Typography 
-              paddingBottom="24px" 
-              fontSize={typography.fontSize.sm} 
+            <Typography
+              paddingBottom="24px"
+              fontSize={typography.fontSize.sm}
               color={colors.gray[500]}
-              sx={{ 
-              [theme.breakpoints.down('md')]: {
-              textAlign: 'center',
-            },}}>
-                Organizations
+              sx={{
+                [theme.breakpoints.down('md')]: {
+                  textAlign: 'center',
+                },
+              }}
+            >
+              Organizations
             </Typography>
           </Link>
           <Link style={linkStyles} to="/admin">
-            <Typography 
-              paddingBottom="24px" 
-              fontSize={typography.fontSize.sm} 
+            <Typography
+              paddingBottom="24px"
+              fontSize={typography.fontSize.sm}
               color={colors.gray[500]}
-              sx={{ 
-              [theme.breakpoints.down('md')]: {
-              textAlign: 'center',
-            }}}>
-                Admins Log In
+              sx={{
+                [theme.breakpoints.down('md')]: {
+                  textAlign: 'center',
+                },
+              }}
+            >
+              Admins Log In
             </Typography>
           </Link>
         </Box>
@@ -122,15 +124,16 @@ const Footer = () => {
         component="p"
         color={colors.gray[400]}
         fontSize={typography.fontSize.xs}
-        sx={{ 
+        sx={{
           [theme.breakpoints.down('md')]: {
-          textAlign: 'center',
-        }}}
+            textAlign: 'center',
+          },
+        }}
       >
         Passionately made by Google Developer Student Clubs - Loyola
       </Typography>
-    </Box>
-  )
-}
+    </StyledFooter>
+  );
+};
 
-export default Footer
+export default Footer;
