@@ -23,6 +23,7 @@ const App = () => {
 
         <Route exact path="/admin/login/" component={Login} />
 
+        <Route path="/events" component={EventPagesRoutes} />
         <Route path="/organizations" component={OrgPageRoutes} />
 
         {/* Protected admin routes */}
