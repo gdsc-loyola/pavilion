@@ -8,7 +8,7 @@ export const EventPagesRoutes = () => {
 
   return (
     <Switch>
-      <Route exact path={`${path}/:id`} component={EventPage} />
+      <Route exact path={`${path}/:shortName/:id`} component={EventPage} />
     </Switch>
   );
 };

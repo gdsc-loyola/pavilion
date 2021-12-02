@@ -23,8 +23,16 @@ const App = () => {
 
         <Route exact path="/admin/login/" component={Login} />
 
-        <Route path="/events" component={EventPagesRoutes} />
-        <Route path="/organizations" component={OrgPageRoutes} />
+        {/* <Route path="/events" component={EventPagesRoutes} /> */}
+        <Route
+          path="/organizations"
+          component={() => (
+            <>
+              <EventPagesRoutes />
+              <OrgPageRoutes />
+            </>
+          )}
+        />
 
         {/* Protected admin routes */}
         <Admin exact path="/admin/" component={Dashboard} />
