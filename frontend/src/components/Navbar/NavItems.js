@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 
 import React from 'react';
 import { theme } from '$lib/theme';
-import { Link, LinkProps, useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { Button, Box, useMediaQuery } from '@mui/material';
 
 /**
@@ -10,7 +10,11 @@ import { Button, Box, useMediaQuery } from '@mui/material';
  * @description Array of nav items
  */
 
-const StyledLink = styled(Link)(
+const StyledLink = styled(Link, {
+  shouldForwardProp: (props) => 
+  props !== 'isActive' && props !== 'preventActiveColor' && props !== 'isNavTransparent',
+
+})(
   ({ theme: { breakpoints, colors }, isActive, preventActiveColor, isNavTransparent }) => ({
     textDecoration: 'none',
     margin: 'auto 0',

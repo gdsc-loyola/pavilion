@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useHistory } from 'react-router'
 import { Grid, Box, Typography, createTheme, InputBase, useMediaQuery, Button } from "@mui/material"
+
 import { styled } from '@mui/system'
 
 import "../../../../stylesheets/student/Landing.scss";
@@ -11,11 +12,10 @@ import EventCard from "../../../components/EventCard";
 import OrgCard from "../../../components/OrgCard";
 import { Link } from "react-router-dom";
 import orgsService from "../../../services/orgs.service";
+import { useOnScreen } from '$lib/utils/useOnScreen';
 
 const Landing = () => {
   const history = useHistory()
-
-  const heroRef = useRef()
 
   const [searchKey, setSearchKey] = useState('')
 
@@ -35,27 +35,7 @@ const Landing = () => {
   const smVW = useMediaQuery(theme.breakpoints.down(700));
   const vW500 = useMediaQuery(theme.breakpoints.down(500));
 
-  const StyledInputRoot = styled("div")`
-    border-radius: 8px;
-    border: none;
-    width: 100%;
-    box-sizing: border-box;
-  `;
-  const StyledInputElement = styled("input")`
-    background-color: white;
-    border-radius: 8px;
-    padding: 28px 24px;
-    border: none;
-    width: 100%;
-    box-sizing: border-box;
-    ${(props) => props.theme.breakpoints.down("md")} {
-      padding: 20px 16px;
-    }
-    ${(props) => props.theme.breakpoints.down(700)} {
-      font-size: 12px;
-      padding: 16px;
-    } ;
-  `;
+  const [heroRef, isHeroVisible] = useOnScreen();
 
   const [orgs, setOrgs] = useState([])
   const [featuredEvents, setFeaturedEvents] = useState([])
@@ -75,8 +55,9 @@ const Landing = () => {
     }
   }
 
+
   return (
-    <Layout transparent_nav>
+    <Layout transparent_nav={isHeroVisible}>
       <Box
         ref={heroRef}
         component="div"
