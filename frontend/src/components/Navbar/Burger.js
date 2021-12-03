@@ -1,8 +1,8 @@
 import React from 'react';
-import { styled, Box, ButtonUnstyled } from '@mui/material';
+import { styled, Box } from '@mui/material';
 
 const Container = styled(Box)(({ theme, bgColor, mobileNavOpen }) => ({
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
