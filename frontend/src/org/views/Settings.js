@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DashboardBase from "../components/DashboardBase";
 import "../../../stylesheets/org/Settings.scss";
 import TextField from "@material-ui/core/TextField";
@@ -6,25 +6,57 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import ControlledTextField from "$components/ControlledTextField";
-import { useForm } from "react-hook-form";
-const Settings = () => {
+import OrgsDataService from "../../services/orgs.service";
+import { styled } from "@mui/material";
+import { colors } from "$lib/theme";
+const Settings = (props) => {
+  const FormField = styled(TextField)({
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: colors.gray[400],
+      },
+    },
+  });
+
+  const StyledControl = styled(FormControl)({
+    "& .MuiInputBase-root": {
+      "& fieldset": {
+        borderColor: colors.gray[400],
+      },
+    },
+  });
+
   const [orgLogoFile, setOrgLogoFile] = React.useState({ file: "../../static/assets/image.png" });
   const [logoUploaded, setLogoUploaded] = React.useState(false);
-
-  const { control } = useForm();
   const [orgForm, setOrgForm] = React.useState({
-    name: null,
-    short_name: null,
-    desc: null,
-    org_body: null,
-    logo: null,
-    facebook: null,
-    instagram: null,
-    twitter: null,
-    linkedin: null,
-    website: null,
+    name: "",
+    short_name: "",
+    desc: "",
+    org_body: "",
+    logo: "",
+    facebook: "",
+    instagram: "",
+    twitter: "",
+    linkedin: "",
+    website: "",
   });
+
+  useEffect(() => {
+    OrgsDataService.get(1).then((res) => {
+      setOrgForm({
+        name: res.data.name,
+        short_name: res.data.short_name,
+        desc: res.data.desc,
+        org_body: res.data.org_body,
+        logo: res.data.logo,
+        facebook: res.data.facebook,
+        instagram: res.data.instagram,
+        twitter: res.data.twitter,
+        linkedin: res.data.linkedin,
+        website: res.data.website,
+      });
+    });
+  }, []);
 
   const uploadChange = (evt) => {
     setOrgLogoFile({
@@ -119,27 +151,29 @@ const Settings = () => {
       <DashboardBase />
       <div className="settings">
         <h1 className="title">Org Information</h1>
-        <ControlledTextField
+        <FormField
           label={"Organization Name*"}
-          control={control}
           margin="dense"
           variant={"outlined"}
+          value={orgForm.name}
           style={{ width: "464px" }}
           onChange={(e) => {
             handleOrgNameChange(e.target.value);
           }}
         />
-        <TextField
+        <FormField
           label={"Shorthand Name*"}
           margin="dense"
+          value={orgForm.short_name}
           variant={"outlined"}
           style={{ width: "464px" }}
           onChange={(e) => {
             handleOrgShortHandChange(e.target.value);
           }}
         />
-        <TextField
+        <FormField
           label={"Short Description*"}
+          value={orgForm.desc}
           margin="dense"
           variant={"outlined"}
           style={{ width: "464px" }}
@@ -149,20 +183,21 @@ const Settings = () => {
             handleOrgDescChange(e.target.value);
           }}
         />
-        <FormControl variant="outlined" margin="dense">
+        <StyledControl variant="outlined" margin="dense">
           <InputLabel>Org body*</InputLabel>
           <Select
             variant={"outlined"}
             margin="dense"
             label={"Org Body*"}
             style={{ width: "464px" }}
+            value={orgForm.org_body}
             onChange={(e) => handleOrgBodyChange(e.target.value)}
           >
             <MenuItem value="COA">COA</MenuItem>
             <MenuItem value="LIONS">LIONS</MenuItem>
             <MenuItem value="Sanggu">Sanggu</MenuItem>
           </Select>
-        </FormControl>
+        </StyledControl>
         <h1 className="body-title">Org Logo</h1>
         <input
           type="file"
@@ -182,51 +217,51 @@ const Settings = () => {
         <p class="image-subtitle">Suggested ratio — 1:1 (ex. 800x800px)</p>
         <h1 className="body-title">Org Social Media</h1>
         <h5 className="social-media-header">Facebook</h5>
-        <TextField
-          label={"Facebook"}
+        <FormField
           margin="dense"
           variant={"outlined"}
+          value={orgForm.facebook}
           style={{ width: "464px" }}
           onChange={(e) => {
             handleFacebookChange(e.target.value);
           }}
         />
         <h5 className="social-media-header">Instagram</h5>
-        <TextField
-          label={"Instagram*"}
+        <FormField
           margin="dense"
           variant={"outlined"}
+          value={orgForm.instagram}
           style={{ width: "464px" }}
           onChange={(e) => {
             handleInstagramChange(e.target.value);
           }}
         />
         <h5 className="social-media-header">Twitter</h5>
-        <TextField
-          label={"Twitter*"}
+        <FormField
           margin="dense"
           variant={"outlined"}
+          value={orgForm.twitter}
           style={{ width: "464px" }}
           onChange={(e) => {
             handleTwitterChange(e.target.value);
           }}
         />
         <h5 className="social-media-header">LinkedIn</h5>
-        <TextField
-          label={"LinkedIn*"}
+        <FormField
           margin="dense"
           variant={"outlined"}
+          value={orgForm.linkedin}
           style={{ width: "464px" }}
           onChange={(e) => {
             handleLinkedInChange(e.target.value);
           }}
         />
         <h5 className="social-media-header">Website</h5>
-        <TextField
-          label={"Website*"}
+        <FormField
           margin="dense"
           variant={"outlined"}
-          style={{ width: "464px" }}
+          value={orgForm.website}
+          style={{ width: "464px", marginBottom: "64px" }}
           onChange={(e) => {
             handleWebsiteChange(e.target.value);
           }}

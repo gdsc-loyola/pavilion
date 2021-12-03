@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Cotter from "cotter";
 import * as auth from "$lib/auth";
-import "$stylesheets/org/SelfSignUp.scss";
 import axios from "axios";
 
 const Login = (props) => {

@@ -12,6 +12,7 @@ module.exports = {
       $lib: path.resolve(__dirname, "./src/lib"),
       $modules: path.resolve(__dirname, "./src/modules"),
       $components: path.resolve(__dirname, "./src/components"),
+      $services: path.resolve(__dirname, "./src/services"),
     },
   },
   module: {
