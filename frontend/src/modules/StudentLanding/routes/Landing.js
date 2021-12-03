@@ -1,14 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Box,
-  Typography,
-  createTheme,
-  InputBase,
-  useMediaQuery,
-  Button,
-} from "@mui/material";
-import { styled } from "@mui/system";
+import React, { useState, useEffect, useRef } from 'react'
+import { useHistory } from 'react-router'
+import { Grid, Box, Typography, createTheme, InputBase, useMediaQuery, Button } from "@mui/material"
+import { styled } from '@mui/system'
 
 import "../../../../stylesheets/student/Landing.scss";
 import { colors, typography } from "$lib/theme";
@@ -20,6 +13,12 @@ import { Link } from "react-router-dom";
 import orgsService from "../../../services/orgs.service";
 
 const Landing = () => {
+  const history = useHistory()
+
+  const heroRef = useRef()
+
+  const [searchKey, setSearchKey] = useState('')
+
   const theme = createTheme({
     breakpoints: {
       values: {
@@ -58,21 +57,28 @@ const Landing = () => {
     } ;
   `;
 
-  const [orgs, setOrgs] = useState([]);
-  const [events, setEvents] = useState([]);
+  const [orgs, setOrgs] = useState([])
+  const [featuredEvents, setFeaturedEvents] = useState([])
 
   useEffect(() => {
-    orgsService.getEvents().then((response) => {
-      setEvents(response.data);
-    });
-    orgsService.getAll().then((response) => {
-      setOrgs(response.data);
-    });
-  }, []);
+    orgsService.getEvents().then(response => {
+      setFeaturedEvents(response.data.sort(() => 0.5 - Math.random()).slice(0,6))
+    })
+    orgsService.getAll().then(response => {
+      setOrgs(response.data)
+    })
+  }, [])
+
+  const onSearchClick = () => {
+    if (searchKey) {
+      history.push(`/organizations?search=${searchKey}`)
+    }
+  }
 
   return (
     <Layout transparent_nav>
       <Box
+        ref={heroRef}
         component="div"
         sx={{
           position: "relative",
@@ -133,50 +139,32 @@ const Landing = () => {
                 position: "relative",
               }}
             >
-              <InputBase
-                theme={theme}
-                components={{ Root: StyledInputRoot, Input: StyledInputElement }}
+              <input
                 placeholder="Looking for any organization or event?"
-              />
-              <svg
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  right: "24px",
-                  transform: "translateY(-50%)",
-                  cursor: "pointer",
+                value={searchKey}
+                onChange={(e) => setSearchKey(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && searchKey) {
+                    history.push(`/organizations?search=${searchKey}`)
+                  }
                 }}
-                width={smVW ? "28" : mdVW ? "38" : "48"}
-                height="48"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect width="48" height="48" rx="24" fill="url(#a)" />
-                <path
-                  d="M33.71 32.29 30 28.61A9 9 0 1 0 28.61 30l3.68 3.68a1.002 1.002 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM23 30a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"
-                  fill="#fff"
-                />
-                <defs>
-                  <linearGradient
-                    id="a"
-                    x1="0"
-                    y1="24"
-                    x2="48"
-                    y2="24"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stop-color="#498AF4" />
-                    <stop offset="1" stop-color="#1A73E8" />
-                  </linearGradient>
-                </defs>
-              </svg>
+                style={{
+                  borderRadius: '8px',
+                  border: 'none',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  backgroundColor: 'white',
+                  padding: smVW ? '16px' : mdVW ? '20px 16px' : '28px 24px',
+                  fontSize: smVW ? '12px' : '16px'
+                }}
+              />
+              <svg onClick={onSearchClick} style={{ position: 'absolute', top: '50%', right: '24px', transform: 'translateY(-50%)', cursor: 'pointer' }} width={smVW ? '28' : mdVW ? '38' : '48'} height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="24" fill="url(#a)"/><path d="M33.71 32.29 30 28.61A9 9 0 1 0 28.61 30l3.68 3.68a1.002 1.002 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM23 30a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" fill="#fff"/><defs><linearGradient id="a" x1="0" y1="24" x2="48" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#498AF4"/><stop offset="1" stop-color="#1A73E8"/></linearGradient></defs></svg>
             </Box>
           </Box>
           <Typography
             component="p"
             position="absolute"
-            width="100vw"
+            maxWidth="100vw"
             padding="0 10%"
             boxSizing="border-box"
             bottom={15}
@@ -184,8 +172,9 @@ const Landing = () => {
             color="white"
             fontSize={typography.fontSize.xs}
             sx={{
-              [theme.breakpoints.down("sm")]: {
-                textAlign: "center",
+              
+              [theme.breakpoints.down('sm')]: {
+                textAlign: 'center'
               },
               textAlign: "end",
             }}
@@ -227,39 +216,39 @@ const Landing = () => {
         >
           Featured Events
         </Typography>
-        {/* 6 random events */}
+        {/* 6 random featuredEvents */}
         {/* .map return event card component */}
-        <Grid
-          container
-          spacing={2}
-          columns={3}
-          sx={{
-            marginBottom: "120px",
-            [theme.breakpoints.down("md")]: {
-              marginBottom: "60px",
-            },
-            [theme.breakpoints.down(600)]: {
-              marginBottom: "54px",
-            },
-            [theme.breakpoints.down("xs")]: {
-              marginBottom: "48px",
-            },
-          }}
-        >
-          {events.length > 0 &&
-            events.map((event) => (
-              <Grid item xs={3} sm={3} md={1} lg={1}>
-                <EventCard
-                  imgSrc={event.cover_photo}
-                  alt=""
-                  eventName={event.name}
-                  startDate={event.start_date}
-                  endDate={event.end_date}
-                  logoSrc=""
-                  logoName={event.short_name}
-                />
-              </Grid>
-            ))}
+        <Grid container spacing={2} columns={3} sx={{
+          marginBottom: '120px',
+          [theme.breakpoints.down('md')]: {
+            marginBottom: '60px'
+          },
+          [theme.breakpoints.down(600)]: {
+            marginBottom: '54px'
+          },
+          [theme.breakpoints.down('xs')]: {
+            marginBottom: '48px'
+          },
+        }}>
+        { featuredEvents.length > 0 &&
+          featuredEvents.map(event => {
+            const org = orgs.find(org => org.events.some(orgEvent => {
+              return orgEvent.name === event.name
+            }))
+            return (
+            <Grid item xs={3} sm={3} md={1} lg={1}>
+              <EventCard
+                imgSrc={event.cover_photo}
+                alt=""
+                eventName={event.name}
+                startDate={event.start_date}
+                endDate={event.end_date}
+                logoSrc={org ? org.logo : ''}
+                logoName={org ? org.short_name : ''}
+              />
+            </Grid>
+          )}
+        )}
         </Grid>
 
         <Box
