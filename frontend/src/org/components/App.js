@@ -14,7 +14,6 @@ import { theme } from "$lib/theme";
 import { OrgPageRoutes } from "$modules/OrgPage/routes/index";
 import { EventPagesRoutes } from "$modules/EventPage/routes/index";
 import { Landing, OrgCatalog } from "$modules/StudentLanding/routes";
-import { Landing } from "$modules/StudentLanding/routes"
 import { OrgCatalogue } from "$modules/OrgCatalogue/routes"
 
 const App = () => {

@@ -3,7 +3,7 @@ import { Box, Typography, TextField, Grid, Checkbox, FormControlLabel, Button, c
 import { Search, FilterAlt, Close } from '@mui/icons-material'
 
 import { colors, typography } from '$lib/theme'
-import Layout from '../../StudentLanding/components/Layout'
+import Layout from '$components/Layout'
 import OrgCard from '../../../components/OrgCard'
 import orgsService from '../../../services/orgs.service'
 import http from '../../../http-common'
