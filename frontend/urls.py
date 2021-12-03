@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index),
+    re_path(r'^organizations/.*$', views.index),
     path('organizations', views.index),
     path('admin/', views.index),
     path('admin/events/', views.index),
