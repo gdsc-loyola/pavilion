@@ -217,7 +217,7 @@ const Landing = () => {
               return orgEvent.name === event.name
             }))
             return (
-            <Grid item xs={3} sm={3} md={1} lg={1}>
+            <Grid item xs={3} sm={3} md={1} lg={1} key={event.id}>
               <EventCard
                 imgSrc={event.cover_photo}
                 alt=""
@@ -276,7 +276,7 @@ const Landing = () => {
         <Grid container spacing={2} columns={4}>
           {orgs.length > 0 &&
             orgs.map((org) => (
-              <Grid item xs={4} sm={4} md={2} lg={1}>
+              <Grid item xs={4} sm={4} md={2} lg={1} key={org.id}>
                 <OrgCard
                   orgPhoto={org.logo}
                   orgBody={org.org_body.toLowerCase()}
