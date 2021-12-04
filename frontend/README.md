@@ -1,3 +1,13 @@
+## Starting Dev Environment
+You can run both the Django server and webpack with one command.
+```bash
+npm run dev:all
+```
+
+## Formatting
+It is recommended to install the [Prettier Extenstion](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to format code every time you save it. To make sure all code is formatted correctly, always remember to run `npm run format` before pushing. 
+
+
 ## Project struture
 
 ```bash
