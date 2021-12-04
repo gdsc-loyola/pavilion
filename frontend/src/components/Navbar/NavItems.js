@@ -11,24 +11,21 @@ import { Button, Box, useMediaQuery } from '@mui/material';
  */
 
 const StyledLink = styled(Link, {
-  shouldForwardProp: (props) => 
-  props !== 'isActive' && props !== 'preventActiveColor' && props !== 'isNavTransparent',
-
-})(
-  ({ theme: { breakpoints, colors }, isActive, preventActiveColor, isNavTransparent }) => ({
-    textDecoration: 'none',
-    margin: 'auto 0',
-    color:
-      isActive && !preventActiveColor
-        ? colors.blue[300]
-        : isNavTransparent
-        ? '#FFF'
-        : colors.gray[500],
-    [breakpoints.down('md')]: {
-      color: isActive && !preventActiveColor ? colors.blue[300] : colors.gray[500],
-    },
-  })
-);
+  shouldForwardProp: (props) =>
+    props !== 'isActive' && props !== 'preventActiveColor' && props !== 'isNavTransparent',
+})(({ theme: { breakpoints, colors }, isActive, preventActiveColor, isNavTransparent }) => ({
+  textDecoration: 'none',
+  margin: 'auto 0',
+  color:
+    isActive && !preventActiveColor
+      ? colors.blue[300]
+      : isNavTransparent
+      ? '#FFF'
+      : colors.gray[500],
+  [breakpoints.down('md')]: {
+    color: isActive && !preventActiveColor ? colors.blue[300] : colors.gray[500],
+  },
+}));
 
 const StyledJoinWaitListButton = styled(Button)({
   borderRadius: '4px',

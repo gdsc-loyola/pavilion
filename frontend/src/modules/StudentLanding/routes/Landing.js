@@ -1,23 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useHistory } from 'react-router'
-import { Grid, Box, Typography, createTheme, InputBase, useMediaQuery, Button } from "@mui/material"
+import React, { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router';
+import {
+  Grid,
+  Box,
+  Typography,
+  createTheme,
+  InputBase,
+  useMediaQuery,
+  Button,
+} from '@mui/material';
 
-import { styled } from '@mui/system'
+import { styled } from '@mui/system';
 
-import "../../../../stylesheets/student/Landing.scss";
-import { colors, typography } from "$lib/theme";
-import Layout from "$components/Layout";
-import hero from "../../../../static/assets/student-landing-hero.png";
-import EventCard from "../../../components/EventCard";
-import OrgCard from "../../../components/OrgCard";
-import { Link } from "react-router-dom";
-import orgsService from "../../../services/orgs.service";
+import '../../../../stylesheets/student/Landing.scss';
+import { colors, typography } from '$lib/theme';
+import Layout from '$components/Layout';
+import hero from '../../../../static/assets/student-landing-hero.png';
+import EventCard from '../../../components/EventCard';
+import OrgCard from '../../../components/OrgCard';
+import { Link } from 'react-router-dom';
+import orgsService from '../../../services/orgs.service';
 import { useOnScreen } from '$lib/utils/useOnScreen';
 
 const Landing = () => {
-  const history = useHistory()
+  const history = useHistory();
 
-  const [searchKey, setSearchKey] = useState('')
+  const [searchKey, setSearchKey] = useState('');
 
   const theme = createTheme({
     breakpoints: {
@@ -31,30 +39,29 @@ const Landing = () => {
     },
   });
 
-  const mdVW = useMediaQuery(theme.breakpoints.down("md"));
+  const mdVW = useMediaQuery(theme.breakpoints.down('md'));
   const smVW = useMediaQuery(theme.breakpoints.down(700));
   const vW500 = useMediaQuery(theme.breakpoints.down(500));
 
   const [heroRef, isHeroVisible] = useOnScreen();
 
-  const [orgs, setOrgs] = useState([])
-  const [featuredEvents, setFeaturedEvents] = useState([])
+  const [orgs, setOrgs] = useState([]);
+  const [featuredEvents, setFeaturedEvents] = useState([]);
 
   useEffect(() => {
-    orgsService.getEvents().then(response => {
-      setFeaturedEvents(response.data.sort(() => 0.5 - Math.random()).slice(0,6))
-    })
-    orgsService.getAll().then(response => {
-      setOrgs(response.data)
-    })
-  }, [])
+    orgsService.getEvents().then((response) => {
+      setFeaturedEvents(response.data.sort(() => 0.5 - Math.random()).slice(0, 6));
+    });
+    orgsService.getAll().then((response) => {
+      setOrgs(response.data);
+    });
+  }, []);
 
   const onSearchClick = () => {
     if (searchKey) {
-      history.push(`/organizations?search=${searchKey}`)
+      history.push(`/organizations?search=${searchKey}`);
     }
-  }
-
+  };
 
   return (
     <Layout transparent_nav={isHeroVisible}>
@@ -62,30 +69,30 @@ const Landing = () => {
         ref={heroRef}
         component="div"
         sx={{
-          position: "relative",
+          position: 'relative',
         }}
       >
-        <img src={hero} alt="" style={{ width: "100%", minHeight: "230px", objectFit: "cover" }} />
+        <img src={hero} alt="" style={{ width: '100%', minHeight: '230px', objectFit: 'cover' }} />
         <Box
           component="div"
           sx={{
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
-            display: "flex",
+            width: '100%',
+            height: '100%',
+            display: 'flex',
           }}
         >
           <Box
             component="div"
             sx={{
-              margin: "auto",
-              flex: "0 1 100%",
-              textAlign: "center",
-              padding: "0 86px",
-              [theme.breakpoints.down("sm")]: {
-                padding: "0 16px",
+              margin: 'auto',
+              flex: '0 1 100%',
+              textAlign: 'center',
+              padding: '0 86px',
+              [theme.breakpoints.down('sm')]: {
+                padding: '0 16px',
               },
             }}
           >
@@ -94,17 +101,17 @@ const Landing = () => {
               color="white"
               margin="auto 0"
               width="100%"
-              fontSize={typography.fontSize["2xl"]}
+              fontSize={typography.fontSize['2xl']}
               fontWeight={700}
               marginBottom="24px"
               sx={{
-                [theme.breakpoints.down("md")]: {
+                [theme.breakpoints.down('md')]: {
                   fontSize: typography.fontSize.xl,
-                  marginBottom: "20px",
+                  marginBottom: '20px',
                 },
-                [theme.breakpoints.down("sm")]: {
+                [theme.breakpoints.down('sm')]: {
                   fontSize: typography.fontSize.md,
-                  marginBottom: "16px",
+                  marginBottom: '16px',
                 },
               }}
             >
@@ -113,11 +120,11 @@ const Landing = () => {
             <Box
               component="div"
               sx={{
-                display: "flex",
-                maxWidth: "760px",
-                margin: "0 auto",
-                justifyContent: "center",
-                position: "relative",
+                display: 'flex',
+                maxWidth: '760px',
+                margin: '0 auto',
+                justifyContent: 'center',
+                position: 'relative',
               }}
             >
               <input
@@ -126,7 +133,7 @@ const Landing = () => {
                 onChange={(e) => setSearchKey(e.target.value)}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && searchKey) {
-                    history.push(`/organizations?search=${searchKey}`)
+                    history.push(`/organizations?search=${searchKey}`);
                   }
                 }}
                 style={{
@@ -136,10 +143,43 @@ const Landing = () => {
                   boxSizing: 'border-box',
                   backgroundColor: 'white',
                   padding: smVW ? '16px' : mdVW ? '20px 16px' : '28px 24px',
-                  fontSize: smVW ? '12px' : '16px'
+                  fontSize: smVW ? '12px' : '16px',
                 }}
               />
-              <svg onClick={onSearchClick} style={{ position: 'absolute', top: '50%', right: '24px', transform: 'translateY(-50%)', cursor: 'pointer' }} width={smVW ? '28' : mdVW ? '38' : '48'} height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="24" fill="url(#a)"/><path d="M33.71 32.29 30 28.61A9 9 0 1 0 28.61 30l3.68 3.68a1.002 1.002 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM23 30a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" fill="#fff"/><defs><linearGradient id="a" x1="0" y1="24" x2="48" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#498AF4"/><stop offset="1" stop-color="#1A73E8"/></linearGradient></defs></svg>
+              <svg
+                onClick={onSearchClick}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '24px',
+                  transform: 'translateY(-50%)',
+                  cursor: 'pointer',
+                }}
+                width={smVW ? '28' : mdVW ? '38' : '48'}
+                height="48"
+                viewBox="0 0 48 48"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect width="48" height="48" rx="24" fill="url(#a)" />
+                <path
+                  d="M33.71 32.29 30 28.61A9 9 0 1 0 28.61 30l3.68 3.68a1.002 1.002 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM23 30a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"
+                  fill="#fff"
+                />
+                <defs>
+                  <linearGradient
+                    id="a"
+                    x1="0"
+                    y1="24"
+                    x2="48"
+                    y2="24"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop stop-color="#498AF4" />
+                    <stop offset="1" stop-color="#1A73E8" />
+                  </linearGradient>
+                </defs>
+              </svg>
             </Box>
           </Box>
           <Typography
@@ -153,11 +193,10 @@ const Landing = () => {
             color="white"
             fontSize={typography.fontSize.xs}
             sx={{
-              
               [theme.breakpoints.down('sm')]: {
-                textAlign: 'center'
+                textAlign: 'center',
               },
-              textAlign: "end",
+              textAlign: 'end',
             }}
           >
             Photo by Nina San Andres
@@ -167,15 +206,15 @@ const Landing = () => {
 
       <Box
         sx={{
-          margin: "81px 144px",
-          [theme.breakpoints.down("md")]: {
-            margin: "60px 100px",
+          margin: '81px 144px',
+          [theme.breakpoints.down('md')]: {
+            margin: '60px 100px',
           },
           [theme.breakpoints.down(600)]: {
-            margin: "54px 40px",
+            margin: '54px 40px',
           },
-          [theme.breakpoints.down("xs")]: {
-            margin: "48px 16px",
+          [theme.breakpoints.down('xs')]: {
+            margin: '48px 16px',
           },
         }}
       >
@@ -184,14 +223,14 @@ const Landing = () => {
           fontWeight={typography.fontWeight.bold}
           sx={{
             fontSize: typography.fontSize.xl,
-            marginBottom: "24px",
-            [theme.breakpoints.down("md")]: {
+            marginBottom: '24px',
+            [theme.breakpoints.down('md')]: {
               fontSize: typography.fontSize.lg,
-              marginBottom: "20px",
+              marginBottom: '20px',
             },
-            [theme.breakpoints.down("sm")]: {
+            [theme.breakpoints.down('sm')]: {
               fontSize: typography.fontSize.base,
-              marginBottom: "16px",
+              marginBottom: '16px',
             },
           }}
         >
@@ -199,46 +238,53 @@ const Landing = () => {
         </Typography>
         {/* 6 random featuredEvents */}
         {/* .map return event card component */}
-        <Grid container spacing={2} columns={3} sx={{
-          marginBottom: '120px',
-          [theme.breakpoints.down('md')]: {
-            marginBottom: '60px'
-          },
-          [theme.breakpoints.down(600)]: {
-            marginBottom: '54px'
-          },
-          [theme.breakpoints.down('xs')]: {
-            marginBottom: '48px'
-          },
-        }}>
-        { featuredEvents.length > 0 &&
-          featuredEvents.map(event => {
-            const org = orgs.find(org => org.events.some(orgEvent => {
-              return orgEvent.name === event.name
-            }))
-            return (
-            <Grid item xs={3} sm={3} md={1} lg={1} key={event.id}>
-              <EventCard
-                imgSrc={event.cover_photo}
-                alt=""
-                eventName={event.name}
-                startDate={event.start_date}
-                endDate={event.end_date}
-                logoSrc={org ? org.logo : ''}
-                logoName={org ? org.short_name : ''}
-              />
-            </Grid>
-          )}
-        )}
+        <Grid
+          container
+          spacing={2}
+          columns={3}
+          sx={{
+            marginBottom: '120px',
+            [theme.breakpoints.down('md')]: {
+              marginBottom: '60px',
+            },
+            [theme.breakpoints.down(600)]: {
+              marginBottom: '54px',
+            },
+            [theme.breakpoints.down('xs')]: {
+              marginBottom: '48px',
+            },
+          }}
+        >
+          {featuredEvents.length > 0 &&
+            featuredEvents.map((event) => {
+              const org = orgs.find((org) =>
+                org.events.some((orgEvent) => {
+                  return orgEvent.name === event.name;
+                })
+              );
+              return (
+                <Grid item xs={3} sm={3} md={1} lg={1} key={event.id}>
+                  <EventCard
+                    imgSrc={event.cover_photo}
+                    alt=""
+                    eventName={event.name}
+                    startDate={event.start_date}
+                    endDate={event.end_date}
+                    logoSrc={org ? org.logo : ''}
+                    logoName={org ? org.short_name : ''}
+                  />
+                </Grid>
+              );
+            })}
         </Grid>
 
         <Box
           component="div"
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "baseline",
-            marginBottom: "24px",
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            marginBottom: '24px',
           }}
         >
           <Typography
@@ -246,14 +292,14 @@ const Landing = () => {
             fontWeight={typography.fontWeight.bold}
             sx={{
               fontSize: typography.fontSize.xl,
-              marginBottom: "24px",
-              [theme.breakpoints.down("md")]: {
+              marginBottom: '24px',
+              [theme.breakpoints.down('md')]: {
                 fontSize: typography.fontSize.lg,
-                marginBottom: "20px",
+                marginBottom: '20px',
               },
-              [theme.breakpoints.down("sm")]: {
+              [theme.breakpoints.down('sm')]: {
                 fontSize: typography.fontSize.base,
-                marginBottom: "16px",
+                marginBottom: '16px',
               },
             }}
           >
@@ -262,14 +308,14 @@ const Landing = () => {
 
           <Link
             style={{
-              textDecoration: "none",
+              textDecoration: 'none',
               color: colors.blue[400],
               fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.med,
             }}
             to="/organizations"
           >
-            {vW500 ? "View all" : "View all organizations"}
+            {vW500 ? 'View all' : 'View all organizations'}
           </Link>
         </Box>
 
@@ -290,23 +336,23 @@ const Landing = () => {
         <Box
           component="div"
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            margin: "160px 0",
-            gap: "40px",
-            [theme.breakpoints.down("md")]: {
-              margin: "66px 0",
+            display: 'flex',
+            justifyContent: 'space-between',
+            margin: '160px 0',
+            gap: '40px',
+            [theme.breakpoints.down('md')]: {
+              margin: '66px 0',
             },
-            [theme.breakpoints.down("sm")]: {
-              flexDirection: "column",
-              justifyContent: "center",
-              margin: "48px 0",
-              gap: "32px",
+            [theme.breakpoints.down('sm')]: {
+              flexDirection: 'column',
+              justifyContent: 'center',
+              margin: '48px 0',
+              gap: '32px',
             },
           }}
         >
           <svg
-            style={{ width: smVW ? "100%" : "", height: "fit-content" }}
+            style={{ width: smVW ? '100%' : '', height: 'fit-content' }}
             width="564"
             height="421"
             viewBox="0 0 564 421"
@@ -689,13 +735,13 @@ const Landing = () => {
           <Box
             component="div"
             sx={{
-              maxWidth: "466px",
-              alignSelf: "center",
-              [theme.breakpoints.down("lg")]: {
-                maxWidth: "360px",
+              maxWidth: '466px',
+              alignSelf: 'center',
+              [theme.breakpoints.down('lg')]: {
+                maxWidth: '360px',
               },
-              [theme.breakpoints.down("sm")]: {
-                maxWidth: "100%",
+              [theme.breakpoints.down('sm')]: {
+                maxWidth: '100%',
               },
             }}
           >
@@ -705,8 +751,8 @@ const Landing = () => {
                 color: colors.gray[700],
                 fontWeight: typography.fontWeight.med,
                 fontSize: typography.fontSize.lg,
-                marginBottom: "8px",
-                [theme.breakpoints.down("sm")]: {
+                marginBottom: '8px',
+                [theme.breakpoints.down('sm')]: {
                   fontSize: typography.fontSize.base,
                   marginBottom: 0,
                 },
@@ -720,7 +766,7 @@ const Landing = () => {
                 color: colors.gray[700],
                 fontWeight: typography.fontWeight.reg,
                 fontSize: typography.fontSize.base,
-                [theme.breakpoints.down("sm")]: {
+                [theme.breakpoints.down('sm')]: {
                   fontSize: typography.fontSize.sm,
                 },
               }}
@@ -730,14 +776,14 @@ const Landing = () => {
             </Typography>
             <Button
               sx={{
-                borderRadius: "4px",
-                padding: "8px 24px",
-                marginTop: "24px",
-                backgroundColor: "linear-gradient(90deg, #498AF4 0%, #1A73E8 100%)",
-                textTransform: "none",
-                [theme.breakpoints.down("md")]: {
-                  fontSize: "12px",
-                  padding: "4px 16px",
+                borderRadius: '4px',
+                padding: '8px 24px',
+                marginTop: '24px',
+                backgroundColor: 'linear-gradient(90deg, #498AF4 0%, #1A73E8 100%)',
+                textTransform: 'none',
+                [theme.breakpoints.down('md')]: {
+                  fontSize: '12px',
+                  padding: '4px 16px',
                 },
               }}
             >

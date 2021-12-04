@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
-import Layout from "$components/Layout";
-import EventTitleCard from "../components/EventTitleCard";
-import { Box, Typography, createTheme } from "@mui/material";
-import { colors, typography } from "$lib/theme";
-import EventsDataService from "$services/events.service";
-import OrgsDataService from "$services/orgs.service";
+import React, { useEffect, useState } from 'react';
+import Layout from '$components/Layout';
+import EventTitleCard from '../components/EventTitleCard';
+import { Box, Typography, createTheme } from '@mui/material';
+import { colors, typography } from '$lib/theme';
+import EventsDataService from '$services/events.service';
+import OrgsDataService from '$services/orgs.service';
 const EventPage = (props) => {
   const id = 1;
   const [eventForm, setEventForm] = useState({
-    eventName: "",
-    startDate: "",
-    endDate: "",
-    description: "",
-    coverPhoto: "",
-    eventPhoto1: "",
-    eventPhoto2: "",
-    eventPhoto3: "",
-    eventPhoto4: "",
+    eventName: '',
+    startDate: '',
+    endDate: '',
+    description: '',
+    coverPhoto: '',
+    eventPhoto1: '',
+    eventPhoto2: '',
+    eventPhoto3: '',
+    eventPhoto4: '',
     featuredEvents: [],
   });
 
   const [orgForm, setOrgForm] = useState({
-    orgName: "",
-    orgLogo: "",
+    orgName: '',
+    orgLogo: '',
   });
 
   useEffect(() => {
@@ -66,36 +66,36 @@ const EventPage = (props) => {
         <img
           height="360px"
           width="100%"
-          style={{ position: "absolute", marginTop: "80px", zIndex: "-1" }}
+          style={{ position: 'absolute', marginTop: '80px', zIndex: '-1' }}
           src="http://placehold.jp/150x150.png"
         />
         <Box
           sx={{
-            paddingTop: "80px",
-            margin: "0 144px",
-            [theme.breakpoints.between("lg", "xl")]: {
-              margin: "0 112px",
+            paddingTop: '80px',
+            margin: '0 144px',
+            [theme.breakpoints.between('lg', 'xl')]: {
+              margin: '0 112px',
             },
-            [theme.breakpoints.between("md", "lg")]: {
-              margin: "0 80px",
+            [theme.breakpoints.between('md', 'lg')]: {
+              margin: '0 80px',
             },
-            [theme.breakpoints.between("sm", "md")]: {
-              margin: "0 48px",
+            [theme.breakpoints.between('sm', 'md')]: {
+              margin: '0 48px',
             },
-            [theme.breakpoints.between("xs", "sm")]: {
-              margin: "0 16px",
+            [theme.breakpoints.between('xs', 'sm')]: {
+              margin: '0 16px',
             },
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <Box
             sx={{
-              width: "100%",
-              maxWidth: "760px",
-              marginTop: "240px",
-              marginBottom: "80px",
+              width: '100%',
+              maxWidth: '760px',
+              marginTop: '240px',
+              marginBottom: '80px',
             }}
           >
             <EventTitleCard
@@ -106,7 +106,7 @@ const EventPage = (props) => {
               orgName={orgForm.orgName}
             />
             <Typography
-              sx={{ marginTop: "40px" }}
+              sx={{ marginTop: '40px' }}
               color={colors.gray[700]}
               fontWeight={typography.fontWeight.reg}
               fontSize={typography.fontSize.base}
@@ -114,25 +114,25 @@ const EventPage = (props) => {
               {eventForm.eventName}
             </Typography>
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Box
               sx={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: "24px",
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '24px',
               }}
             >
               <Box
                 sx={{
-                  width: "564px",
-                  height: "376px",
-                  marginRight: "12px",
-                  [theme.breakpoints.down("1380")]: {
-                    marginRight: "0",
-                    marginBottom: "12px",
+                  width: '564px',
+                  height: '376px',
+                  marginRight: '12px',
+                  [theme.breakpoints.down('1380')]: {
+                    marginRight: '0',
+                    marginBottom: '12px',
                   },
                 }}
               >
@@ -140,12 +140,12 @@ const EventPage = (props) => {
               </Box>
               <Box
                 sx={{
-                  width: "564px",
-                  height: "376px",
-                  marginLeft: "12px",
-                  [theme.breakpoints.down("1380")]: {
-                    marginLeft: "0",
-                    marginTop: "12px",
+                  width: '564px',
+                  height: '376px',
+                  marginLeft: '12px',
+                  [theme.breakpoints.down('1380')]: {
+                    marginLeft: '0',
+                    marginTop: '12px',
                   },
                 }}
               >
@@ -154,24 +154,24 @@ const EventPage = (props) => {
             </Box>
             <Box
               sx={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                alignItems: "center",
-                justifyContent: "center",
-                [theme.breakpoints.down("md")]: {
-                  margin: "0 80px",
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'center',
+                [theme.breakpoints.down('md')]: {
+                  margin: '0 80px',
                 },
               }}
             >
               <Box
                 sx={{
-                  width: "564px",
-                  height: "376px",
-                  marginRight: "12px",
-                  [theme.breakpoints.down("1380")]: {
-                    marginRight: "0",
-                    marginBottom: "12px",
+                  width: '564px',
+                  height: '376px',
+                  marginRight: '12px',
+                  [theme.breakpoints.down('1380')]: {
+                    marginRight: '0',
+                    marginBottom: '12px',
                   },
                 }}
               >
@@ -179,13 +179,13 @@ const EventPage = (props) => {
               </Box>
               <Box
                 sx={{
-                  width: "564px",
-                  height: "376px",
-                  marginLeft: "12px",
-                  [theme.breakpoints.down("1380")]: {
-                    marginLeft: "0",
-                    marginBottom: "12px",
-                    marginTop: "12px",
+                  width: '564px',
+                  height: '376px',
+                  marginLeft: '12px',
+                  [theme.breakpoints.down('1380')]: {
+                    marginLeft: '0',
+                    marginBottom: '12px',
+                    marginTop: '12px',
                   },
                 }}
               >
@@ -194,7 +194,7 @@ const EventPage = (props) => {
             </Box>
           </Box>
           <Typography
-            sx={{ marginTop: "120px" }}
+            sx={{ marginTop: '120px' }}
             color={colors.gray[700]}
             fontSize={typography.fontSize.lg}
             fontWeight={typography.fontWeight.med}

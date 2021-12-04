@@ -1,7 +1,7 @@
-import http from "./http";
+import http from './http';
 
-const IS_AUTH = "isAuth";
-const TOKEN_KEY = "auth-token";
+const IS_AUTH = 'isAuth';
+const TOKEN_KEY = 'auth-token';
 
 /**
  * Login
@@ -15,9 +15,9 @@ const TOKEN_KEY = "auth-token";
  */
 export const login = async ({
   email,
-  password = "9,2Nli1H:C&Vmyl<9:Y)VV1t[jQN7rS7Laf|sip*]X_Fi)IX5",
+  password = '9,2Nli1H:C&Vmyl<9:Y)VV1t[jQN7rS7Laf|sip*]X_Fi)IX5',
 }) => {
-  const res = await http.post("login/", { username: email, password });
+  const res = await http.post('login/', { username: email, password });
   window.sessionStorage.removeItem(IS_AUTH);
   window.sessionStorage.setItem(IS_AUTH, true);
 
@@ -35,14 +35,14 @@ export const login = async ({
  * @example register({email: "gdsc@gmail.com"})
  */
 export const register = ({ email }) => {
-  return http.post("register/", { username: email });
+  return http.post('register/', { username: email });
 };
 
 /**
  * Logout
  */
 export const logout = async () => {
-  await http.post("logout/");
+  await http.post('logout/');
   window.sessionStorage.setItem(IS_AUTH, false);
 };
 

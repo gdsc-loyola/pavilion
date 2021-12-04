@@ -1,6 +1,6 @@
-import React from "react";
-import { Controller, ControllerProps } from "react-hook-form";
-import { TextField } from "@mui/material";
+import React from 'react';
+import { Controller, ControllerProps } from 'react-hook-form';
+import { TextField } from '@mui/material';
 
 /**
  * @description A MUI TextField with a react-hook-form Controller wrapper
@@ -20,7 +20,7 @@ const ControlledTextField = (props) => {
           error={!!error}
           helperText={error ? error.message : null}
           onChange={onChange}
-          value={value || ""}
+          value={value || ''}
           {...rest}
         />
       )}

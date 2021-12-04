@@ -1,18 +1,18 @@
-const USER_KEY = "auth-user"
+const USER_KEY = 'auth-user';
 
 class UserSession {
-    signOut = () => {
-        window.sessionStorage.clear()
-    }
+  signOut = () => {
+    window.sessionStorage.clear();
+  };
 
-    setUser = (payload) => {
-        window.sessionStorage.removeItem(USER_KEY)
-        window.sessionStorage.setItem(USER_KEY, payload)
-    }
+  setUser = (payload) => {
+    window.sessionStorage.removeItem(USER_KEY);
+    window.sessionStorage.setItem(USER_KEY, payload);
+  };
 
-    getUser = () => {
-        return JSON.parse(sessionStorage.getItem(USER_KEY) || "{}")
-    }
+  getUser = () => {
+    return JSON.parse(sessionStorage.getItem(USER_KEY) || '{}');
+  };
 }
 
-export default new UserSession()
+export default new UserSession();

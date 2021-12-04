@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "webpack --mode development --entry ./src/index.js --output-path ./static/frontend --watch",
     "build": "webpack --mode production --entry ./src/index.js --output-path ./static/frontend",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"src/**/*.js\""
   },
   "keywords": [],
   "author": "",
@@ -20,7 +21,7 @@
     "cotter": "^0.3.35",
     "css-loader": "^6.2.0",
     "file-loader": "^6.2.0",
-    "prettier": "^2.4.1",
+    "prettier": "2.5.0",
     "sass": "^1.38.2",
     "sass-loader": "^12.1.0",
     "source-map-loader": "^3.0.0",

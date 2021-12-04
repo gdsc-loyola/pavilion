@@ -21,7 +21,6 @@ const NAV_ITEMS = [
 ];
 
 const NavBar = ({ transparent }) => {
-
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const smVW = useMediaQuery(theme.breakpoints.down('sm'));
@@ -35,7 +34,7 @@ const NavBar = ({ transparent }) => {
         justifyContent: 'space-between',
         boxSizing: 'border-box',
         padding: '20px 10%',
-        backgroundColor:  transparent ? 'transparent' : 'white',
+        backgroundColor: transparent ? 'transparent' : 'white',
         boxShadow: !transparent && '0px 4px 10px rgba(0, 0, 0, 0.08)',
         position: 'fixed',
         zIndex: '5',

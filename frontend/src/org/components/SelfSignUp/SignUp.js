@@ -1,11 +1,11 @@
 // import essential dependencies
-import React from "react";
+import React from 'react';
 
 // import stylesheets
-import "$stylesheets/org/SelfSignUp.scss";
-import PrimaryButton from "../PrimaryButton.js";
-import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
+import '$stylesheets/org/SelfSignUp.scss';
+import PrimaryButton from '../PrimaryButton.js';
+import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
 
 const SignUpForm = () => {
   return (
@@ -29,7 +29,7 @@ const SignUpForm = () => {
         </div>
         {/* <input type="submit"><PrimaryButton button_copy="Create an account"/> */}
         {/* <p className="error_msg">Please fill out the fields to create an account.</p> */}
-        <Button sx={{ alignSelf: "stretch" }}>Create an account</Button>
+        <Button sx={{ alignSelf: 'stretch' }}>Create an account</Button>
       </form>
     </div>
   );

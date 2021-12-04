@@ -1,14 +1,14 @@
-import React from 'react'
-import NavDashboard from './DashboardNav'
-import TopBar from './TopBar'
+import React from 'react';
+import NavDashboard from './DashboardNav';
+import TopBar from './TopBar';
 
 const DashboardBase = () => {
-    return (
-        <>
-            <TopBar />
-            <NavDashboard />
-        </>
-    )
-}
+  return (
+    <>
+      <TopBar />
+      <NavDashboard />
+    </>
+  );
+};
 
-export default DashboardBase
+export default DashboardBase;
