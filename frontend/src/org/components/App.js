@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Admin, CreateOrg } from './Router';
+import { Admin } from './Router';
 import Dashboard from '../views/Dashboard';
 import Events from '../views/Events';
 import Settings from '../views/Settings';
@@ -13,7 +13,7 @@ import { theme } from '$lib/theme';
 
 import { OrgPageRoutes } from '$modules/OrgPage/routes/index';
 import { EventPagesRoutes } from '$modules/EventPage/routes/index';
-import { Landing, OrgCatalog } from '$modules/StudentLanding/routes';
+import { Landing } from '$modules/StudentLanding/routes';
 import { OrgCatalogue } from '$modules/OrgCatalogue/routes';
 
 const App = () => {

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    // this is implicitly set in a `jsconfig.json` so we have to do it manually here
+    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "$stylesheets/*": ["./stylesheets/*"],
+      "$lib/*": ["./src/lib/*"],
+      "$modules/*": ["./src/modules/*"],
+      "$components/*": ["./src/components/*"],
+      "$services/*": ["./src/services/*"]
+    }
+  }
+}

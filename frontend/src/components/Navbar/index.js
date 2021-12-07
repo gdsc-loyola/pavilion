@@ -5,12 +5,12 @@ import { Box, useMediaQuery } from '@mui/material';
 import { theme } from '$lib/theme';
 import NavbarLogo from './NavbarLogo';
 import Burger from './Burger';
-import NavItems, { NavItemList } from './NavItems';
+import NavItems from './NavItems';
 
 const { colors } = theme;
 
 /**
- * @type {NavItemList}
+ * @type {import('./NavItems').NavItemList}
  */
 const NAV_ITEMS = [
   { label: 'Home', to: '/', preventActiveColor: true },

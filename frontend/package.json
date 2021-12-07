@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development --entry ./src/index.js --output-path ./static/frontend --watch",
+    "dev:webpack": "webpack --mode development --entry ./src/index.js --output-path ./static/frontend --watch",
     "dev:all": "cross-env npm run dev & cd .. && python manage.py runserver --settings=pavilion.dev_settings",
     "build": "webpack --mode production --entry ./src/index.js --output-path ./static/frontend",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write \"src/**/*.js\"",
-    "format:check": "prettier --check \"src/**/*.js\""
+    "format:check": "prettier --check \"src/**/*.js\"",
+    "dev": "vite"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
+    "@vitejs/plugin-react": "^1.1.1",
     "babel-loader": "^8.2.2",
     "cotter": "^0.3.35",
     "cross-env": "^7.0.3",
@@ -30,8 +32,11 @@
     "source-map-loader": "^3.0.0",
     "style-loader": "^3.2.1",
     "svg-url-loader": "^7.1.1",
+    "vite": "^2.7.0",
+    "vite-tsconfig-paths": "^3.3.17",
     "webpack": "^5.51.1",
-    "webpack-cli": "^4.8.0"
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.6.0"
   },
   "dependencies": {
     "@emotion/react": "^11.5.0",

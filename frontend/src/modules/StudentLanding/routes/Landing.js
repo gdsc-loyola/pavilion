@@ -22,22 +22,22 @@ import { Link } from 'react-router-dom';
 import orgsService from '../../../services/orgs.service';
 import { useOnScreen } from '$lib/utils/useOnScreen';
 
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 425,
+      sm: 700,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});
+
 const Landing = () => {
   const history = useHistory();
 
   const [searchKey, setSearchKey] = useState('');
-
-  const theme = createTheme({
-    breakpoints: {
-      values: {
-        xs: 425,
-        sm: 700,
-        md: 900,
-        lg: 1200,
-        xl: 1536,
-      },
-    },
-  });
 
   const mdVW = useMediaQuery(theme.breakpoints.down('md'));
   const smVW = useMediaQuery(theme.breakpoints.down(700));

@@ -1,12 +1,22 @@
 ## Starting Dev Environment
-You can run both the Django server and webpack with one command.
+
+You can run both the Django server and vite with one command.
+
 ```bash
 npm run dev:all
 ```
 
-## Formatting
-It is recommended to install the [Prettier Extenstion](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to format code every time you save it. To make sure all code is formatted correctly, always remember to run `npm run format` before pushing. 
+The Django server should be live at http://localhost:8000
 
+The vite server should be live at http://localhost:3000
+
+We're using vite for our development bundler since it supports HMR (Hot Module Reloading) and it is generally faster than webpack, thus a faster feedback loop.
+
+When building for production though, run `npm run build` to update the `main.js` file.
+
+## Formatting
+
+It is recommended to install the [Prettier Extenstion](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to format code every time you save it. To make sure all code is formatted correctly, always remember to run `npm run format` before pushing.
 
 ## Project struture
 
@@ -49,22 +59,26 @@ Here's a rule of thumb (Of course with some exceptions): **If we delete a certai
 
 ## FAQS
 
+## Why is there an `index.html` in both the root folder and the `templates/frontend` folder?
+
+The `index.html` in the root folder is used by vite, the bundler we use for development, while the `templates/frontend/index.html` is used by django. When you want to build for production use `npm run build`, but if you want to run a dev server only use `npm run dev:all`.
+
 ### Why do I see import paths that start with `$`? For example `'$lib/theme'`.
 
 These are what's called path aliases. It helps clean up the import statement, turning something like `'../../../../lib/theme'` into `'$lib/theme'`.
 
-You can find the aliases inside the `jsconfig.json`, but that **only** provides the autocomplete for our editor. For webpack to know what these aliases map to, we put the names inside the `resolve.alias` property.
+You can find the aliases inside the `tsconfig.json`, but that **only** provides the autocomplete for our editor. For webpack to know what these aliases map to, we put the names inside the `resolve.alias` property.
 
 For example:
 
 ```js
-const path = require("path");
+const path = require('path');
 
 module.exports = {
   // Rest of config here
   resolve: {
     alias: {
-      $lib: path.resolve(__dirname, "./src/lib"),
+      $lib: path.resolve(__dirname, './src/lib'),
     },
   },
 };

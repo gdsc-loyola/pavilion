@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import SideBar from './SideBar';
 import Progress from './Progress';
 import Box from '@material-ui/core/Box';
-import TextField from '@material-ui/core';
 
 const OrgLogoForm = (props) => {
   // const [orgLogo, setOrgLogo] = React.useState('');
