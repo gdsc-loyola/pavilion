@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useLayoutEffect } from 'react';
+import { useState, useCallback, useLayoutEffect, useMemo } from 'react';
 
 /**
  * @description Detects when an element is in the viewport
@@ -12,7 +12,10 @@ export function useOnScreen() {
     setNode(node);
   }, []);
 
-  const observer = new IntersectionObserver(([entry]) => setIntersecting(entry.isIntersecting));
+  const observer = useMemo(
+    () => new IntersectionObserver(([entry]) => setIntersecting(entry.isIntersecting)),
+    []
+  );
 
   useLayoutEffect(() => {
     if (node) {
@@ -22,7 +25,7 @@ export function useOnScreen() {
         observer.disconnect();
       };
     }
-  }, [node]);
+  }, [node, observer]);
 
   return [ref, isIntersecting, node];
 }

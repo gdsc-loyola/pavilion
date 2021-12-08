@@ -15,7 +15,7 @@ const BodyDashboard = () => {
   return (
     <section className="dashboard-body">
       <img src={dashboard_empty} alt="" />
-      <h1>Your dashboard's coming soon 😉</h1>
+      <h1>Your dashboard&apos;s coming soon 😉</h1>
       <p>
         We’re still working on creating a big experience for you and your organization. For now, try
         adding a past event to your organization’s web page!

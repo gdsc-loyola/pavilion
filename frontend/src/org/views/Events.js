@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import DashboardBase from '../components/DashboardBase';
 import OrgsDataService from '../../services/orgs.service';
 import more_options from '../../../static/assets/more_options.svg';
@@ -7,8 +7,7 @@ import '../../../stylesheets/org/Events.scss';
 const Events = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [events, getEvents] = useState([]);
-  const [user_loggedin, setUser] = useState('gdsc');
-  const url = 'http://localhost:8000/api/';
+  const [user_loggedin] = useState('gdsc');
 
   function show_dropdown(e) {
     console.log(e.target);
@@ -22,9 +21,9 @@ const Events = () => {
 
   useEffect(() => {
     setEvents();
-  }, []);
+  }, [setEvents]);
 
-  const setEvents = () => {
+  const setEvents = useCallback(() => {
     OrgsDataService.getByOrgUser(user_loggedin) //filter happens in the backend
       .then((res) => {
         // const org = res.data.find(({ user }) => user.username === user_loggedin)
@@ -33,7 +32,7 @@ const Events = () => {
         return getEvents(org.events);
       })
       .catch((e) => console.log(e));
-  };
+  }, [user_loggedin]);
 
   const tableData = () => {
     return events.map((val, i) => {

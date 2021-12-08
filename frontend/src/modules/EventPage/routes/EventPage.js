@@ -5,8 +5,7 @@ import { Box, Typography, createTheme } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 import EventsDataService from '$services/events.service';
 import OrgsDataService from '$services/orgs.service';
-const EventPage = (props) => {
-  const id = 1;
+const EventPage = () => {
   const [eventForm, setEventForm] = useState({
     eventName: '',
     startDate: '',

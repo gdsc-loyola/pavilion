@@ -22,7 +22,7 @@ export const login = async ({
   window.sessionStorage.setItem(IS_AUTH, true);
 
   window.sessionStorage.removeItem(TOKEN_KEY);
-  window.sessionStorage.setItem(TOKEN_KEY, token);
+  window.sessionStorage.setItem(TOKEN_KEY, res.data.access);
   return res;
 };
 

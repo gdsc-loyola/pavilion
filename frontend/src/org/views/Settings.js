@@ -9,7 +9,7 @@ import Select from '@material-ui/core/Select';
 import OrgsDataService from '../../services/orgs.service';
 import { styled } from '@mui/material';
 import { colors } from '$lib/theme';
-const Settings = (props) => {
+const Settings = () => {
   const FormField = styled(TextField)({
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
@@ -214,7 +214,7 @@ const Settings = (props) => {
             />
           </div>
         </label>
-        <p class="image-subtitle">Suggested ratio — 1:1 (ex. 800x800px)</p>
+        <p className="image-subtitle">Suggested ratio — 1:1 (ex. 800x800px)</p>
         <h1 className="body-title">Org Social Media</h1>
         <h5 className="social-media-header">Facebook</h5>
         <FormField

@@ -85,7 +85,7 @@ const OrgLogo = (props) => {
           onDragOver={(e) => handleDragOver(e)}
           onDrop={(e) => handleDrop(e)}
         >
-          <img src={!!logo ? logo : '../../../static/assets/image.png'} alt="logo" />
+          <img src={logo ? logo : '../../../static/assets/image.png'} alt="logo" />
           {!logo && <p>Browse through your files</p>}
         </Label>
         <HelperText>Suggested ratio — 1:1 (ex. 800x800px)</HelperText>

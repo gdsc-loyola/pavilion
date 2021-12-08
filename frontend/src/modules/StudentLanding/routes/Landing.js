@@ -1,16 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import {
-  Grid,
-  Box,
-  Typography,
-  createTheme,
-  InputBase,
-  useMediaQuery,
-  Button,
-} from '@mui/material';
-
-import { styled } from '@mui/system';
+import { Grid, Box, Typography, createTheme, useMediaQuery, Button } from '@mui/material';
 
 import '../../../../stylesheets/student/Landing.scss';
 import { colors, typography } from '$lib/theme';
@@ -175,8 +165,8 @@ const Landing = () => {
                     y2="24"
                     gradientUnits="userSpaceOnUse"
                   >
-                    <stop stop-color="#498AF4" />
-                    <stop offset="1" stop-color="#1A73E8" />
+                    <stop stopColor="#498AF4" />
+                    <stop offset="1" stopColor="#1A73E8" />
                   </linearGradient>
                 </defs>
               </svg>

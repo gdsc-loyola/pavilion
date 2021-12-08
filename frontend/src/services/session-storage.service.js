@@ -21,7 +21,7 @@ class SessionStorageService {
   };
 
   getToken = () => {
-    return sessionStorage.getItem(USER_TOKEN);
+    return sessionStorage.getItem(TOKEN_KEY);
   };
 }
 

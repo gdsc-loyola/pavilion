@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Cotter from 'cotter';
 import * as auth from '$lib/auth';
 import axios from 'axios';
+import '$stylesheets/org/SelfSignUp.scss';
 
 const Login = (props) => {
   useEffect(() => {
@@ -32,7 +33,7 @@ const Login = (props) => {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [props.history]);
 
   return (
     <div className="form-container login">

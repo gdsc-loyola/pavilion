@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write \"src/**/*.js\"",
     "format:check": "prettier --check \"src/**/*.js\"",
-    "dev": "vite"
+    "dev": "vite",
+    "lint": "eslint --ext .js src/"
   },
   "keywords": [],
   "author": "",

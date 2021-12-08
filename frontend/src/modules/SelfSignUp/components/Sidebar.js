@@ -17,7 +17,7 @@ const StyledSidebar = styled('aside')(({ theme }) => ({
   },
 }));
 
-const BlueEllipse = styled('div')(({}) => ({
+const BlueEllipse = styled('div')(() => ({
   background: `linear-gradient(90deg, ${colors.blue[100]} 0%,${colors.blue[300]} 100%)`,
   position: 'fixed',
   bottom: '-355px',

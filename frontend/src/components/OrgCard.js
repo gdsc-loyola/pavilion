@@ -5,7 +5,7 @@ import { theme } from '$lib/theme';
 
 const { fontSize, fontWeight, colors, breakpoints, typography } = theme;
 
-const OrgCard = ({ orgPhoto, orgBody, orgName }) => {
+const OrgCard = ({ orgPhoto, orgBody, orgName, orgId }) => {
   const history = useHistory();
 
   const smVW = useMediaQuery(theme.breakpoints.down(700));

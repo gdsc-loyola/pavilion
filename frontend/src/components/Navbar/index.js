@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router';
 import { Box, useMediaQuery } from '@mui/material';
 
 import { theme } from '$lib/theme';

@@ -56,7 +56,7 @@ export function useDimensions({ liveMeasure = true }) {
         };
       }
     }
-  }, [node]);
+  }, [liveMeasure, node]);
 
   return [ref, dimensions, node];
 }

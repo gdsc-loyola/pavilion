@@ -5,9 +5,6 @@ import Dashboard from '../views/Dashboard';
 import Events from '../views/Events';
 import Settings from '../views/Settings';
 import { OrgInfo, OrgLogo, OrgLinks, Login } from '$modules/SelfSignUp/routes';
-
-import OrgInfoOld from './SelfSignUp/OrgInfo';
-import OrgLogoOld from './SelfSignUp/OrgLogo';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '$lib/theme';
 
@@ -39,15 +36,11 @@ const App = () => {
         {/* Protected admin routes */}
         <Admin exact path="/admin/" component={Dashboard} />
         <Admin exact path="/admin/events" component={Events} />
-
         <Admin exact path="/admin/settings" component={Settings} />
 
         {/* SSU routes */}
         <Route exact path="/org-info/" component={OrgInfo} />
         <Route exact path="/org-logo/" component={OrgLogo} />
-
-        <Route exact path="/org-info-old/" component={OrgInfoOld} />
-        <Route exact path="/org-logo-old/" component={OrgLogoOld} />
         <Route exact path="/org-links/" component={OrgLinks} />
       </Switch>
     </ThemeProvider>

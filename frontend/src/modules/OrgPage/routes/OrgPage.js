@@ -50,7 +50,7 @@ const OrgPage = (props) => {
         events: res.data.events,
       });
     });
-  }, []);
+  }, [id]);
 
   const openForSignUps = true;
 
@@ -160,7 +160,7 @@ const OrgPage = (props) => {
           </Typography>
           <Grid container spacing={2} columns={3} marginBottom="120px">
             {orgForm.events.map((event) => (
-              <Grid item xs={3} sm={3} md={1} lg={1}>
+              <Grid item xs={3} sm={3} md={1} lg={1} key={event.name}>
                 <EventCard
                   imgSrc={event.cover_photo1}
                   alt={event.desc}
