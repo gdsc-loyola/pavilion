@@ -1,93 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Typography,
-  TextField,
-  Grid,
-  Checkbox,
-  FormControlLabel,
-  Button,
-  createTheme,
-  useMediaQuery,
-} from '@mui/material';
-import { Search, FilterAlt, Close } from '@mui/icons-material';
-
-import { colors, typography } from '$lib/theme';
+import React, { useEffect } from 'react';
+import { Box, Typography, Grid, useMediaQuery } from '@mui/material';
+import { theme } from '$lib/theme';
 import Layout from '$components/Layout';
-import OrgCard from '../../../components/OrgCard';
-import orgsService from '../../../services/orgs.service';
-import http from '../../../http-common';
+import OrgCard from '$components/OrgCard';
+import orgsService from '$services/orgs.service';
+import { useSearchQuery } from '$lib/utils/useSearchQuery';
+
+// Module specific imports
+import Filter from '../components/Filter';
+import EmptyState from '../components/EmptyState';
+import Searchbar from '../components/Searchbar';
+import { useSearch } from '../hooks/useSearch';
+import { useFilterOrgs } from '../hooks/useFilterOrgs';
+import { useAsync } from '$lib/utils/useAsync';
+
+const { colors, fontSize, fontWeight } = theme;
 
 const OrgCatalogue = () => {
-  const theme = createTheme({
-    breakpoints: {
-      values: {
-        xs: 425,
-        sm: 700,
-        md: 900,
-        lg: 1200,
-        xl: 1536,
-      },
-    },
-  });
   const smVW = useMediaQuery(theme.breakpoints.down('sm'));
+  const query = useSearchQuery();
 
-  const [orgs, setOrgs] = useState([]);
-  useEffect(() => {
-    orgsService.getAll().then((response) => {
-      console.log(response);
-      setOrgs(response.data);
-      setFilteredOrgs(response.data);
-    });
-  }, []);
+  const { data, status } = useAsync(orgsService.getAll);
+  const orgs = data?.data;
 
-  const [search, setSearch] = useState('');
-  useEffect(() => {
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
+  const { handleSearchChange, searchValue } = useSearch(query.get('search'));
 
-    const searchKey = params.get('search');
-    if (searchKey) {
-      setSearch(searchKey);
-    }
-  }, []);
+  const {
+    filteredOrgs,
+    filterTags,
+    setFilterTags,
+    filters,
+    setFilters,
+    filtersApplied,
+    setFiltersApplied,
+  } = useFilterOrgs(orgs, searchValue);
 
-  const [searchFocus, setSearchFocus] = useState(false);
-
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
-
-  const [openFilter, setOpenFilter] = useState(false);
-  const [filters, setFilters] = useState([]);
-  const [filtersApplied, setFiltersApplied] = useState(false);
   useEffect(() => {
     if (filtersApplied) {
-      console.log('filters', filters);
       setFilterTags(filters);
-      setOpenFilter(false);
     }
-  }, [filtersApplied]);
-  const [filterTags, setFilterTags] = useState([]);
-
-  const [filteredOrgs, setFilteredOrgs] = useState([]);
-  useEffect(() => {
-    setFilteredOrgs(
-      orgs
-        .filter((org) =>
-          filterTags
-            ? filterTags.length > 0
-              ? filterTags.includes(org.org_body.toLowerCase())
-              : true
-            : true
-        )
-        .filter(
-          (org) =>
-            org.name.toLowerCase().includes(search.toLowerCase()) ||
-            org.short_name.toLowerCase().includes(search.toLowerCase())
-        )
-    );
-  }, [filterTags, search, orgs]);
+  }, [filters, filtersApplied, setFilterTags]);
 
   return (
     <Layout>
@@ -109,15 +61,15 @@ const OrgCatalogue = () => {
         <Typography
           component="h1"
           sx={{
-            fontWeight: typography.fontWeight.bold,
-            fontSize: typography.fontSize.xl,
+            fontWeight: theme.fontWeight.bold,
+            fontSize: theme.fontSize.xl,
             color: colors.gray[700],
             [theme.breakpoints.down('md')]: {
-              fontSize: typography.fontSize.lg,
+              fontSize: fontSize.lg,
               marginBottom: '20px',
             },
             [theme.breakpoints.down('sm')]: {
-              fontSize: typography.fontSize.base,
+              fontSize: fontSize.base,
               marginBottom: '16px',
             },
           }}
@@ -125,7 +77,6 @@ const OrgCatalogue = () => {
           Organizations
         </Typography>
 
-        {/* search bar */}
         <Box
           component="div"
           sx={{
@@ -139,335 +90,22 @@ const OrgCatalogue = () => {
             },
           }}
         >
-          <Search
-            sx={{
-              position: 'absolute',
-              top: '16px',
-              left: '14px',
-            }}
-            style={{
-              color: colors.gray[400],
-            }}
-          />
-          <TextField
-            onFocus={() => setSearchFocus(true)}
-            onBlur={() => setSearchFocus(false)}
-            placeholder={searchFocus ? 'Search for an organization...' : ''}
-            label={searchFocus || search ? 'Search' : 'Search for an organization...'}
-            variant="outlined"
-            value={search}
-            onChange={handleSearchChange}
-            sx={{
-              maxWidth: '33%',
-              fontSize: typography.fontSize.sm,
-              [theme.breakpoints.down('lg')]: {
-                maxWidth: '45%',
-              },
-              [theme.breakpoints.down(850)]: {
-                maxWidth: '70%',
-              },
-              [theme.breakpoints.down(600)]: {
-                maxWidth: '100%',
-              },
-            }}
-            InputProps={{
-              sx: {
-                paddingLeft: '36px',
-                fontSize: typography.fontSize.sm,
-                [theme.breakpoints.down('sm')]: {
-                  fontSize: typography.fontSize.xs,
-                },
-              },
-            }}
-            InputLabelProps={{
-              sx: {
-                paddingLeft: searchFocus || search ? 0 : '36px',
-                fontSize: typography.fontSize.sm,
-                [theme.breakpoints.down('sm')]: {
-                  fontSize: typography.fontSize.xs,
-                },
-              },
-            }}
-          />
+          <Searchbar onChange={handleSearchChange} value={searchValue} />
 
           {/* filter button */}
-          <Box
-            component="div"
-            sx={{
-              display: 'flex',
-              marginTop: '16px',
-            }}
-          >
-            <Box
-              component="div"
-              sx={{
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                cursor: 'pointer',
-                backgroundColor: openFilter ? colors.gray[100] : 'transparent',
-                borderRadius: '4px',
-                width: 'fit-content',
-                padding: '4px 8px',
-                marginRight: '24px',
-                boxSizing: 'border-box',
-                transition: 'all 150ms ease-in-out',
-                '&:hover': {
-                  backgroundColor: colors.gray[100],
-                },
-                [theme.breakpoints.down('sm')]: {
-                  padding: '1px 6px',
-                  marginRight: '12px',
-                },
-              }}
-            >
-              <Box
-                onClick={() => setOpenFilter(!openFilter)}
-                component="div"
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  width: 'fit-content',
-                }}
-              >
-                <FilterAlt
-                  sx={{
-                    color: colors.blue[400],
-                    [theme.breakpoints.down('sm')]: {
-                      width: '16px',
-                    },
-                  }}
-                />
-                <Typography
-                  sx={{
-                    fontSize: typography.fontSize.sm,
-                    color: colors.gray[400],
-                    [theme.breakpoints.down('sm')]: {
-                      fontSize: typography.fontSize.xs,
-                    },
-                  }}
-                >
-                  Filter
-                </Typography>
-              </Box>
-              {/* filter list */}
-              <Box
-                component="div"
-                sx={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  marginTop: '32px',
-                  backgroundColor: 'white',
-                  width: openFilter ? 'max-content' : '81.5px',
-                  height: openFilter ? 'max-content' : 0,
-                  transition: 'all 0.15s ease-out',
-                  zIndex: '1',
-                  overflow: 'hidden',
-                  padding: openFilter ? '24px' : 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '4px',
-                  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.08), 0px 4px 10px rgba(0, 0, 0, 0.08)',
-                  [theme.breakpoints.down('sm')]: {
-                    width: openFilter ? 'calc(100vw - 80px)' : '64.75px',
-                    boxSizing: 'border-box',
-                  },
-                  [theme.breakpoints.down('xs')]: {
-                    width: openFilter ? 'calc(100vw - 32px)' : '64.75px',
-                    boxSizing: 'border-box',
-                  },
-                }}
-              >
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      onClick={() => {
-                        setFiltersApplied(false);
-                        setFilters(
-                          !filters.includes('coa')
-                            ? [...filters, 'coa']
-                            : filters.filter((x) => x !== 'coa')
-                        );
-                      }}
-                      checked={filters.includes('coa')}
-                      sx={{
-                        color: colors.gray[400],
-                        '&.Mui-checked': {
-                          color: colors.green[400],
-                        },
-                      }}
-                    />
-                  }
-                  label={
-                    <Typography
-                      sx={{
-                        fontSize: typography.fontSize.sm,
-                        color: colors.gray[700],
-                      }}
-                    >
-                      COA
-                    </Typography>
-                  }
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      onClick={() => {
-                        setFiltersApplied(false);
-                        setFilters(
-                          !filters.includes('lions')
-                            ? [...filters, 'lions']
-                            : filters.filter((x) => x !== 'lions')
-                        );
-                      }}
-                      checked={filters.includes('lions')}
-                      sx={{
-                        color: colors.gray[400],
-                        '&.Mui-checked': {
-                          color: colors.green[400],
-                        },
-                      }}
-                    />
-                  }
-                  label={
-                    <Typography
-                      sx={{
-                        fontSize: typography.fontSize.sm,
-                        color: colors.gray[700],
-                      }}
-                    >
-                      LIONS
-                    </Typography>
-                  }
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      onClick={() => {
-                        setFiltersApplied(false);
-                        setFilters(
-                          !filters.includes('sanggu')
-                            ? [...filters, 'sanggu']
-                            : filters.filter((x) => x !== 'sanggu')
-                        );
-                      }}
-                      checked={filters.includes('sanggu')}
-                      sx={{
-                        color: colors.gray[400],
-                        '&.Mui-checked': {
-                          color: colors.green[400],
-                        },
-                      }}
-                    />
-                  }
-                  label={
-                    <Typography
-                      sx={{
-                        fontSize: typography.fontSize.sm,
-                        color: colors.gray[700],
-                      }}
-                    >
-                      Sanggu
-                    </Typography>
-                  }
-                />
-                <Button
-                  onClick={() => setFiltersApplied(true)}
-                  variant="outlined"
-                  sx={{
-                    border: '1px solid #498AF4',
-                    boxSizing: 'border-box',
-                    borderRadius: '4px',
-                    color: colors.blue[300],
-                    fontSize: typography.fontSize.sm,
-                    padding: '8px 60px',
-                    marginTop: '18px',
-                    [theme.breakpoints.down('sm')]: {
-                      width: '100%',
-                      padding: '8px 0',
-                    },
-                  }}
-                >
-                  Apply filters
-                </Button>
-              </Box>
-            </Box>
-            {filterTags.length > 0 &&
-              filterTags.map((tag) => (
-                <Box
-                  sx={{
-                    backgroundColor:
-                      tag === 'coa'
-                        ? colors.red[100]
-                        : tag === 'lions'
-                        ? colors.yellow[100]
-                        : colors.blue[100],
-                    width: 'fit-content',
-                    padding: '0 8px',
-                    borderRadius: '4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    marginRight: '8px',
-                    boxSizing: 'border-box',
-                    [theme.breakpoints.down('sm')]: {
-                      padding: '0 6px',
-                    },
-                  }}
-                >
-                  <Typography
-                    color={
-                      tag === 'coa'
-                        ? colors.red[400]
-                        : tag === 'lions'
-                        ? colors.yellow[500]
-                        : colors.blue[400]
-                    }
-                    sx={{
-                      fontSize: typography.fontSize.xs,
-                      [theme.breakpoints.down('sm')]: {
-                        fontSize: '8px',
-                      },
-                    }}
-                  >
-                    {tag.toUpperCase()}
-                  </Typography>
-                  <div
-                    onClick={() => {
-                      setFilterTags(filterTags.filter((current) => current !== tag));
-                      setFilters(filterTags.filter((current) => current !== tag));
-                    }}
-                    style={{
-                      height: '24.5px',
-                      marginLeft: smVW ? '8px' : '10px',
-                    }}
-                  >
-                    <Close
-                      sx={{
-                        color:
-                          tag === 'coa'
-                            ? colors.red[400]
-                            : tag === 'lions'
-                            ? colors.yellow[500]
-                            : colors.blue[400],
-                        width: '12px',
-                        heigth: '12px',
-                        boxSizing: 'border-box',
-                        cursor: 'pointer',
-                      }}
-                    />
-                  </div>
-                </Box>
-              ))}
-          </Box>
+          <Filter
+            filterTags={filterTags}
+            filters={filters}
+            setFilterTags={setFilterTags}
+            setFilters={setFilters}
+            setFiltersApplied={setFiltersApplied}
+          />
         </Box>
 
-        {filteredOrgs.length > 0 ? (
+        {status === 'idle' || status === 'pending' ? null : orgs?.length > 0 ? (
           <Grid container spacing={2} columns={4}>
             {filteredOrgs.map((org) => (
-              <Grid item xs={4} sm={4} md={2} lg={1}>
+              <Grid item xs={4} sm={4} md={2} lg={1} key={org.id}>
                 <OrgCard
                   orgPhoto={org.logo}
                   orgBody={org.org_body.toLowerCase()}
@@ -487,449 +125,20 @@ const OrgCatalogue = () => {
               padding: '40px 0',
             }}
           >
-            <svg
-              style={{ margin: '0 auto' }}
-              width={smVW ? '320' : '370'}
-              height="275"
-              viewBox="0 0 370 275"
-              preserveAspectRatio="xMidYMid meet"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M369.452 241.559H0.546875V241.744H369.452V241.559Z" fill="#EBEBEB" />
-              <path d="M63.6892 248.583H39.2529V248.768H63.6892V248.583Z" fill="#EBEBEB" />
-              <path d="M158.195 246.584H126.815V246.768H158.195V246.584Z" fill="#EBEBEB" />
-              <path d="M83.6684 251.173H69.5098V251.357H83.6684V251.173Z" fill="#EBEBEB" />
-              <path d="M332.488 254.198H321.251V254.382H332.488V254.198Z" fill="#EBEBEB" />
-              <path d="M314.677 254.198H289.378V254.382H314.677V254.198Z" fill="#EBEBEB" />
-              <path d="M245.375 248.886H227.793V249.07H245.375V248.886Z" fill="#EBEBEB" />
-              <path
-                d="M175.408 208.653H32.9438C31.8278 208.651 30.7581 208.206 29.9696 207.416C29.1811 206.627 28.7383 205.556 28.7383 204.44V4.17601C28.748 3.06636 29.1951 2.00535 29.9826 1.22345C30.77 0.441549 31.8341 0.00190089 32.9438 0H175.408C176.525 0 177.597 0.443858 178.387 1.23393C179.177 2.024 179.621 3.09557 179.621 4.2129V204.44C179.621 205.557 179.177 206.629 178.387 207.419C177.597 208.209 176.525 208.653 175.408 208.653ZM32.9438 0.147563C31.8767 0.149517 30.8539 0.574803 30.1 1.33007C29.3461 2.08534 28.9227 3.10888 28.9227 4.17601V204.44C28.9227 205.507 29.3461 206.531 30.1 207.286C30.8539 208.041 31.8767 208.467 32.9438 208.469H175.408C176.476 208.467 177.499 208.042 178.254 207.286C179.009 206.531 179.434 205.508 179.436 204.44V4.17601C179.434 3.1082 179.009 2.08468 178.254 1.32962C177.499 0.574563 176.476 0.149513 175.408 0.147563H32.9438Z"
-                fill="#EBEBEB"
-              />
-              <path
-                d="M335.004 208.653H192.532C191.415 208.651 190.345 208.207 189.555 207.417C188.766 206.627 188.321 205.557 188.319 204.44V4.17601C188.331 3.06569 188.78 2.00469 189.568 1.22299C190.357 0.441291 191.422 0.00188016 192.532 0H335.004C336.112 0.00383993 337.174 0.444346 337.96 1.22604C338.746 2.00774 339.192 3.06764 339.202 4.17601V204.44C339.202 205.555 338.76 206.624 337.973 207.414C337.186 208.203 336.118 208.649 335.004 208.653ZM192.532 0.147563C191.464 0.149513 190.441 0.574563 189.686 1.32962C188.931 2.08468 188.506 3.1082 188.504 4.17601V204.44C188.506 205.508 188.931 206.531 189.686 207.286C190.441 208.042 191.464 208.467 192.532 208.469H335.004C336.071 208.467 337.095 208.042 337.85 207.286C338.605 206.531 339.03 205.508 339.032 204.44V4.17601C339.03 3.1082 338.605 2.08468 337.85 1.32962C337.095 0.574563 336.071 0.149513 335.004 0.147563H192.532Z"
-                fill="#EBEBEB"
-              />
-              <path
-                d="M39.6362 162.193H36.3604L36.9801 241.56H42.4104L39.6362 162.193Z"
-                fill="#E0E0E0"
-              />
-              <path
-                d="M38.2568 160.784H94.965L101.273 241.559H44.5651L38.2568 160.784Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M38.2562 160.784H36.0723L42.3805 241.559H44.5645L38.2562 160.784Z"
-                fill="#EBEBEB"
-              />
-              <path
-                d="M128.55 82.6353H240.114L252.532 241.56H140.967L128.55 82.6353Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M198.657 141.519C202.287 147.805 209.348 151.251 216.239 153.464C219.471 154.512 223.743 155.051 225.624 152.217C227.1 150.004 226.155 146.994 226.819 144.419C227.985 139.903 233.378 138.206 237.931 137.188C240.081 136.709 242.188 136.055 244.232 135.233L241.339 98.1948C240.764 98.9803 240.334 99.8623 240.07 100.799C239.332 103.131 240.616 105.757 239.783 108.045C239.045 110.147 236.654 111.298 234.419 111.439C232.183 111.579 229.992 110.922 227.778 110.494C219.021 108.768 209.289 110.811 202.877 117.009C196.466 123.207 194.201 133.794 198.657 141.519Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M128.55 82.6353L134.829 163.418C136.202 164.973 137.66 166.451 139.196 167.845C143.232 171.534 147.844 174.758 153.067 176.426C154.836 176.99 156.662 177.354 158.512 177.51C155.126 182.144 154.233 188.88 157.701 193.418C159.575 195.867 162.401 197.372 164.821 199.32C167.241 201.268 169.425 204.013 169.1 207.082C168.871 209.295 167.359 211.184 165.831 212.829C159.929 219.211 152.654 224.634 148.67 232.381C147.475 234.698 146.589 237.332 147.113 239.878C147.232 240.461 147.42 241.028 147.674 241.567H201.232C203.657 235.433 203.838 228.638 201.741 222.384C198.177 212.055 188.962 204.212 178.61 200.633C183.037 196.524 189.095 194.731 194.945 193.167C200.796 191.603 206.868 190.156 211.716 186.526C219.758 180.521 221.721 163.691 207.946 164.304C203.947 164.481 200.413 166.79 196.222 166.893C192.031 166.997 187.921 166.893 183.841 167.159C185.544 165.278 186.988 163.179 188.135 160.917C189.987 157.228 191.138 153.067 190.297 149.053C188.143 138.768 174.899 134.976 169.83 125.768C163.707 114.649 171.572 100.461 168.111 88.2426C167.541 86.2427 166.648 84.3488 165.47 82.6353H128.55Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M128.55 82.6349L134.829 163.418C136.202 164.973 137.66 166.45 139.196 167.845C143.232 171.534 147.844 174.758 153.067 176.425C154.836 176.99 156.662 177.353 158.512 177.51C167.823 178.344 177.459 174.197 183.775 167.136C185.477 165.256 186.921 163.157 188.069 160.895C189.921 157.205 191.072 153.044 190.231 149.031C188.076 138.745 174.833 134.953 169.764 125.745C163.64 114.626 171.505 100.438 168.045 88.2202C167.474 86.2202 166.582 84.3264 165.403 82.6128L128.55 82.6349Z"
-                fill="#E6E6E6"
-              />
-              <path
-                d="M147.143 239.87C147.262 240.453 147.45 241.02 147.704 241.559H201.232C203.658 235.425 203.838 228.63 201.741 222.376C198.177 212.047 188.962 204.204 178.611 200.625C183.037 196.516 189.095 194.723 194.946 193.159C200.797 191.595 206.869 190.148 211.716 186.518C219.758 180.513 221.721 163.683 207.946 164.296C203.947 164.473 200.413 166.782 196.222 166.885C192.031 166.989 187.922 166.885 183.842 167.151C180.992 167.286 178.158 167.661 175.372 168.272C169.403 169.608 163.353 171.961 159.346 176.558C159.081 176.868 158.822 177.193 158.609 177.525C155.222 182.158 154.329 188.894 157.797 193.432C159.671 195.881 162.497 197.386 164.917 199.334C167.337 201.282 169.521 204.027 169.196 207.096C168.967 209.309 167.455 211.198 165.928 212.844C160.025 219.226 152.75 224.649 148.766 232.396C147.504 234.69 146.634 237.324 147.143 239.87Z"
-                fill="white"
-              />
-              <path
-                d="M198.657 141.519C202.287 147.805 209.348 151.251 216.239 153.464C219.471 154.512 223.743 155.051 225.624 152.217C227.1 150.004 226.155 146.994 226.819 144.419C227.985 139.903 233.378 138.206 237.931 137.188C240.081 136.709 242.188 136.055 244.232 135.233L241.339 98.1948C240.764 98.9803 240.334 99.8623 240.07 100.799C239.332 103.131 240.616 105.757 239.783 108.045C239.045 110.147 236.654 111.298 234.419 111.439C232.183 111.579 229.992 110.922 227.778 110.494C219.021 108.768 209.289 110.811 202.877 117.009C196.466 123.207 194.201 133.794 198.657 141.519Z"
-                fill="#F0F0F0"
-              />
-              <path
-                d="M127.355 85.3429L124.61 84.7231L128.55 241.56H138.481L127.355 85.3429Z"
-                fill="#E0E0E0"
-              />
-              <path
-                d="M128.549 82.6353H124.248L136.665 241.56H140.967L128.549 82.6353Z"
-                fill="#EBEBEB"
-              />
-              <path
-                d="M233.614 120.344H318.706L328.179 241.559H243.088L233.614 120.344Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M233.614 120.344H230.331L235.761 241.559H241.192L233.614 120.344Z"
-                fill="#E0E0E0"
-              />
-              <path
-                d="M233.614 120.344H230.331L239.805 241.559H243.088L233.614 120.344Z"
-                fill="#EBEBEB"
-              />
-              <path d="M59.5132 60.3384H75.8926V15.0884H59.5132L59.5132 60.3384Z" fill="#EBEBEB" />
-              <path
-                d="M75.8921 60.3384L298.896 60.3384V15.0884L75.8921 15.0884V60.3384Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M294.461 55.9114V19.5151L80.3113 19.5151V55.9114L294.461 55.9114Z"
-                fill="#E6E6E6"
-              />
-              <path d="M137.816 55.904V19.5078H119.29V55.904H137.816Z" fill="#E0E0E0" />
-              <path d="M142.073 55.904V19.5078H137.816V55.904H142.073Z" fill="#F5F5F5" />
-              <path
-                d="M258.353 55.9111H281.314C282.308 55.9111 283.114 55.1051 283.114 54.1109V33.1201C283.114 32.1259 282.308 31.3199 281.314 31.3199L258.353 31.3199C257.359 31.3199 256.553 32.1259 256.553 33.1201V54.1109C256.553 55.1051 257.359 55.9111 258.353 55.9111Z"
-                fill="#FAFAFA"
-              />
-              <path
-                d="M259.784 31.3198L279.882 31.3198C280.196 31.3198 280.45 31.0655 280.45 30.7517V28.8555C280.45 28.5418 280.196 28.2874 279.882 28.2874L259.784 28.2874C259.47 28.2874 259.216 28.5418 259.216 28.8555V30.7517C259.216 31.0655 259.47 31.3198 259.784 31.3198Z"
-                fill="white"
-              />
-              <path
-                d="M283.114 50.1714H262.78C262.52 50.1714 262.27 50.068 262.086 49.884C261.902 49.6999 261.799 49.4504 261.799 49.1901V38.0418C261.799 37.7815 261.902 37.5319 262.086 37.3479C262.27 37.1639 262.52 37.0605 262.78 37.0605H283.114V50.1714Z"
-                fill="#F0F0F0"
-              />
-              <path
-                d="M227.04 55.9111H250.001C250.995 55.9111 251.801 55.1051 251.801 54.1109V33.1201C251.801 32.1259 250.995 31.3199 250.001 31.3199L227.04 31.3199C226.046 31.3199 225.24 32.1259 225.24 33.1201V54.1109C225.24 55.1051 226.046 55.9111 227.04 55.9111Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M228.472 31.3198L248.57 31.3198C248.883 31.3198 249.138 31.0655 249.138 30.7517V28.8555C249.138 28.5418 248.883 28.2874 248.57 28.2874L228.472 28.2874C228.158 28.2874 227.903 28.5418 227.903 28.8555V30.7517C227.903 31.0655 228.158 31.3198 228.472 31.3198Z"
-                fill="white"
-              />
-              <path
-                d="M251.801 50.1714H231.467C231.206 50.1714 230.957 50.068 230.773 49.884C230.589 49.6999 230.485 49.4504 230.485 49.1901V38.0418C230.484 37.9123 230.509 37.7839 230.558 37.664C230.607 37.5441 230.679 37.435 230.77 37.3431C230.861 37.2512 230.97 37.1783 231.089 37.1285C231.209 37.0787 231.337 37.0531 231.467 37.0531H251.801V50.1714Z"
-                fill="#EBEBEB"
-              />
-              <path
-                d="M212.099 55.9111H227.999C228.688 55.9111 229.246 55.3529 229.246 54.6642V40.122C229.246 39.4333 228.688 38.8751 227.999 38.8751H212.099C211.411 38.8751 210.852 39.4333 210.852 40.122V54.6642C210.852 55.3529 211.411 55.9111 212.099 55.9111Z"
-                fill="#FAFAFA"
-              />
-              <path
-                d="M213.088 38.875H227.01C227.226 38.875 227.401 38.6999 227.401 38.484V37.1633C227.401 36.9473 227.226 36.7722 227.01 36.7722H213.088C212.872 36.7722 212.697 36.9473 212.697 37.1633V38.484C212.697 38.6999 212.872 38.875 213.088 38.875Z"
-                fill="white"
-              />
-              <path
-                d="M229.246 51.9346H219.544C219.364 51.9346 219.191 51.8631 219.064 51.7358C218.937 51.6085 218.865 51.4358 218.865 51.2558V43.5309C218.865 43.3509 218.937 43.1782 219.064 43.0509C219.191 42.9236 219.364 42.8521 219.544 42.8521H229.246V51.9346Z"
-                fill="#F0F0F0"
-              />
-              <path
-                d="M91.283 55.9111H107.183C107.871 55.9111 108.43 55.3529 108.43 54.6642V40.122C108.43 39.4333 107.871 38.8751 107.183 38.8751H91.283C90.5943 38.8751 90.0361 39.4333 90.0361 40.122V54.6642C90.0361 55.3529 90.5943 55.9111 91.283 55.9111Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M92.2714 38.875H106.194C106.41 38.875 106.585 38.6999 106.585 38.484V37.1633C106.585 36.9473 106.41 36.7722 106.194 36.7722H92.2714C92.0555 36.7722 91.8804 36.9473 91.8804 37.1633V38.484C91.8804 38.6999 92.0555 38.875 92.2714 38.875Z"
-                fill="white"
-              />
-              <path
-                d="M93.991 51.9346H105.626C106.49 51.9346 107.19 51.2343 107.19 50.3704V44.4163C107.19 43.5524 106.49 42.8521 105.626 42.8521H93.991C93.1271 42.8521 92.4268 43.5524 92.4268 44.4163V50.3704C92.4268 51.2343 93.1271 51.9346 93.991 51.9346Z"
-                fill="#EBEBEB"
-              />
-              <path d="M176.456 55.9111H202.936V27.8153L176.456 27.8153V55.9111Z" fill="#F0F0F0" />
-              <path
-                d="M176.456 31.5269L202.936 31.5269V27.8157L176.456 27.8157V31.5269Z"
-                fill="white"
-              />
-              <path
-                opacity="0.3"
-                d="M179.341 55.9111H184.062V27.8153H179.341V55.9111Z"
-                fill="#E0E0E0"
-              />
-              <path
-                opacity="0.3"
-                d="M186.158 55.9111H188.519V27.8153H186.158V55.9111Z"
-                fill="#E0E0E0"
-              />
-              <path d="M150.102 55.9111H173.837V30.7296L150.102 30.7296V55.9111Z" fill="#E0E0E0" />
-              <path d="M150.102 34.0571H173.837V30.7296L150.102 30.7296V34.0571Z" fill="#F0F0F0" />
-              <path
-                opacity="0.3"
-                d="M152.691 55.9111H156.919V30.7296H152.691V55.9111Z"
-                fill="#F5F5F5"
-              />
-              <path
-                opacity="0.3"
-                d="M158.793 55.9111H160.91V30.7296H158.793V55.9111Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M184.999 274.879C264.006 274.879 328.054 271.139 328.054 266.527C328.054 261.914 264.006 258.175 184.999 258.175C105.993 258.175 41.9453 261.914 41.9453 266.527C41.9453 271.139 105.993 274.879 184.999 274.879Z"
-                fill="#F5F5F5"
-              />
-              <path
-                d="M114.436 264.299H118.693L127.332 26.0669H123.068L114.436 264.299Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M186.136 264.299H181.871L142.251 26.0669H146.516L186.136 264.299Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M92.4932 264.299H96.7577L137.81 17.582H133.545L92.4932 264.299Z"
-                fill="#498AF4"
-              />
-              <path d="M125.363 32.4414H144.561V29.3942L125.363 29.3942V32.4414Z" fill="#498AF4" />
-              <path d="M120.877 178.181H168.916V174.861H120.877V178.181Z" fill="#498AF4" />
-              <path
-                d="M95.3061 58.4979L94.5703 58.5527L94.823 61.9446L95.5587 61.8898L95.3061 58.4979Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M94.1098 42.4512L93.374 42.5059L94.2751 54.6315L95.0109 54.5769L94.1098 42.4512Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M104.372 156.328L105.833 156.342L96.6103 31.3942L95.1494 31.3794L104.372 156.328Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M105.833 156.342L192.518 157.176L183.296 32.2278L96.6104 31.394L105.833 156.342Z"
-                fill="#498AF4"
-              />
-              <path
-                opacity="0.8"
-                d="M105.833 156.342L192.518 157.176L183.296 32.2278L96.6104 31.394L105.833 156.342Z"
-                fill="white"
-              />
-              <path
-                d="M108.304 155.626L190.983 155.671L182.041 32.9432L98.1738 32.8916L108.304 155.626Z"
-                fill="white"
-              />
-              <path
-                d="M142.303 158.039H164.437C164.857 158.038 165.262 157.881 165.574 157.599C165.886 157.317 166.083 156.93 166.127 156.512L166.599 152.085H141.048L140.613 156.121C140.583 156.361 140.604 156.604 140.675 156.835C140.746 157.066 140.865 157.28 141.025 157.461C141.185 157.643 141.381 157.788 141.602 157.888C141.822 157.987 142.061 158.039 142.303 158.039Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M233.421 87.0177C232.593 86.6996 231.795 86.3069 231.038 85.8446C230.197 85.3355 229.327 84.7822 228.471 84.1772C226.752 82.9671 225.04 81.6317 223.343 80.2594C219.971 77.4926 218.333 76.3195 215.065 73.3608L211.7 76.3859C213.897 79.4561 216.316 82.361 218.938 85.0773C220.539 86.7447 222.214 88.3605 224.029 89.9173C224.937 90.6551 225.881 91.4667 226.906 92.1898C228.006 92.9888 229.177 93.6853 230.404 94.2704C231.194 94.6354 232.023 94.9077 232.875 95.082C234.226 95.3629 235.63 95.2213 236.896 94.6762C237.696 94.3094 238.406 93.7732 238.977 93.1047C239.232 92.806 239.459 92.485 239.656 92.1455C239.818 91.8504 239.98 91.5258 240.099 91.2454L240.253 90.8248L240.364 90.4781L240.497 90.0354L233.421 87.0177Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M220.798 132.851C222.207 124.676 224.317 120.507 225.298 118.913C226.081 116.656 227.217 114.826 227.755 112.052C227.209 101.877 227.578 87.7998 228.7 85.4904C229.342 84.4723 233.864 81.9932 234.226 81.9047C234.905 75.3972 239.509 69.6939 239.509 69.6939C240.685 69.6138 241.866 69.6138 243.043 69.6939C238.483 75.7587 237.878 79.6765 237.517 81.2849C242.351 80.6078 247.25 80.531 252.103 81.0562C253.416 74.5708 258.95 70.8154 258.95 70.8154C259.919 70.932 260.874 71.1496 261.798 71.4646C257.069 76.5703 256.191 79.7355 255.608 81.4989C257.592 81.794 259.85 85.6011 259.85 85.6011C256.619 98.7637 254.243 110.229 254.184 113.055C254.125 115.881 255.261 115.268 255.659 117.821C259.525 118.308 259.872 119.046 259.872 119.046C259.964 120.022 259.822 121.006 259.459 121.916C258.154 121.447 256.796 121.142 255.416 121.009C251.778 140.369 246.688 158.947 246.311 177.65L206.167 176.536C206.167 176.536 215.338 141.726 220.798 132.851Z"
-                fill="white"
-              />
-              <path
-                d="M217.566 74.7259L216.445 70.1367L210.085 73.538C210.085 73.538 212.055 78.7839 215.006 78.3043L216.806 76.9246C217.132 76.671 217.378 76.3283 217.513 75.938C217.648 75.5477 217.666 75.1266 217.566 74.7259Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M212.704 65.3184L208.941 70.9995L210.07 73.5376L216.445 70.1363L212.704 65.3184Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M259.23 55.4541C257.474 59.7998 254.973 67.7977 257.415 70.9481C254.56 73.1616 250.901 75.6923 245.692 75.5226C240.483 75.3529 242.121 71.8335 243.877 70.0185C248.975 69.1848 249.595 65.5326 249.447 62.0575L259.23 55.4541Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M244.984 45.3092C245.026 45.3324 245.072 45.3446 245.12 45.3446C245.168 45.3446 245.215 45.3324 245.257 45.3092C245.567 45.1286 245.916 45.0262 246.275 45.0108C246.634 44.9954 246.991 45.0674 247.315 45.2206C247.349 45.2387 247.385 45.25 247.423 45.2538C247.461 45.2577 247.499 45.254 247.535 45.243C247.572 45.2321 247.606 45.214 247.635 45.1899C247.664 45.1658 247.688 45.1361 247.706 45.1026C247.741 45.0367 247.749 44.96 247.728 44.8884C247.708 44.8169 247.66 44.7561 247.596 44.7189C247.186 44.5242 246.736 44.4306 246.283 44.446C245.829 44.4614 245.387 44.5854 244.991 44.8075C244.958 44.8246 244.928 44.8481 244.904 44.8768C244.88 44.9055 244.862 44.9387 244.851 44.9744C244.84 45.0102 244.837 45.0478 244.84 45.085C244.844 45.1222 244.855 45.1583 244.873 45.1911C244.895 45.2419 244.935 45.2836 244.984 45.3092Z"
-                fill="#263238"
-              />
-              <path
-                d="M245.293 47.9575C244.422 49.2925 243.372 50.5016 242.172 51.5507C242.452 51.8541 242.796 52.092 243.178 52.2476C243.561 52.4032 243.973 52.4726 244.385 52.4508L245.293 47.9575Z"
-                fill="#ED893E"
-              />
-              <path
-                d="M245.293 48.113C245.197 48.5852 244.858 48.9246 244.555 48.8508C244.253 48.777 244.076 48.3417 244.172 47.8695C244.268 47.3973 244.607 47.0579 244.909 47.1317C245.212 47.2055 245.396 47.6334 245.293 48.113Z"
-                fill="#263238"
-              />
-              <path
-                d="M261.525 49.9425C259.938 55.7122 259.311 59.1652 255.733 61.5483C250.347 65.1341 243.699 60.9507 243.522 54.8268C243.367 49.308 245.979 40.8084 252.184 39.6796C253.551 39.4229 254.961 39.5202 256.279 39.9622C257.598 40.4042 258.782 41.1762 259.718 42.2047C260.654 43.2333 261.312 44.4843 261.628 45.8386C261.944 47.193 261.909 48.6058 261.525 49.9425Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M249.027 50.9092C248.485 52.0562 248.222 53.3146 248.258 54.5824C248.294 55.8501 248.628 57.0916 249.233 58.2061C250.421 60.6262 251.343 62.1018 255.918 62.8691C260.492 63.6364 258.95 57.3429 261.083 54.8417C263.215 52.3405 270.792 44.5124 263.126 42.5498C264.772 36.7654 260.618 34.8397 255.32 36.4407C250.023 38.0418 242.851 40.0191 243.825 36.8096C243.825 36.8096 237.509 44.7632 251.203 43.8188C246.695 47.6702 249.027 50.9092 249.027 50.9092Z"
-                fill="#263238"
-              />
-              <path
-                d="M251.609 37.2006C254.052 36.0633 256.759 35.6143 259.437 35.902C263.717 36.2562 267.081 38.4844 268.291 44.4459C269.501 50.4074 268.66 55.5795 265.768 55.063C264.816 53.8604 260.898 57.0551 260.898 57.0551C260.079 58.6856 254.487 54.5391 252.089 49.8024C249.691 45.0657 248.134 37.7539 251.609 37.2006Z"
-                fill="#498AF4"
-              />
-              <path
-                opacity="0.3"
-                d="M251.609 37.2006C254.052 36.0633 256.759 35.6143 259.437 35.902C263.717 36.2562 267.081 38.4844 268.291 44.4459C269.501 50.4074 268.66 55.5795 265.768 55.063C264.816 53.8604 260.898 57.0551 260.898 57.0551C260.079 58.6856 254.487 54.5391 252.089 49.8024C249.691 45.0657 248.134 37.7539 251.609 37.2006Z"
-                fill="white"
-              />
-              <path
-                d="M249.189 37.5474C247.219 37.8721 247.92 44.1066 250.134 49.227C252.347 54.3474 256.095 58.7816 259.925 59.394C260.245 59.094 260.501 58.732 260.678 58.3299C260.854 57.9279 260.947 57.4942 260.95 57.0551C259.888 56.3173 256.147 54.3916 252.709 47.5079C249.271 40.6241 251.646 37.1785 251.646 37.1785C251.536 36.7358 249.189 37.5474 249.189 37.5474Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M250.915 50.9091C250.542 52.1202 249.76 53.1637 248.702 53.8604C247.314 54.7531 246.348 53.6685 246.488 52.1339C246.628 50.7616 247.521 48.6367 249.019 48.3637C250.517 48.0907 251.358 49.4335 250.915 50.9091Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M236.727 260.373H230.699L231.902 246.414H237.93L236.727 260.373Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M229.895 259.71H237.236C237.357 259.709 237.474 259.749 237.568 259.824C237.662 259.9 237.727 260.005 237.753 260.123L238.94 265.479C238.97 265.609 238.969 265.745 238.938 265.874C238.907 266.004 238.847 266.125 238.762 266.228C238.678 266.332 238.571 266.414 238.449 266.47C238.328 266.525 238.196 266.552 238.062 266.549C235.694 266.512 233.975 266.372 230.994 266.372C229.164 266.372 225.136 266.564 222.605 266.564C220.075 266.564 219.75 264.063 220.783 263.834C225.424 262.816 227.423 261.421 228.899 260.079C229.174 259.836 229.529 259.705 229.895 259.71Z"
-                fill="#263238"
-              />
-              <path
-                opacity="0.2"
-                d="M237.93 246.422H231.902L231.282 253.615H237.31L237.93 246.422Z"
-                fill="black"
-              />
-              <path
-                d="M212.948 62.0652C212.21 62.294 212.343 62.685 212.254 63.0318L212.07 64.0942L211.701 66.2191L211.022 70.4837C210.811 71.9003 210.606 73.3243 210.41 74.7556C210.247 76.187 210.041 77.6109 209.908 79.0497C209.902 79.1424 209.931 79.2341 209.988 79.3069C210.046 79.3798 210.129 79.4288 210.22 79.4443C210.312 79.4599 210.406 79.441 210.485 79.3913C210.563 79.3416 210.621 79.2646 210.646 79.1751C211.022 77.7806 211.325 76.3788 211.664 74.9769C212.003 73.5751 212.284 72.1659 212.571 70.7567L213.413 66.529L213.804 64.4041L214.003 63.349C214.003 62.9875 214.298 62.6703 213.686 62.1907C213.582 62.1121 213.46 62.0597 213.332 62.0378C213.204 62.016 213.072 62.0254 212.948 62.0652Z"
-                fill="#263238"
-              />
-              <path
-                d="M213.162 62.4412C213.936 62.5888 215.375 62.1092 214.925 60.1466C214.475 58.184 213.28 57.7192 214.822 56.3174C211.893 58.007 210.572 61.9247 213.162 62.4412Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M266.549 76.1941C258.131 98.1514 259.769 120.463 258.765 125.185L226.685 124.189C225.837 96.0117 230.507 78.105 233.4 72.7485C233.677 72.2225 234.073 71.7678 234.556 71.4197C235.038 71.0717 235.594 70.8396 236.181 70.7417C237.03 70.6089 238.121 70.4613 239.346 70.3285C240.239 70.2326 241.198 70.144 242.202 70.085C242.748 70.0481 243.308 70.026 243.876 70.0112C248.406 70.0587 252.929 70.3691 257.423 70.9409C258.264 71.0442 259.12 71.1696 259.946 71.3024C260.772 71.4352 261.458 71.568 262.159 71.7082C263.052 71.8779 263.886 72.0623 264.624 72.232C265.034 72.3298 265.417 72.5174 265.745 72.7811C266.074 73.0449 266.34 73.3783 266.524 73.7573C266.708 74.1363 266.806 74.5515 266.811 74.9729C266.815 75.3943 266.726 75.8114 266.549 76.1941Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M229.629 84.6414L228.618 88.3305C253.003 96.2103 243.042 69.686 243.042 69.686C241.87 69.5239 240.681 69.5239 239.508 69.686C244.23 82.8781 239.759 89.3265 229.629 84.6414Z"
-                fill="white"
-              />
-              <path
-                opacity="0.2"
-                d="M242.836 78.8868C248.591 78.6803 251.365 89.0096 251.365 89.0096L250.627 89.563L255.652 98.2544L249.749 101.693L244.238 93.2299L242.836 94.2702C240.452 92.4344 238.479 90.1196 237.044 87.475C233.857 81.5135 235.857 79.1229 242.836 78.8868Z"
-                fill="black"
-              />
-              <path
-                d="M257.865 99.199C257.806 98.6976 257.697 98.2033 257.54 97.7234C257.471 97.5005 257.389 97.2813 257.297 97.0668L257.076 96.5724C256.655 95.6354 256.242 94.6836 255.777 93.7761C254.857 91.9426 253.84 90.1595 252.73 88.4344C251.626 86.7115 250.434 85.0468 249.159 83.4468C248.51 82.6499 247.853 81.8679 247.159 81.1005C246.82 80.7095 246.458 80.3627 246.104 79.9495L245.536 79.3814L244.909 78.769L238.601 85.4093L239.412 86.2873C239.707 86.6046 240.003 86.9219 240.298 87.2539C240.881 87.9105 241.456 88.5967 242.017 89.2829C243.16 90.6552 244.23 92.0718 245.307 93.5179C246.385 94.964 247.373 96.4691 248.296 97.9448C248.753 98.6457 249.159 99.3687 249.579 100.092C249.039 100.486 248.461 100.825 247.853 101.103C246.286 101.807 244.665 102.384 243.005 102.829C239.545 103.796 235.812 104.533 232.167 105.197L232.351 109.72C236.345 109.984 240.355 109.868 244.326 109.373C246.437 109.119 248.519 108.667 250.546 108.023C251.723 107.647 252.852 107.134 253.91 106.496C254.568 106.096 255.177 105.62 255.725 105.079C256.437 104.384 257.004 103.554 257.393 102.637C257.838 101.549 258.001 100.367 257.865 99.199Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M234.307 104.769L229.6 105.256L232.108 112.022C232.108 112.022 237.575 110.79 237.502 107.802L236.38 105.832C236.174 105.473 235.869 105.182 235.501 104.994C235.133 104.805 234.718 104.727 234.307 104.769Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M225.357 107.477L226.309 113.748L232.108 112.059L229.6 105.286L225.357 107.477Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M239.708 70.284C245.441 70.889 252.421 85.3649 252.421 85.3649L242.829 91.7839C242.829 91.7839 238.845 90.3746 234.551 84.2951C229.408 76.976 232.219 69.5093 239.708 70.284Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M238.062 124.542C238.062 124.542 231.481 171.91 229.769 189.521C227.888 208.837 228.699 251.328 228.699 251.328H239.767C239.767 251.328 242.865 208.837 246.341 190.001C250.295 168.553 261.835 136.414 258.795 125.192L238.062 124.542Z"
-                fill="#263238"
-              />
-              <path
-                opacity="0.2"
-                d="M240.047 138.649C239.649 138.782 237.893 138.989 236.048 139.291C234.713 149.222 232.949 162.51 231.577 173.725C236.683 164.79 241.434 147.562 240.047 138.649Z"
-                fill="black"
-              />
-              <path
-                d="M227.763 252.272H240.763L241.294 248.391L227.719 247.764L227.763 252.272Z"
-                fill="#498AF4"
-              />
-              <path
-                opacity="0.2"
-                d="M227.763 252.272H240.763L241.294 248.391L227.719 247.764L227.763 252.272Z"
-                fill="black"
-              />
-              <path
-                d="M227.896 260.728C228.428 260.714 228.958 260.642 229.475 260.514C229.503 260.508 229.529 260.494 229.549 260.472C229.569 260.451 229.581 260.425 229.585 260.396C229.59 260.367 229.586 260.338 229.574 260.312C229.562 260.286 229.543 260.264 229.519 260.248C229.298 260.115 227.357 258.92 226.686 259.26C226.613 259.299 226.551 259.358 226.508 259.429C226.466 259.501 226.443 259.582 226.442 259.665C226.429 259.803 226.449 259.942 226.501 260.07C226.552 260.198 226.633 260.312 226.737 260.403C227.076 260.639 227.484 260.754 227.896 260.728ZM229.061 260.307C228.036 260.514 227.254 260.477 226.922 260.204C226.851 260.14 226.796 260.059 226.763 259.969C226.729 259.879 226.718 259.783 226.73 259.688C226.73 259.57 226.782 259.533 226.819 259.518C227.165 259.341 228.272 259.857 229.061 260.307Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M229.445 260.514C229.465 260.514 229.484 260.51 229.502 260.502C229.52 260.494 229.536 260.482 229.55 260.468C229.563 260.453 229.573 260.436 229.579 260.417C229.585 260.398 229.587 260.379 229.585 260.359C229.585 260.285 229.438 258.551 228.737 257.976C228.652 257.906 228.554 257.853 228.449 257.821C228.344 257.79 228.233 257.78 228.124 257.791C228.017 257.793 227.914 257.831 227.832 257.9C227.75 257.968 227.694 258.063 227.674 258.168C227.549 258.839 228.751 260.16 229.371 260.499L229.445 260.514ZM228.227 258.072C228.347 258.075 228.462 258.119 228.552 258.197C228.981 258.739 229.238 259.397 229.29 260.086C228.67 259.614 227.903 258.61 227.977 258.219C227.977 258.182 227.977 258.101 228.183 258.079H228.25L228.227 258.072Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M232.167 254.25L226.331 256.286L223.181 242.976L229.024 240.94L232.167 254.25Z"
-                fill="#FFB573"
-              />
-              <path
-                d="M225.638 256.662C225.601 256.603 224.9 255.135 223.948 254.811C223.814 254.763 223.672 254.742 223.53 254.75C223.388 254.757 223.25 254.793 223.122 254.855C222.827 255.002 222.753 255.179 222.753 255.327C222.749 255.356 222.749 255.386 222.753 255.416C222.893 256.094 224.693 256.817 225.49 256.891C225.521 256.903 225.555 256.903 225.586 256.891C225.607 256.882 225.625 256.868 225.639 256.85C225.653 256.832 225.663 256.812 225.668 256.79C225.673 256.767 225.673 256.745 225.668 256.722C225.662 256.7 225.652 256.68 225.638 256.662ZM223.04 255.364C223.036 255.331 223.041 255.297 223.055 255.267C223.07 255.237 223.093 255.211 223.122 255.194C223.16 255.162 223.202 255.135 223.247 255.113C223.35 255.062 223.464 255.034 223.579 255.032C223.675 255.035 223.769 255.052 223.859 255.084C224.463 255.421 224.947 255.936 225.247 256.559C224.398 256.39 223.122 255.77 223.04 255.364Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M225.579 256.84C225.598 256.822 225.612 256.8 225.62 256.776C225.628 256.751 225.629 256.725 225.623 256.7C225.617 256.671 225.603 256.645 225.582 256.625C225.561 256.606 225.534 256.593 225.505 256.589C225.195 256.545 222.502 256.235 221.956 256.869C221.903 256.928 221.867 257.001 221.851 257.078C221.836 257.156 221.841 257.237 221.868 257.312C221.898 257.437 221.959 257.554 222.043 257.651C222.128 257.749 222.235 257.825 222.355 257.873C223.181 258.19 224.716 257.364 225.557 256.847L225.579 256.84ZM222.215 257.017C222.583 256.714 223.985 256.729 225.04 256.825C223.875 257.489 222.923 257.784 222.458 257.6C222.379 257.57 222.308 257.52 222.252 257.456C222.197 257.391 222.159 257.314 222.141 257.231C222.124 257.206 222.115 257.176 222.115 257.146C222.115 257.116 222.124 257.086 222.141 257.061C222.169 257.04 222.202 257.025 222.237 257.017H222.215Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M225.867 255.851L232.035 253.571C232.147 253.529 232.271 253.526 232.385 253.563C232.499 253.601 232.597 253.677 232.662 253.778L235.613 258.389C235.688 258.501 235.737 258.628 235.755 258.762C235.773 258.895 235.76 259.031 235.717 259.159C235.675 259.286 235.603 259.403 235.508 259.498C235.413 259.594 235.298 259.666 235.17 259.71C232.957 260.492 229.666 261.554 226.87 262.587C223.594 263.797 223.616 263.945 219.772 265.362C217.456 266.225 215.943 264.115 216.821 263.547C220.886 260.942 221.683 260.595 224.627 256.81C224.94 256.378 225.37 256.045 225.867 255.851Z"
-                fill="#263238"
-              />
-              <path
-                opacity="0.2"
-                d="M223.188 242.983L224.804 249.845L230.648 247.801L229.025 240.94L223.188 242.983Z"
-                fill="black"
-              />
-              <path
-                d="M224.406 185.324C229.519 172.493 247.772 124.823 247.772 124.823L226.686 124.167C226.686 124.167 212.667 163.536 207.156 181.672C201.401 200.53 222.089 248.311 222.089 248.311L232.699 244.998C232.699 244.998 219.293 198.154 224.406 185.324Z"
-                fill="#263238"
-              />
-              <path
-                d="M221.58 249.447L233.562 245.227L232.698 241.545L220.244 245.286L221.58 249.447Z"
-                fill="#498AF4"
-              />
-              <path
-                opacity="0.2"
-                d="M221.58 249.447L233.562 245.227L232.698 241.545L220.244 245.286L221.58 249.447Z"
-                fill="black"
-              />
-              <path
-                d="M226.317 117.246L225.978 120.544C240.889 120.942 247.809 122.691 247.809 122.691C248.001 121.698 248.112 120.691 248.141 119.681C242.696 117.593 232.367 117.128 226.317 117.246Z"
-                fill="white"
-              />
-              <path
-                d="M259.85 119.032L259.437 121.902C255.513 121.798 251.588 122.062 247.713 122.691C247.597 121.671 247.732 120.638 248.104 119.681C254.191 118.154 258.043 118.604 259.85 119.032Z"
-                fill="white"
-              />
-              <path
-                d="M261.798 71.4496L258.95 70.8003C259.437 82.0814 262.824 88.3233 262.824 88.3233C263.557 86.9508 264.008 85.4458 264.152 83.8964C262.382 79.9959 261.574 75.7271 261.798 71.4496Z"
-                fill="white"
-              />
-              <path
-                d="M246.157 122.691C245.906 123.547 247.824 123.148 248.104 122.868C248.385 122.588 251.506 119.238 249.831 119.054C248.156 118.869 248.023 119.238 248.023 119.238C247.414 118.854 246.714 118.641 245.994 118.618C244.829 118.603 246.681 120.942 246.157 122.691Z"
-                fill="white"
-              />
-              <path
-                d="M245.987 119.297C244.71 120.293 241.095 125.059 240.881 130.01C241.809 129.564 242.765 129.179 243.744 128.859C243.744 128.859 244.356 124.764 246.569 122.278L245.987 119.297Z"
-                fill="white"
-              />
-              <path
-                d="M249.285 119.659C250.436 121.245 253.653 127.826 253.763 133.279C252.939 132.445 252.072 131.654 251.166 130.91C251.166 130.91 250.2 125.635 248.215 122.057L249.285 119.659Z"
-                fill="white"
-              />
-              <path
-                d="M238.609 141.874H236.395L215.412 266.527H217.626L238.609 141.874Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M263.864 141.874H261.651L240.66 266.527H242.874L263.864 141.874Z"
-                fill="#498AF4"
-              />
-              <path
-                opacity="0.2"
-                d="M263.864 141.874H261.651L240.66 266.527H242.874L263.864 141.874Z"
-                fill="black"
-              />
-              <path
-                d="M266.727 141.874H268.94L289.931 266.527H287.717L266.727 141.874Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M241.479 141.874H243.692L264.683 266.527H262.469L241.479 141.874Z"
-                fill="#498AF4"
-              />
-              <path
-                d="M238.579 136.414H266.764C267.351 136.414 267.914 136.647 268.329 137.062C268.744 137.477 268.977 138.04 268.977 138.627V141.903H236.396V138.627C236.395 138.046 236.625 137.487 237.033 137.073C237.442 136.658 237.998 136.422 238.579 136.414Z"
-                fill="#498AF4"
-              />
-            </svg>
+            <EmptyState style={{ margin: '0 auto' }} width={smVW ? '320' : '370'} />
             <Typography
               sx={{
-                fontWeight: typography.fontWeight.med,
-                fontSize: typography.fontSize.md,
+                fontWeight: fontWeight.med,
+                fontSize: fontSize.md,
                 textAlign: 'center',
                 marginTop: '24px',
                 margin: '0 40px',
                 [theme.breakpoints.down('sm')]: {
-                  fontSize: typography.fontSize.base,
+                  fontSize: fontSize.base,
                 },
               }}
             >
-              We can't seem to find what you’re looking for...
+              We can&apos;t seem to find what you’re looking for...
             </Typography>
           </Box>
         )}

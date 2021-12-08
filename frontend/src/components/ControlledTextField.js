@@ -8,7 +8,7 @@ import { TextField } from '@mui/material';
  * @returns {React.Component}
  */
 const ControlledTextField = (props) => {
-  const { name, control, defaultValue, rules, shouldUnregister, ...rest } = props;
+  const { name, control, rules, ...rest } = props;
   return (
     <Controller
       name={name}
