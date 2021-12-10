@@ -10,6 +10,9 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v1
