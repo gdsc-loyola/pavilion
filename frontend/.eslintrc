@@ -19,5 +19,6 @@
     "react": {
       "version": "detect"
     }
-  }
+  },
+  "ignorePatterns": ["webpack.config.js", "vite.config.js"]
 }

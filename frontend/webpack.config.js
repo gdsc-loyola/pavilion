@@ -1,18 +1,18 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const webpack = require('webpack');
 module.exports = {
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, "./static/frontend"),
-    filename: "[name].js",
+    path: path.resolve(__dirname, './static/frontend'),
+    filename: '[name].js',
   },
   resolve: {
     alias: {
-      $stylesheets: path.resolve(__dirname, "/stylesheets"),
-      $lib: path.resolve(__dirname, "./src/lib"),
-      $modules: path.resolve(__dirname, "./src/modules"),
-      $components: path.resolve(__dirname, "./src/components"),
-      $services: path.resolve(__dirname, "./src/services"),
+      $stylesheets: path.resolve(__dirname, '/stylesheets'),
+      $lib: path.resolve(__dirname, './src/lib'),
+      $modules: path.resolve(__dirname, './src/modules'),
+      $components: path.resolve(__dirname, './src/components'),
+      $services: path.resolve(__dirname, './src/services'),
     },
   },
   module: {
@@ -21,23 +21,23 @@ module.exports = {
         test: /\.js|.jsx$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
         },
       },
       {
         test: /\.s[ac]ss/i,
         exclude: /node_modules/,
-        use: ["style-loader", "css-loader", "sass-loader"],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader", "file-loader"],
+        use: ['style-loader', 'css-loader', 'file-loader'],
       },
       {
         test: /\.svg$/,
         use: [
           {
-            loader: "svg-url-loader",
+            loader: 'svg-url-loader',
             options: {
               limit: 10000,
             },
@@ -46,7 +46,7 @@ module.exports = {
       },
       {
         test: /\.png$/,
-        loader: "file-loader",
+        loader: 'file-loader',
       },
     ],
   },
@@ -54,11 +54,5 @@ module.exports = {
     minimize: true,
   },
 
-  plugins: [
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify("development"),
-      },
-    }),
-  ],
+  plugins: [],
 };
