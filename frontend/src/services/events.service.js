@@ -1,4 +1,4 @@
-import http from '../http-common';
+import http from '$lib/http';
 
 class EventsDataService {
   getAll = () => http.get('events/');

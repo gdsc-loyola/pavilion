@@ -1,4 +1,4 @@
-import http from '../http-common';
+import http from '$lib/http';
 
 class OrgsDataService {
   getAll = () => http.get(`orgs/`);

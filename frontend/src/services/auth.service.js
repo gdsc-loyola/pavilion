@@ -1,4 +1,4 @@
-import http from '../http-common';
+import http from '$lib/http';
 
 class AuthDataService {
   register = (email) => http.post('register/', { username: email });
