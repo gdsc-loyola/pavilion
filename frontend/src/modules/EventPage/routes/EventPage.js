@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '$components/Layout';
 import EventTitleCard from '../components/EventTitleCard';
-import { Box, Typography, createTheme } from '@mui/material';
-import { colors, typography } from '$lib/theme';
+import { Box, Typography } from '@mui/material';
+import { colors, typography, theme } from '$lib/theme';
 import EventsDataService from '$services/events.service';
 import OrgsDataService from '$services/orgs.service';
 const EventPage = () => {
@@ -47,18 +47,6 @@ const EventPage = () => {
     });
   }, []);
 
-  useEffect(() => {});
-  const theme = createTheme({
-    breakpoints: {
-      values: {
-        xs: 0,
-        sm: 700,
-        md: 900,
-        lg: 1200,
-        xl: 1536,
-      },
-    },
-  });
   return (
     <>
       <Layout>
