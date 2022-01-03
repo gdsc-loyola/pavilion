@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    // this is implicitly set in a `jsconfig.json` so we have to do it manually here
+    "allowJs": true,
+    "outDir": "dist", // this essentially disables the compilation errors by telling vs code where files would be put if it were to compile (which it won't because this isn't a real typescript project)
+
+    "baseUrl": ".",
+    "paths": {
+      "$stylesheets/*": ["./stylesheets/*"],
+      "$lib/*": ["./src/lib/*"],
+      "$modules/*": ["./src/modules/*"],
+      "$components/*": ["./src/components/*"],
+      "$services/*": ["./src/services/*"]
+    }
+  },
+
+  // only treat files in here as js source (thus ignoring `node_modules` and your fake output directory above)
+  "include": ["src"]
+}
