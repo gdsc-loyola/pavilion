@@ -5,7 +5,7 @@ import { theme } from '$lib/theme';
 import logo from '../../static/assets/pav_footer_logo.svg';
 import { styled } from '@mui/material';
 
-const StyledFooter = styled('footer')(({}) => ({
+const StyledFooter = styled('footer')(() => ({
   backgroundColor: '#F8F9FF',
   maxWidth: '100vw',
   padding: '40px 10%',

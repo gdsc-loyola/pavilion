@@ -1,5 +1,5 @@
-import create from "zustand";
-import { persist } from "zustand/middleware";
+import create from 'zustand';
+import { persist } from 'zustand/middleware';
 
 /**
  * @typedef OrgForm
@@ -20,16 +20,16 @@ export const useOrgFormStore = create(
   persist(
     (set) => ({
       orgForm: {
-        name: "",
-        shortName: "",
-        description: "",
-        orgBody: "",
-        logo: "",
-        facebook: "",
-        instagram: "",
-        twitter: "",
-        linkedin: "",
-        website: "",
+        name: '',
+        shortName: '',
+        description: '',
+        orgBody: '',
+        logo: '',
+        facebook: '',
+        instagram: '',
+        twitter: '',
+        linkedin: '',
+        website: '',
         step: 1,
       },
       /**
@@ -46,12 +46,12 @@ export const useOrgFormStore = create(
         })),
     }),
     {
-      name: "orgForm",
+      name: 'orgForm',
       partialize: (state) => ({
         ...state,
         orgForm: {
           ...state.orgForm,
-          logo: "",
+          logo: '',
         },
       }),
     }

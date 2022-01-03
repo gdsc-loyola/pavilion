@@ -1,19 +1,19 @@
-import { colors } from "$lib/theme";
-import { styled } from "@mui/material/styles";
-import React from "react";
+import { colors } from '$lib/theme';
+import { styled } from '@mui/material/styles';
+import React from 'react';
 
-const StyledProgress = styled("div")({
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
+const StyledProgress = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
 });
 
-const StyledDot = styled("div")(() => ({
+const StyledDot = styled('div')(() => ({
   backgroundColor: colors.gray[100],
-  width: "16px",
-  height: "16px",
-  borderRadius: "999px",
-  margin: "0 1rem",
+  width: '16px',
+  height: '16px',
+  borderRadius: '999px',
+  margin: '0 1rem',
   '&[data-active="true"]': {
     backgroundColor: colors.blue[300],
   },

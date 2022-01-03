@@ -1,38 +1,39 @@
-import React, { useEffect } from "react";
-import Cotter from "cotter";
-import * as auth from "$lib/auth";
-import axios from "axios";
+import React, { useEffect } from 'react';
+import Cotter from 'cotter';
+import * as auth from '$lib/auth';
+import axios from 'axios';
+import '$stylesheets/org/SelfSignUp.scss';
 
 const Login = (props) => {
   useEffect(() => {
-    const cotter = new Cotter("aa2398ab-3950-42dd-b3d1-4e383734a5ac");
+    const cotter = new Cotter('aa2398ab-3950-42dd-b3d1-4e383734a5ac');
     cotter
-      .withFormID("form_default") // Use customization for form "form_default"
+      .withFormID('form_default') // Use customization for form "form_default"
       .signInWithLink() // use .signInWithOTP() to send an OTP
       .showEmailForm() // use .showPhoneForm() to send magic link to a phone number
       .then(async (res) => {
         const user = await auth.getUser({ email: res.email });
 
         // Signup
-        if (user.data === "signup") {
+        if (user.data === 'signup') {
           const registerRes = await auth.register({ email: res.email });
           await auth.login({
             email: registerRes.data.username,
           });
 
-          props.history.push("/org-info/");
+          props.history.push('/org-info/');
 
           // Login
         } else {
           await auth.login(user.data.username);
 
-          axios.defaults.headers.common["Authorization"] = auth.getToken();
+          axios.defaults.headers.common['Authorization'] = auth.getToken();
 
-          props.history.push("/admin/");
+          props.history.push('/admin/');
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [props.history]);
 
   return (
     <div className="form-container login">

@@ -1,21 +1,19 @@
-import http from "../http-common"
+import http from '$lib/http';
 
 class OrgsDataService {
+  getAll = () => http.get(`orgs/`);
 
-    getAll = () => http.get(`orgs/`)
+  getEvents = () => http.get(`events/`);
 
-    getEvents = () => http.get(`events/`)
+  get = (id) => http.get(`orgs/${id}/`);
 
-    get = (id) => http.get(`orgs/${id}/`);
-    
-    getByOrgUser = (user) => http.get(`orgs/?user=${user}`);
-    
-    create = (data) => http.post(`orgs/`, data);
+  getByOrgUser = (user) => http.get(`orgs/?user=${user}`);
 
-    update = (id, data) => http.put(`orgs/${id}/`, data);
+  create = (data) => http.post(`orgs/`, data);
 
-    delete = (id) => http.delete(`orgs/${id}/`);
+  update = (id, data) => http.put(`orgs/${id}/`, data);
 
+  delete = (id) => http.delete(`orgs/${id}/`);
 }
 
 export default new OrgsDataService();

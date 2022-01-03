@@ -1,7 +1,5 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import auth from "../authentication/auth";
-import signUpState from "./SelfSignUp/SignUpTracker";
+import React from 'react';
+import { Route } from 'react-router-dom';
 
 export const Admin = ({ component: Component, ...rest }) => {
   return (

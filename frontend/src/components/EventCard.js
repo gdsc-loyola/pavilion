@@ -1,5 +1,5 @@
-import React from "react";
-import { useHistory } from "react-router";
+import React from 'react';
+import { useHistory } from 'react-router';
 import {
   Card,
   CardActionArea,
@@ -8,9 +8,9 @@ import {
   Typography,
   CardHeader,
   Avatar,
-  createTheme
-} from "@mui/material";
-import { colors, typography } from "$lib/theme";
+  createTheme,
+} from '@mui/material';
+import { colors, typography } from '$lib/theme';
 /**
  * @description A MUI Card dedicated for events
  * @param {Omit<ControllerProps, 'render'> & React.ComponentPropsWithoutRef<typeof TextField>} props
@@ -34,36 +34,38 @@ const EventCard = (props) => {
 
   let formattedStartDate = new Date(startDate).toDateString();
   let formattedStartDateArray = formattedStartDate
-    .substr(formattedStartDate.indexOf(" ") + 1)
-    .split(" ");
+    .substr(formattedStartDate.indexOf(' ') + 1)
+    .split(' ');
   formattedStartDate =
     formattedStartDateArray[0] +
-    " " +
+    ' ' +
     formattedStartDateArray[1] +
-    ", " +
+    ', ' +
     formattedStartDateArray[2];
   let formattedEndDate = new Date(endDate).toDateString();
-  let formattedEndDateArray = formattedEndDate.substr(formattedEndDate.indexOf(" ") + 1).split(" ");
+  let formattedEndDateArray = formattedEndDate.substr(formattedEndDate.indexOf(' ') + 1).split(' ');
   formattedEndDate =
-    formattedEndDateArray[0] + " " + formattedEndDateArray[1] + ", " + formattedEndDateArray[2];
+    formattedEndDateArray[0] + ' ' + formattedEndDateArray[1] + ', ' + formattedEndDateArray[2];
 
   return (
-    <Card sx={{ width: "100%", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.08)" }}>
+    <Card sx={{ width: '100%', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.08)' }}>
       <CardActionArea
-        onClick={() => history.push(`/organizations/${logoName.toLowerCase()}/${eventName.toLowerCase()}`)}
+        onClick={() =>
+          history.push(`/organizations/${logoName.toLowerCase()}/${eventName.toLowerCase()}`)
+        }
       >
         <CardMedia component="img" height="92" image={imgSrc} alt={alt} />
-        <CardContent sx={{ paddingBottom: "0", marginBottom: "16px" }}>
+        <CardContent sx={{ paddingBottom: '0', marginBottom: '16px' }}>
           <Typography
             sx={{
               fontWeight: 600,
-              fontSize: "20px",
-              marginBottom: "8px",
-              width: "100%",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              [theme.breakpoints.down("sm")]: {
+              fontSize: '20px',
+              marginBottom: '8px',
+              width: '100%',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              [theme.breakpoints.down('sm')]: {
                 fontSize: typography.fontSize.base,
               },
             }}
@@ -75,8 +77,8 @@ const EventCard = (props) => {
           <Typography
             sx={{
               fontWeight: typography.fontWeight.reg,
-              fontSize: "16px",
-              [theme.breakpoints.down("sm")]: {
+              fontSize: '16px',
+              [theme.breakpoints.down('sm')]: {
                 fontSize: typography.fontSize.sm,
               },
             }}
@@ -87,15 +89,15 @@ const EventCard = (props) => {
           </Typography>
         </CardContent>
         <CardHeader
-          sx={{ paddingTop: "0" }}
+          sx={{ paddingTop: '0' }}
           avatar={<Avatar sx={{ width: 24, height: 24 }} src={logoSrc} aria-label="logo" />}
           title={logoName}
           titleTypographyProps={{
             sx: {
               fontWeight: typography.fontWeight.reg,
-              fontSize: "14px",
+              fontSize: '14px',
               color: colors.gray[500],
-              [theme.breakpoints.down("sm")]: {
+              [theme.breakpoints.down('sm')]: {
                 fontSize: typography.fontSize.xs,
               },
             },

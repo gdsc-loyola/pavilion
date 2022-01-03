@@ -92,7 +92,7 @@ export const theme = createTheme({
     ].join(','),
   },
 
-  fontSize: typography.fontSize,
+  ...typography,
 
   colors,
   breakpoints: {

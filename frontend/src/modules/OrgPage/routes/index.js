@@ -1,6 +1,6 @@
-import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
-import OrgPage from "./OrgPage";
+import React from 'react';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import OrgPage from './OrgPage';
 
 export const OrgPageRoutes = () => {
   // Path always equal to /organizations

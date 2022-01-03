@@ -1,1 +1,1 @@
-export { default as OrgCatalogue } from './OrgCatalogue'
+export { default as OrgCatalogue } from './OrgCatalogue';

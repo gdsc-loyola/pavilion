@@ -1,6 +1,6 @@
-import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
-import EventPage from "./EventPage";
+import React from 'react';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import EventPage from './EventPage';
 
 export const EventPagesRoutes = () => {
   // Path always equal to /organizations

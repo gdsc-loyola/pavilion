@@ -1,14 +1,14 @@
-import React from "react";
-import { Controller, ControllerProps } from "react-hook-form";
-import { TextField } from "@mui/material";
+import React from 'react';
+import { Controller } from 'react-hook-form';
+import { TextField } from '@mui/material';
 
 /**
  * @description A MUI TextField with a react-hook-form Controller wrapper
- * @param {Omit<ControllerProps, 'render'> & React.ComponentPropsWithoutRef<typeof TextField>} props
+ * @param {Omit<import('react-hook-form').ControllerProps, 'render'> & React.ComponentPropsWithoutRef<typeof TextField>} props
  * @returns {React.Component}
  */
 const ControlledTextField = (props) => {
-  const { name, control, defaultValue, rules, shouldUnregister, ...rest } = props;
+  const { name, control, rules, ...rest } = props;
   return (
     <Controller
       name={name}
@@ -20,14 +20,12 @@ const ControlledTextField = (props) => {
           error={!!error}
           helperText={error ? error.message : null}
           onChange={onChange}
-          value={value || ""}
+          value={value || ''}
           {...rest}
         />
       )}
     />
   );
 };
-
-<ControlledTextField />;
 
 export default ControlledTextField;

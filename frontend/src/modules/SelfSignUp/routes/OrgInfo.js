@@ -1,5 +1,5 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import React from 'react';
+import { useForm, Controller } from 'react-hook-form';
 
 import {
   Select,
@@ -10,18 +10,18 @@ import {
   FormHelperText,
   Box,
   useTheme,
-} from "@mui/material";
-import { yupResolver } from "@hookform/resolvers/yup";
-import ControlledTextField from "$components/ControlledTextField";
-import * as yup from "yup";
-import { useOrgFormStore } from "../store/useOrgFormStore";
-import Layout from "../components/Layout";
+} from '@mui/material';
+import { yupResolver } from '@hookform/resolvers/yup';
+import ControlledTextField from '$components/ControlledTextField';
+import * as yup from 'yup';
+import { useOrgFormStore } from '../stores/useOrgFormStore';
+import Layout from '../components/Layout';
 
 const ValidationSchema = yup.object().shape({
-  name: yup.string().required("Name is a required"),
-  shortName: yup.string().required("Short Name is required"),
-  description: yup.string().required("Description is required"),
-  orgBody: yup.string().required("Org Body is required"),
+  name: yup.string().required('Name is a required'),
+  shortName: yup.string().required('Short Name is required'),
+  description: yup.string().required('Description is required'),
+  orgBody: yup.string().required('Org Body is required'),
 });
 
 const OrgInfo = (props) => {
@@ -42,7 +42,7 @@ const OrgInfo = (props) => {
       step: 2,
     });
     props.history.push({
-      pathname: "/org-logo/",
+      pathname: '/org-logo/',
       state: { detail: orgForm },
     });
   };
@@ -51,20 +51,20 @@ const OrgInfo = (props) => {
     <Layout step={1} title="Tell us more about your organization.">
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "2rem",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '2rem',
         }}
         component="form"
         onSubmit={handleSubmit(onSubmit)}
       >
         <Box
           sx={{
-            width: "100%",
-            maxWidth: "468px",
-            [theme.breakpoints.down("sm")]: {
-              maxWidth: "unset",
+            width: '100%',
+            maxWidth: '468px',
+            [theme.breakpoints.down('sm')]: {
+              maxWidth: 'unset',
             },
           }}
         >
@@ -85,7 +85,7 @@ const OrgInfo = (props) => {
 
           <ControlledTextField
             name="description"
-            label={"Short Description*"}
+            label={'Short Description*'}
             control={control}
             multiline
             fullWidth
@@ -98,7 +98,7 @@ const OrgInfo = (props) => {
             render={({ field, fieldState: { error } }) => (
               <FormControl fullWidth margin="dense" error={!!error}>
                 <InputLabel id="org-body"> Org Body* </InputLabel>
-                <Select id="org-body" label={"Org Body*"} fullWidth error={!!error} {...field}>
+                <Select id="org-body" label={'Org Body*'} fullWidth error={!!error} {...field}>
                   <MenuItem value="COA">COA</MenuItem>
                   <MenuItem value="LIONS">LIONS</MenuItem>
                   <MenuItem value="Sanggu">Sanggu</MenuItem>
@@ -108,7 +108,7 @@ const OrgInfo = (props) => {
             )}
           />
           <Button
-            sx={{ marginTop: "2rem", marginLeft: "auto", display: "block" }}
+            sx={{ marginTop: '2rem', marginLeft: 'auto', display: 'block' }}
             type="submit"
             color="primary"
           >
