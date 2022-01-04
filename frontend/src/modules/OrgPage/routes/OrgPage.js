@@ -75,17 +75,19 @@ const OrgPage = (props) => {
             },
           }}
         >
-          <Typography
-            color={colors.gray[500]}
-            sx={{ margin: '80px 0px' }}
-            fontSize={typography.fontSize.base}
-            fontWeight={typography.fontWeight.reg}
-          >
-            <svg style={{ marginRight: '16px' }} width="8" height="12">
-              <path d="M7.41 1.41 6 0 0 6l6 6 1.41-1.41L2.83 6l4.58-4.59Z" fill="#6B7280" />
-            </svg>{' '}
-            Back to organizations
-          </Typography>
+          <a href="/organizations">
+            <Typography
+              color={colors.gray[500]}
+              sx={{ margin: '80px 0px' }}
+              fontSize={typography.fontSize.base}
+              fontWeight={typography.fontWeight.reg}
+            >
+              <svg style={{ marginRight: '16px' }} width="8" height="12">
+                <path d="M7.41 1.41 6 0 0 6l6 6 1.41-1.41L2.83 6l4.58-4.59Z" fill="#6B7280" />
+              </svg>{' '}
+              Back to organizations
+            </Typography>
+          </a>
           {openForSignUps ? (
             <Box
               sx={{
