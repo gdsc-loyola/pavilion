@@ -35,7 +35,7 @@ const EventPage = () => {
         eventPhoto1: res.data.event_photo1,
         eventPhoto2: res.data.event_photo2,
         eventPhoto3: res.data.event_photo3,
-        coverPhoto4: res.data.event_photo4,
+        eventPhoto4: res.data.event_photo4,
       });
 
       OrgsDataService.get(1).then((res) => {
