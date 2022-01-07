@@ -98,7 +98,7 @@ const EventPage = () => {
               fontWeight={typography.fontWeight.reg}
               fontSize={typography.fontSize.base}
             >
-              {eventForm.eventName}
+              {eventForm.description}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
