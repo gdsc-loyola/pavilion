@@ -54,7 +54,7 @@ const EventPage = () => {
           height="360px"
           width="100%"
           style={{ position: 'absolute', marginTop: '80px', zIndex: '-1' }}
-          src="http://placehold.jp/150x150.png"
+          src={eventForm.coverPhoto}
         />
         <Box
           sx={{
