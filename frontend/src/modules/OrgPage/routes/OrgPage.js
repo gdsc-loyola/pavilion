@@ -174,6 +174,7 @@ const OrgPage = (props) => {
                     imgSrc={event.cover_photo}
                     alt={event.desc}
                     eventName={event.name}
+                    eventId={event.id}
                     startDate={event.start_date}
                     endDate={event.end_date}
                     logoSrc={orgForm.logo}
