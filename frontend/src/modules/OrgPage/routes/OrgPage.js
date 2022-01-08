@@ -164,7 +164,7 @@ const OrgPage = (props) => {
             {orgForm.events.map((event) => (
               <Grid item xs={3} sm={3} md={1} lg={1} key={event.name}>
                 <EventCard
-                  imgSrc={event.cover_photo1}
+                  imgSrc={event.cover_photo}
                   alt={event.desc}
                   eventName={event.name}
                   startDate={event.start_date}
