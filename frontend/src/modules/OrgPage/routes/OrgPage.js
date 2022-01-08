@@ -142,6 +142,11 @@ const OrgPage = (props) => {
             logoSrc={orgForm.logo}
             orgName={orgForm.name}
             shortOrgName={orgForm.short_name}
+            facebook={orgForm.facebook}
+            instagram={orgForm.instagram}
+            twitter={orgForm.twitter}
+            linkedin={orgForm.linkedin}
+            website={orgForm.website}
           />
           <Typography
             sx={{ marginTop: '40px', marginBottom: '80px' }}
