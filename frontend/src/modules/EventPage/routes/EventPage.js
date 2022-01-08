@@ -5,7 +5,8 @@ import { Box, Typography } from '@mui/material';
 import { colors, typography, theme } from '$lib/theme';
 import EventsDataService from '$services/events.service';
 import OrgsDataService from '$services/orgs.service';
-const EventPage = () => {
+const EventPage = (props) => {
+  const { id } = props.match.params;
   const [eventForm, setEventForm] = useState({
     eventName: '',
     startDate: '',
@@ -25,7 +26,7 @@ const EventPage = () => {
   });
 
   useEffect(() => {
-    EventsDataService.get(1).then((res) => {
+    EventsDataService.get(id).then((res) => {
       setEventForm({
         eventName: res.data.name,
         startDate: res.data.start_date,
@@ -45,7 +46,7 @@ const EventPage = () => {
         });
       });
     });
-  }, []);
+  }, [id]);
 
   return (
     <>

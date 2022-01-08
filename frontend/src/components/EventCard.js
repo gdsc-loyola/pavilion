@@ -29,7 +29,7 @@ const EventCard = (props) => {
       },
     },
   });
-  const { imgSrc, alt, eventName, startDate, endDate, logoSrc, logoName } = props;
+  const { imgSrc, alt, eventName, startDate, endDate, logoSrc, logoName, eventId } = props;
   const history = useHistory();
 
   let formattedStartDate = new Date(startDate).toDateString();
@@ -50,9 +50,7 @@ const EventCard = (props) => {
   return (
     <Card sx={{ width: '100%', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.08)' }}>
       <CardActionArea
-        onClick={() =>
-          history.push(`/organizations/${logoName.toLowerCase()}/${eventName.toLowerCase()}`)
-        }
+        onClick={() => history.push(`/organizations/${logoName.toLowerCase()}/${eventId}`)}
       >
         <CardMedia component="img" height="92" image={imgSrc} alt={alt} />
         <CardContent sx={{ paddingBottom: '0', marginBottom: '16px' }}>

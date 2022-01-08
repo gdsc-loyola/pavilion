@@ -257,6 +257,7 @@ const Landing = () => {
                   <EventCard
                     imgSrc={event.cover_photo}
                     alt=""
+                    eventId={event.id}
                     eventName={event.name}
                     startDate={event.start_date}
                     endDate={event.end_date}
