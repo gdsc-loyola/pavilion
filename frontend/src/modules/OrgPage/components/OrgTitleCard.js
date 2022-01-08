@@ -38,13 +38,14 @@ const OrgTitleCard = (props) => {
   });
 
   const OrgBodyTag = ({ body }) => {
+    const lowerCaseBody = body.toLowerCase();
     return (
       <Box
         sx={{
           backgroundColor:
-            body === 'coa'
+            lowerCaseBody === 'coa'
               ? colors.red[100]
-              : body === 'lions'
+              : lowerCaseBody === 'lions'
               ? colors.yellow[100]
               : colors.blue[100],
           width: 'fit-content',
@@ -61,9 +62,9 @@ const OrgTitleCard = (props) => {
       >
         <Typography
           color={
-            body === 'coa'
+            lowerCaseBody === 'coa'
               ? colors.red[400]
-              : body === 'lions'
+              : lowerCaseBody === 'lions'
               ? colors.yellow[500]
               : colors.blue[400]
           }
