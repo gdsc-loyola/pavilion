@@ -40,7 +40,12 @@ const Landing = () => {
 
   useEffect(() => {
     orgsService.getEvents().then((response) => {
-      setFeaturedEvents(response.data.sort(() => 0.5 - Math.random()).slice(0, 6));
+      setFeaturedEvents(
+        response.data
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 6)
+          .filter((event) => event.status === 'Published')
+      );
     });
     orgsService.getAll().then((response) => {
       setOrgs(response.data);
