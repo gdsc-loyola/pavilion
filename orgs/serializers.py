@@ -45,7 +45,8 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             "id",
             "name", 
-            "short_name", 
+            "short_name",
+            "slug", 
             "desc", 
             "org_body",
             "logo",

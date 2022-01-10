@@ -25,7 +25,9 @@ class OrgsViewSet(viewsets.ModelViewSet):
 
     def list(self, *args, **kwargs):
         #getAll
-        if (self.request.GET.get("user") == None):
+        orgToCheck = self.request.query_params.get('user', None)
+        print(orgToCheck)
+        if (orgToCheck == None):
             queryset = Organization.objects.all()
             serializer = [OrgsSerializer(query).data for query in queryset]
 
@@ -33,11 +35,11 @@ class OrgsViewSet(viewsets.ModelViewSet):
 
         #getByOrgUser
         else: 
-            query = Organization.objects.filter(user=self.request.GET.get("user"))
-            serializer = OrgsSerializer(query[0])
+            query = Organization.objects.get(user__username=orgToCheck)
+            print(query)
+            serializer = OrgsSerializer(query)
 
             return Response(serializer.data)
-    
     def update(self, id, *args, **kwargs):
         instance = Organization.objects.get( id = id )
 
@@ -61,7 +63,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         try:
-            checkIfOrg = Organization.objects.filter(user__id=pk)
+            print(request.query_params)
+            checkIfOrg = Organization.objects.filter(user__username=pk)
 
             serializer = OrgsSerializer(checkIfOrg[0]).data
             return Response(serializer)
@@ -70,16 +73,20 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer)
 
     #getByUsername
-    def list(self, *args, **kwargs):
-        #query = User.objects.filter(username=self.request.GET.get("user"))
-        
-        query = User.objects.all()
-
-        if not query:
-            return Response("signup")
+    def list(self, request, *args, **kwargs):
+        userToCheck = request.query_params.get('user', None)
+        if userToCheck is not None:
+            print(self.request.query_params)
+            query = User.objects.get(username=userToCheck)
+            
+            if not query:
+                return Response("signup")
+            return Response(UsernameSerializer(query).data)
         else:
-            serializer = UsernameSerializer(query[0])
+            query = User.objects.all()
+            serializer = UsernameSerializer(query, many=True)
             return Response(serializer.data)
+
     
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
