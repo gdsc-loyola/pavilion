@@ -2,6 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 export const colors = {
   blue: {
+    50: '#F8F9FF',
     100: '#e8f0fe',
     200: '#d2e3fc',
     300: '#498af4',

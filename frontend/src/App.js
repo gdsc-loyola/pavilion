@@ -12,7 +12,7 @@ import { OrgPageRoutes } from '$modules/OrgPage/routes/index';
 import { EventPagesRoutes } from '$modules/EventPage/routes/index';
 import { Landing } from '$modules/StudentLanding/routes';
 import { OrgCatalogue } from '$modules/OrgCatalogue/routes';
-import { Comp, EventCreationRoutes } from '$modules/EventCreation';
+import { EventCreationRoutes } from '$modules/EventCreation';
 import { DashboardRoutes } from '$modules/Dashboard';
 
 const App = () => {
@@ -39,7 +39,7 @@ const App = () => {
         <Admin exact path="/admin/" component={DashboardRoutes} />
 
         <Admin exact path="/old/admin/" component={Dashboard} />
-        <Admin exact path="/admin/events/" component={Comp} />
+        <Admin exact path="/admin/events/" component={EventCreationRoutes} />
         <Admin exact path="/admin/settings/" component={Settings} />
 
         {/* SSU routes */}
