@@ -9,7 +9,8 @@ import { useSearchQuery } from '$lib/utils/useSearchQuery';
 // Module specific imports
 import Filter from '../components/Filter';
 import EmptyState from '../components/EmptyState';
-import Searchbar from '../components/Searchbar';
+import Searchbar from '$components/Searchbar';
+
 import { useSearch } from '../hooks/useSearch';
 import { useFilterOrgs } from '../hooks/useFilterOrgs';
 import { useAsync } from '$lib/utils/useAsync';
@@ -90,7 +91,17 @@ const OrgCatalogue = () => {
             },
           }}
         >
-          <Searchbar onChange={handleSearchChange} value={searchValue} />
+          <Searchbar
+            sx={{
+              margin: '8px 4px',
+              maxWidth: '33%s',
+            }}
+            size="small"
+            label="Search for an organization..."
+            placeholder="Search for an organization..."
+            onChange={handleSearchChange}
+            value={searchValue}
+          />
 
           {/* filter button */}
           <Filter
