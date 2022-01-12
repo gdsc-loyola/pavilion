@@ -18,11 +18,11 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
   },
 }));
 
-const AvatarContainer = styled(Button)(() => ({
+const AvatarContainer = styled(Button)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   ':hover': {
-    backgroundColor: 'rgba(0, 0, 0, 0.01)',
+    backgroundColor: theme.colors.gray[100],
   },
 }));
 
