@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from orgs.models import Event, Org
+from orgs.models import Event, Organization
 from django.contrib.auth.models import User
 
 # Event serializer
@@ -8,8 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "id", 
-            "username", 
-            "password")
+            "username")
 
 class UsernameSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,14 +38,15 @@ class EventsSerializer(serializers.ModelSerializer):
 
 class OrgsSerializer(serializers.HyperlinkedModelSerializer):
     events = EventsSerializer(read_only=True, many=True)
-    #user = UserSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
-        model = Org
+        model = Organization
         fields = (
             "id",
             "name", 
-            "short_name", 
+            "short_name",
+            "slug", 
             "desc", 
             "org_body",
             "logo",
@@ -57,3 +57,4 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
             "website",
             "user",
             "events")
+        lookup_field = 'slug'
