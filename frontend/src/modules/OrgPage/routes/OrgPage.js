@@ -142,6 +142,11 @@ const OrgPage = (props) => {
             logoSrc={orgForm.logo}
             orgName={orgForm.name}
             shortOrgName={orgForm.short_name}
+            facebook={orgForm.facebook}
+            instagram={orgForm.instagram}
+            twitter={orgForm.twitter}
+            linkedin={orgForm.linkedin}
+            website={orgForm.website}
           />
           <Typography
             sx={{ marginTop: '40px', marginBottom: '80px' }}
@@ -161,19 +166,22 @@ const OrgPage = (props) => {
             Past Events
           </Typography>
           <Grid container spacing={2} columns={3} marginBottom="120px">
-            {orgForm.events.map((event) => (
-              <Grid item xs={3} sm={3} md={1} lg={1} key={event.name}>
-                <EventCard
-                  imgSrc={event.cover_photo1}
-                  alt={event.desc}
-                  eventName={event.name}
-                  startDate={event.start_date}
-                  endDate={event.end_date}
-                  logoSrc={orgForm.logo}
-                  logoName={orgForm.short_name}
-                />
-              </Grid>
-            ))}
+            {orgForm.events
+              .filter((event) => event.status === 'Published')
+              .map((event) => (
+                <Grid item xs={3} sm={3} md={1} lg={1} key={event.name}>
+                  <EventCard
+                    imgSrc={event.cover_photo}
+                    alt={event.desc}
+                    eventName={event.name}
+                    eventId={event.id}
+                    startDate={event.start_date}
+                    endDate={event.end_date}
+                    logoSrc={orgForm.logo}
+                    logoName={orgForm.short_name}
+                  />
+                </Grid>
+              ))}
           </Grid>
         </Box>
       </Layout>

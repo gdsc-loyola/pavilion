@@ -40,7 +40,12 @@ const Landing = () => {
 
   useEffect(() => {
     orgsService.getEvents().then((response) => {
-      setFeaturedEvents(response.data.sort(() => 0.5 - Math.random()).slice(0, 6));
+      setFeaturedEvents(
+        response.data
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 6)
+          .filter((event) => event.status === 'Published')
+      );
     });
     orgsService.getAll().then((response) => {
       setOrgs(response.data);
@@ -257,6 +262,7 @@ const Landing = () => {
                   <EventCard
                     imgSrc={event.cover_photo}
                     alt=""
+                    eventId={event.id}
                     eventName={event.name}
                     startDate={event.start_date}
                     endDate={event.end_date}

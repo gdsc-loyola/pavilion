@@ -11,7 +11,20 @@ const SocialButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const OrgTitleCard = (props) => {
-  const { orgBody, logoSrc, orgName, shortOrgName } = props;
+  const {
+    orgBody,
+    logoSrc,
+    orgName,
+    shortOrgName,
+    facebook,
+    instagram,
+    twitter,
+    linkedin,
+    website,
+  } = props;
+
+  const socials = { facebook, instagram, twitter, linkedin, website };
+
   const theme = createTheme({
     breakpoints: {
       values: {
@@ -25,13 +38,14 @@ const OrgTitleCard = (props) => {
   });
 
   const OrgBodyTag = ({ body }) => {
+    const lowerCaseBody = body.toLowerCase();
     return (
       <Box
         sx={{
           backgroundColor:
-            body === 'coa'
+            lowerCaseBody === 'coa'
               ? colors.red[100]
-              : body === 'lions'
+              : lowerCaseBody === 'lions'
               ? colors.yellow[100]
               : colors.blue[100],
           width: 'fit-content',
@@ -48,9 +62,9 @@ const OrgTitleCard = (props) => {
       >
         <Typography
           color={
-            body === 'coa'
+            lowerCaseBody === 'coa'
               ? colors.red[400]
-              : body === 'lions'
+              : lowerCaseBody === 'lions'
               ? colors.yellow[500]
               : colors.blue[400]
           }
@@ -131,11 +145,19 @@ const OrgTitleCard = (props) => {
             {shortOrgName}
           </Typography>
           <Box sx={{ marginTop: '16px', display: 'flex', flexDirection: 'row' }}>
-            <SocialButton>{icons.website}</SocialButton>
-            <SocialButton>{icons.facebook}</SocialButton>
-            <SocialButton>{icons.instagram}</SocialButton>
-            <SocialButton>{icons.linkedin}</SocialButton>
-            <SocialButton>{icons.twitter}</SocialButton>
+            {Object.entries(icons).map(([key, value]) => {
+              return (
+                <SocialButton
+                  as={'a'}
+                  href={socials[key]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  key={key}
+                >
+                  {value}
+                </SocialButton>
+              );
+            })}
           </Box>
         </Box>
       </Box>

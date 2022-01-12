@@ -5,7 +5,8 @@ import { Box, Typography } from '@mui/material';
 import { colors, typography, theme } from '$lib/theme';
 import EventsDataService from '$services/events.service';
 import OrgsDataService from '$services/orgs.service';
-const EventPage = () => {
+const EventPage = (props) => {
+  const { id } = props.match.params;
   const [eventForm, setEventForm] = useState({
     eventName: '',
     startDate: '',
@@ -25,7 +26,7 @@ const EventPage = () => {
   });
 
   useEffect(() => {
-    EventsDataService.get(1).then((res) => {
+    EventsDataService.get(id).then((res) => {
       setEventForm({
         eventName: res.data.name,
         startDate: res.data.start_date,
@@ -35,7 +36,7 @@ const EventPage = () => {
         eventPhoto1: res.data.event_photo1,
         eventPhoto2: res.data.event_photo2,
         eventPhoto3: res.data.event_photo3,
-        coverPhoto4: res.data.event_photo4,
+        eventPhoto4: res.data.event_photo4,
       });
 
       OrgsDataService.get(1).then((res) => {
@@ -45,7 +46,7 @@ const EventPage = () => {
         });
       });
     });
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -54,7 +55,7 @@ const EventPage = () => {
           height="360px"
           width="100%"
           style={{ position: 'absolute', marginTop: '80px', zIndex: '-1' }}
-          src="http://placehold.jp/150x150.png"
+          src={eventForm.coverPhoto}
         />
         <Box
           sx={{
@@ -98,7 +99,7 @@ const EventPage = () => {
               fontWeight={typography.fontWeight.reg}
               fontSize={typography.fontSize.base}
             >
-              {eventForm.eventName}
+              {eventForm.description}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
