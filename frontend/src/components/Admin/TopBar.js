@@ -49,9 +49,13 @@ const TopBar = () => {
         container
         justifyContent="space-between"
         alignItems="center"
-        sx={{ height: '100%', padding: '0 1rem' }}
+        sx={{ height: '100%', padding: '0 1rem', width: '100%' }}
       >
-        <Grid item>hi</Grid>
+        <Grid item>
+          {/* This can be used for a hamburger downt the 
+          line when 
+we support mobile screens */}
+        </Grid>
         <Grid item>
           <AvatarContainer
             variant=""

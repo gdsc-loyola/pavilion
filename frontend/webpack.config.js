@@ -13,6 +13,7 @@ module.exports = {
       $modules: path.resolve(__dirname, './src/modules'),
       $components: path.resolve(__dirname, './src/components'),
       $services: path.resolve(__dirname, './src/services'),
+      $static: path.resolve(__dirname, './static'),
     },
   },
   module: {

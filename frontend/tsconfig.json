@@ -10,7 +10,8 @@
       "$lib/*": ["./src/lib/*"],
       "$modules/*": ["./src/modules/*"],
       "$components/*": ["./src/components/*"],
-      "$services/*": ["./src/services/*"]
+      "$services/*": ["./src/services/*"],
+      "$static/*": ["./static/*"]
     }
   },
 

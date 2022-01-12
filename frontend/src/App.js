@@ -12,6 +12,8 @@ import { OrgPageRoutes } from '$modules/OrgPage/routes/index';
 import { EventPagesRoutes } from '$modules/EventPage/routes/index';
 import { Landing } from '$modules/StudentLanding/routes';
 import { OrgCatalogue } from '$modules/OrgCatalogue/routes';
+import { Comp, EventCreationRoutes } from '$modules/EventCreation';
+import { DashboardRoutes } from '$modules/Dashboard';
 
 const App = () => {
   return (
@@ -34,9 +36,11 @@ const App = () => {
         />
 
         {/* Protected admin routes */}
-        <Admin exact path="/admin/" component={Dashboard} />
-        <Admin exact path="/admin/events" component={Events} />
-        <Admin exact path="/admin/settings" component={Settings} />
+        <Admin exact path="/admin/" component={DashboardRoutes} />
+
+        <Admin exact path="/old/admin/" component={Dashboard} />
+        <Admin exact path="/admin/events/" component={Comp} />
+        <Admin exact path="/admin/settings/" component={Settings} />
 
         {/* SSU routes */}
         <Route exact path="/org-info/" component={OrgInfo} />
