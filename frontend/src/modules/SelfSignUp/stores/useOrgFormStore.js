@@ -1,5 +1,6 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 
 /**
  * @typedef OrgForm
@@ -57,3 +58,7 @@ export const useOrgFormStore = create(
     }
   )
 );
+
+if (process.env.NODE_ENV === 'development') {
+  mountStoreDevtool('Event Creation', useOrgFormStore);
+}

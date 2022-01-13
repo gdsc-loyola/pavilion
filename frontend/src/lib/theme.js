@@ -76,6 +76,12 @@ export const typography = {
   },
 };
 
+export const background = {
+  blue: {
+    upDown: 'linear-gradient(180deg, #498AF4 0%, #1A73E8 100%)',
+  },
+};
+
 export const theme = createTheme({
   typography: {
     fontFamily: [
@@ -94,7 +100,7 @@ export const theme = createTheme({
   },
 
   ...typography,
-
+  background,
   colors,
   breakpoints: {
     values: {
@@ -130,6 +136,9 @@ export const theme = createTheme({
         },
         sizeSmall: {
           padding: '0.5rem 1.5rem',
+        },
+        root: {
+          textTransform: 'none',
         },
       },
     },

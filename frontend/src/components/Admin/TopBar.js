@@ -26,7 +26,7 @@ const AvatarContainer = styled(Button)(({ theme }) => ({
   },
 }));
 
-const Avatar = styled(A)();
+const Avatar = A;
 
 const TopBar = () => {
   const [anchorEl, setAnchorEl] = useState();
@@ -58,7 +58,7 @@ we support mobile screens */}
         </Grid>
         <Grid item>
           <AvatarContainer
-            variant=""
+            variant="text"
             onClick={handleClick}
             endIcon={<KeyboardArrowDown sx={{ width: '18px', color: '#9CA3AF' }} />}
           >

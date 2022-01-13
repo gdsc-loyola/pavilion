@@ -3,6 +3,12 @@ import { styled, Grid, Button, Box } from '@mui/material';
 import React, { useState } from 'react';
 import Searchbar from '$components/Searchbar';
 import emptyState from '$static/assets/emptyState.svg';
+import { useBoolean } from '$lib/utils/useBoolean';
+import Modal from '../components/Modal';
+import { useForm } from 'react-hook-form';
+import { useEventCreationFormStore } from '../stores/useEventCreationStore';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -10,7 +16,6 @@ const Container = styled('div')(({ theme }) => ({
   padding: '1rem 3rem',
   flex: 1,
   '.MuiButton-root': {
-    textTransform: 'none',
     fontWeight: theme.fontWeight.med,
   },
   h1: {
@@ -19,8 +24,26 @@ const Container = styled('div')(({ theme }) => ({
   },
 }));
 
+const ValidationSchema = yup.object().shape({
+  name: yup.string().required('Event name is required'),
+});
+
 const Events = () => {
   const [searchValue, setSearchValue] = useState('');
+  const { eventCreationForm, setEventCreationForm } = useEventCreationFormStore();
+  const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
+  const { control, handleSubmit } = useForm({
+    defaultValues: eventCreationForm,
+    resolver: yupResolver(ValidationSchema),
+  });
+
+  const onSubmit = (data) => {
+    setEventCreationForm({
+      ...data,
+    });
+    // TODO: create event
+  };
+
   return (
     <AdminLayout>
       <Container>
@@ -37,6 +60,7 @@ const Events = () => {
           </Grid>
           <Grid item container xs={8} xl={9} justifyItems="flex-end">
             <Button
+              onClick={openModal}
               size="small"
               sx={{
                 height: '100%',
@@ -67,10 +91,33 @@ const Events = () => {
           })}
         >
           <img src={emptyState} style={{ width: '400px' }} />
-          <h4>You don’t have any event yet!</h4>
-          <Button>Create an event</Button>
+          <h4>You don&apos;t have any event yet!</h4>
+          <Button onClick={openModal}>Create an event</Button>
         </Box>
       </Container>
+      <Modal
+        open={isModalOpen}
+        onClose={closeModal}
+        asForm={true}
+        TextFieldProps={{
+          placeholder: 'Event Name',
+          size: 'medium',
+          label: 'Event Name',
+          control,
+          name: 'name',
+        }}
+        title="Create an event"
+        subtitle="Fill up your webpage by adding an event for your organization."
+        onSubmit={handleSubmit(onSubmit)}
+        leftButtonProps={{
+          label: 'Never mind',
+          onClick: closeModal,
+        }}
+        rightButtonProps={{
+          label: 'Create',
+          type: 'submit',
+        }}
+      />
     </AdminLayout>
   );
 };
