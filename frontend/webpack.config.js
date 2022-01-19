@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.jsx',
   output: {
     path: path.resolve(__dirname, './static/frontend'),
     filename: '[name].js',
@@ -15,6 +15,8 @@ module.exports = {
       $services: path.resolve(__dirname, './src/services'),
       $static: path.resolve(__dirname, './static'),
     },
+
+    extensions: ['', '.js', '.jsx'],
   },
   module: {
     rules: [
@@ -54,6 +56,5 @@ module.exports = {
   optimization: {
     minimize: true,
   },
-
   plugins: [],
 };
