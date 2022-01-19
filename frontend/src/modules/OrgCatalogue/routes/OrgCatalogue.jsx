@@ -110,7 +110,7 @@ const OrgCatalogue = () => {
                   orgPhoto={org.logo}
                   orgBody={org.org_body.toLowerCase()}
                   orgName={org.short_name}
-                  orgId={org.id}
+                  orgId={org.slug}
                 />
               </Grid>
             ))}
