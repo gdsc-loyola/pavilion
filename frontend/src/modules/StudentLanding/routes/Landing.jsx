@@ -11,6 +11,7 @@ import OrgCard from '../../../components/OrgCard';
 import { Link } from 'react-router-dom';
 import orgsService from '../../../services/orgs.service';
 import { useOnScreen } from '$lib/utils/useOnScreen';
+import { shuffleByDay } from '$lib/utils/shuffleByDay';
 
 const theme = createTheme({
   breakpoints: {
@@ -41,14 +42,12 @@ const Landing = () => {
   useEffect(() => {
     orgsService.getEvents().then((response) => {
       setFeaturedEvents(
-        response.data
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 6)
-          .filter((event) => event.status === 'Published')
+        shuffleByDay(response.data.slice(0, 6).filter((event) => event.status === 'Published'))
       );
     });
     orgsService.getAll().then((response) => {
-      setOrgs(response.data);
+      // Limit to 8 orgs
+      setOrgs(response.data.slice(0, 8));
     });
   }, []);
 
@@ -137,7 +136,11 @@ const Landing = () => {
                   width: '100%',
                   boxSizing: 'border-box',
                   backgroundColor: 'white',
-                  padding: smVW ? '16px' : mdVW ? '20px 16px' : '28px 24px',
+                  padding: smVW
+                    ? '16px 70px 16px 16px'
+                    : mdVW
+                    ? '20px 80px 20px 16px '
+                    : '28px 100px 28px 24px',
                   fontSize: smVW ? '12px' : '16px',
                 }}
               />
@@ -323,7 +326,7 @@ const Landing = () => {
                   orgPhoto={org.logo}
                   orgBody={org.org_body.toLowerCase()}
                   orgName={org.short_name}
-                  orgId={org.id}
+                  orgSlug={org.slug}
                 />
               </Grid>
             ))}
@@ -777,9 +780,8 @@ const Landing = () => {
                 marginTop: '24px',
                 backgroundColor: 'linear-gradient(90deg, #498AF4 0%, #1A73E8 100%)',
                 textTransform: 'none',
-                [theme.breakpoints.down('md')]: {
-                  fontSize: '12px',
-                  padding: '4px 16px',
+                [theme.breakpoints.down('sm')]: {
+                  padding: '16px 32px',
                 },
               }}
             >
