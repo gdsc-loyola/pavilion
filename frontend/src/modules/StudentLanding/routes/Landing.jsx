@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import orgsService from '../../../services/orgs.service';
 import { useOnScreen } from '$lib/utils/useOnScreen';
 import { shuffleByDay } from '$lib/utils/shuffleByDay';
+import ScrollToTop from '$components/ScrollToTop';
 
 const theme = createTheme({
   breakpoints: {
@@ -42,12 +43,13 @@ const Landing = () => {
   useEffect(() => {
     orgsService.getEvents().then((response) => {
       setFeaturedEvents(
-        shuffleByDay(response.data.slice(0, 6).filter((event) => event.status === 'Published'))
+        // Limit to 6 events
+        shuffleByDay(response.data.filter((event) => event.status === 'Published')).slice(0, 6)
       );
     });
     orgsService.getAll().then((response) => {
       // Limit to 8 orgs
-      setOrgs(response.data.slice(0, 8));
+      setOrgs(shuffleByDay(response.data).slice(0, 8));
     });
   }, []);
 
@@ -59,6 +61,7 @@ const Landing = () => {
 
   return (
     <Layout transparent_nav={isHeroVisible}>
+      <ScrollToTop />
       <Box
         ref={heroRef}
         component="div"
