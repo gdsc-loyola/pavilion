@@ -22,6 +22,9 @@ const StyledLink = styled(Link, {
       : isNavTransparent
       ? '#FFF'
       : colors.gray[500],
+  '&:hover': {
+    color: colors.blue[300],
+  },
   [breakpoints.down('md')]: {
     color: isActive && !preventActiveColor ? colors.blue[300] : colors.gray[500],
   },

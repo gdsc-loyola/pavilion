@@ -146,6 +146,11 @@ const OrgTitleCard = (props) => {
           </Typography>
           <Box sx={{ marginTop: '16px', display: 'flex', flexDirection: 'row' }}>
             {Object.entries(icons).map(([key, value]) => {
+              // Do not render anything if there is no social media link
+              if (!socials[key]) {
+                return null;
+              }
+
               return (
                 <SocialButton
                   as={'a'}
