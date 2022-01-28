@@ -5,8 +5,12 @@ import { Box, Typography } from '@mui/material';
 import { colors, typography, theme } from '$lib/theme';
 import EventsDataService from '$services/events.service';
 import OrgsDataService from '$services/orgs.service';
+import OtherEvents from '../components/OtherEvents';
+import ScrollToTop from '$components/ScrollToTop';
+
 const EventPage = (props) => {
-  const { id } = props.match.params;
+  const { id, shortName } = props.match.params;
+
   const [eventForm, setEventForm] = useState({
     eventName: '',
     startDate: '',
@@ -18,45 +22,67 @@ const EventPage = (props) => {
     eventPhoto3: '',
     eventPhoto4: '',
     featuredEvents: [],
+    eventPhotos: [],
   });
 
+  const [otherEvents, setOtherEvents] = useState([]);
+
   const [orgForm, setOrgForm] = useState({
+    orgShortName: '',
     orgName: '',
     orgLogo: '',
   });
 
   useEffect(() => {
-    EventsDataService.get(id).then((res) => {
+    EventsDataService.get(id).then((eventRes) => {
       setEventForm({
-        eventName: res.data.name,
-        startDate: res.data.start_date,
-        endDate: res.data.end_date,
-        description: res.data.desc,
-        coverPhoto: res.data.cover_photo,
-        eventPhoto1: res.data.event_photo1,
-        eventPhoto2: res.data.event_photo2,
-        eventPhoto3: res.data.event_photo3,
-        eventPhoto4: res.data.event_photo4,
+        eventName: eventRes.data.name,
+        startDate: eventRes.data.start_date,
+        endDate: eventRes.data.end_date,
+        description: eventRes.data.desc,
+        coverPhoto: eventRes.data.cover_photo,
+        eventPhoto1: eventRes.data.event_photo1,
+        eventPhoto2: eventRes.data.event_photo2,
+        eventPhoto3: eventRes.data.event_photo3,
+        eventPhoto4: eventRes.data.event_photo4,
+        eventPhotos: [
+          eventRes.data.event_photo1,
+          eventRes.data.event_photo2,
+          eventRes.data.event_photo3,
+          eventRes.data.event_photo4,
+        ].filter((x) => !!x),
+        // The filter removes potential null values
       });
 
-      OrgsDataService.get(1).then((res) => {
+      OrgsDataService.get(shortName).then((res) => {
         setOrgForm({
           orgName: res.data.name,
           orgLogo: res.data.logo,
+          orgShortName: res.data.short_name,
         });
+
+        setOtherEvents(res.data.events.filter((e) => e.id !== eventRes.data.id));
       });
     });
-  }, [id]);
+  }, [id, shortName]);
 
   return (
     <>
+      <ScrollToTop />
       <Layout>
-        <img
-          height="360px"
-          width="100%"
-          style={{ position: 'absolute', marginTop: '80px', zIndex: '-1' }}
-          src={eventForm.coverPhoto}
-        />
+        <div
+          style={{
+            height: '360px',
+            width: '100%',
+            position: 'absolute',
+            marginTop: ' 70px',
+            maxWidth: '100vw',
+            zIndex: '-1',
+            backgroundImage: `url(${eventForm.coverPhoto})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        ></div>
         <Box
           sx={{
             paddingTop: '80px',
@@ -102,109 +128,37 @@ const EventPage = (props) => {
               {eventForm.description}
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '24px',
-              }}
-            >
-              <Box
-                sx={{
-                  width: '564px',
-                  height: '376px',
-                  marginRight: '12px',
-                  [theme.breakpoints.down('1380')]: {
-                    marginRight: '0',
-                    marginBottom: '12px',
-                  },
-                }}
-              >
-                <img width="100%" height="100%" src={eventForm.eventPhoto1} />
-              </Box>
-              <Box
-                sx={{
-                  width: '564px',
-                  height: '376px',
-                  marginLeft: '12px',
-                  [theme.breakpoints.down('1380')]: {
-                    marginLeft: '0',
-                    marginTop: '12px',
-                  },
-                }}
-              >
-                <img width="564px" height="376px" src={eventForm.eventPhoto2} />
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                justifyContent: 'center',
-                [theme.breakpoints.down('md')]: {
-                  margin: '0 80px',
-                },
-              }}
-            >
-              <Box
-                sx={{
-                  width: '564px',
-                  height: '376px',
-                  marginRight: '12px',
-                  [theme.breakpoints.down('1380')]: {
-                    marginRight: '0',
-                    marginBottom: '12px',
-                  },
-                }}
-              >
-                <img width="100%" height="100%" src={eventForm.eventPhoto3} />
-              </Box>
-              <Box
-                sx={{
-                  width: '564px',
-                  height: '376px',
-                  marginLeft: '12px',
-                  [theme.breakpoints.down('1380')]: {
-                    marginLeft: '0',
-                    marginBottom: '12px',
-                    marginTop: '12px',
-                  },
-                }}
-              >
-                <img width="564px" height="376px" src={eventForm.eventPhoto4} />
-              </Box>
-            </Box>
-          </Box>
-          <Typography
-            sx={{ marginTop: '120px' }}
-            color={colors.gray[700]}
-            fontSize={typography.fontSize.lg}
-            fontWeight={typography.fontWeight.med}
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              [theme.breakpoints.down('lg')]: {
+                gridTemplateColumns: '1fr',
+              },
+              gap: '16px',
+              paddingBottom: '5rem',
+            }}
           >
-            Other events by {orgForm.orgName}
-          </Typography>
-          {/* <Grid container sx={{ marginBottom: "120px", marginTop: "40px" }} spacing={2} columns={3}>
-            {eventForm.featuredEvents.length > 0 &&
-              eventForm.featuredEvents.map((event) => (
-                <Grid item xs={3} sm={3} md={1} lg={1}>
-                  <EventCard
-                    imgSrc={event.cover_photo}
-                    alt=""
-                    eventName={event.name}
-                    startDate={event.startDate}
-                    endDate={event.endDate}
-                    logoSrc=""
-                    logoName=""
-                  />
-                </Grid>
-              ))}
-          </Grid> */}
+            {eventForm.eventPhotos.map((photoUrl, i) => {
+              return (
+                <Box
+                  key={i}
+                  sx={{
+                    aspectRatio: '1.5',
+                  }}
+                >
+                  <img width="100%" height="100%" src={photoUrl} />
+                </Box>
+              );
+            })}
+          </Box>
+          {otherEvents.length > 0 && (
+            <OtherEvents
+              events={otherEvents}
+              orgLogo={orgForm.orgLogo}
+              orgShortName={orgForm.orgShortName}
+            />
+          )}
         </Box>
       </Layout>
     </>

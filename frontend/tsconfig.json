@@ -4,6 +4,7 @@
     "allowJs": true,
     "outDir": "dist", // this essentially disables the compilation errors by telling vs code where files would be put if it were to compile (which it won't because this isn't a real typescript project)
 
+    "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
       "$stylesheets/*": ["./stylesheets/*"],
