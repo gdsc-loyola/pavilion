@@ -36,6 +36,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 ALLOWED_HOSTS = [
     'dev.gpavilion.org',
@@ -43,7 +44,8 @@ ALLOWED_HOSTS = [
     'gpavilion-staging.herokuapp.com'
     'staging.gpavilion.org', 
     '127.0.0.1', 
-    'localhost'
+    'localhost',
+    '*'
 ]
 
 
@@ -59,6 +61,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'orgs',
     'rest_framework',
+    'corsheaders',
     'frontend'
 ]
 
@@ -67,7 +70,10 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -177,3 +183,7 @@ SIMPLE_JWT = {
 
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]

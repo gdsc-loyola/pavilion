@@ -1,4 +1,4 @@
-from orgs.models import Event, Org
+from orgs.models import Event, Organization
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
@@ -16,27 +16,43 @@ class EventsViewSet(viewsets.ModelViewSet):
     serializer_class = EventsSerializer
 
 class OrgsViewSet(viewsets.ModelViewSet):
-    queryset = Org.objects.all()
+    queryset = Organization.objects.all()
     permission_classes = [  
         IsGetOrIsAuthenticated
     ]
     serializer_class = OrgsSerializer
+    lookup_field = 'slug'
 
-    
     def list(self, *args, **kwargs):
         #getAll
-        if (self.request.GET.get("user") == None):
-            queryset = Org.objects.all()
+        orgToCheck = self.request.query_params.get('user', None)
+        print(orgToCheck)
+        if (orgToCheck == None):
+            queryset = Organization.objects.all()
             serializer = [OrgsSerializer(query).data for query in queryset]
 
             return Response(serializer)
 
         #getByOrgUser
         else: 
-            query = Org.objects.filter(user=self.request.GET.get("user"))
-            serializer = OrgsSerializer(query[0])
+            query = Organization.objects.get(user__username=orgToCheck)
+            print(query)
+            serializer = OrgsSerializer(query)
 
             return Response(serializer.data)
+    def update(self, id, *args, **kwargs):
+        instance = Organization.objects.get( id = id )
+
+        if not instance:
+            # return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response("Instance not found.", status=404)
+        print(self.request.data)
+        serializer = self.get_serializer(instance, data=self.request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response("Serializer not valid.", status=401)
+        serializer.save()
+        return Response(serializer.data, status=200)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -45,15 +61,32 @@ class UserViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = UsernameSerializer
 
-    #getByUsername
-    def list(self, *args, **kwargs):
-        query = User.objects.filter(username=self.request.GET.get("user"))
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        try:
+            print(request.query_params)
+            checkIfOrg = Organization.objects.filter(user__username=pk)
 
-        if not query:
-            return Response("signup")
+            serializer = OrgsSerializer(checkIfOrg[0]).data
+            return Response(serializer)
+        except:
+            serializer = UsernameSerializer(User.objects.get(id=pk)).data
+            return Response(serializer)
+
+    #getByUsername
+    def list(self, request, *args, **kwargs):
+        userToCheck = request.query_params.get('user', None)
+        if userToCheck is not None:
+            print(self.request.query_params)
+            query = User.objects.get(username=userToCheck)
+            
+            if not query:
+                return Response("signup")
+            return Response(UsernameSerializer(query).data)
         else:
-            serializer = UsernameSerializer(query[0])
+            query = User.objects.all()
+            serializer = UsernameSerializer(query, many=True)
             return Response(serializer.data)
+
     
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

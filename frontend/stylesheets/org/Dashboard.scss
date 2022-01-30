@@ -106,6 +106,21 @@
         background-color: $blue-400;
         transition-duration: 0.5s;
     }
+
+    .nav-item-active {
+        display: flex;
+        align-items: center;
+        font-family: $text-base-med-font-family;
+        font-size: $text-base-med-font-size;
+        font-weight: $text-base-med-font-weight;
+        line-height: $text-base-med-line-height;
+        text-decoration: none;
+        color: #FFFFFF;
+        background-color: $blue-400;
+        height: 72px;
+        padding-left: 32px;
+        transition-duration: 0.5s;
+    }
 }
 
 /* Top Bar */
