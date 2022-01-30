@@ -5,19 +5,24 @@ import React, { useState } from 'react';
 
 /**
  * @type {(props: {
- *  onChange: (value: string) => void,
- * 	value: string,
+ * onChange:  React.ChangeEventHandler<HTMLInputElement>,
+ * value: string,
+ * placeholder?: string,
+ * label?: string,
+ * size?: 'medium' | 'small'
+ * sx?: import('@mui/material').SxProps<import('@mui/material').Theme>
  * }) => JSX.Element}
  */
-const Searchbar = ({ onChange, value }) => {
+const Searchbar = ({ onChange, value, label, placeholder, size = 'small', sx }) => {
   const [searchFocus, setSearchFocus] = useState(false);
 
   return (
-    <>
+    <div style={{ display: 'flex', position: 'relative' }}>
       <Search
         sx={{
           position: 'absolute',
-          top: '16px',
+          top: `calc(50% + ${size === 'medium' ? '1px' : '2px'})`,
+          transform: `translateY(-50%)`,
           left: '14px',
         }}
         style={{
@@ -27,13 +32,15 @@ const Searchbar = ({ onChange, value }) => {
       <TextField
         onFocus={() => setSearchFocus(true)}
         onBlur={() => setSearchFocus(false)}
-        placeholder={searchFocus ? 'Search for an organization...' : ''}
-        label={searchFocus || value ? 'Search' : 'Search for an organization...'}
+        placeholder={searchFocus ? placeholder : ''}
+        label={searchFocus || value ? '' : label}
         variant="outlined"
         value={value}
+        size={size}
         onChange={onChange}
         sx={{
-          maxWidth: '33%',
+          flex: 1,
+          margin: 0,
           fontSize: theme.fontSize.sm,
           [theme.breakpoints.down('lg')]: {
             maxWidth: '45%',
@@ -44,6 +51,7 @@ const Searchbar = ({ onChange, value }) => {
           [theme.breakpoints.down(600)]: {
             maxWidth: '100%',
           },
+          ...sx,
         }}
         InputProps={{
           sx: {
@@ -52,19 +60,25 @@ const Searchbar = ({ onChange, value }) => {
             [theme.breakpoints.down('sm')]: {
               fontSize: theme.typography.fontSize.xs,
             },
+            input: {
+              padding: size === 'medium' ? '12.5px 14px' : undefined,
+            },
           },
         }}
         InputLabelProps={{
+          shrink: false,
+
           sx: {
             paddingLeft: searchFocus || value ? 0 : '36px',
             fontSize: theme.fontSize.sm,
             [theme.breakpoints.down('sm')]: {
               fontSize: theme.fontSize.xs,
             },
+            transform: size === 'medium' ? `translate(14px, 13px)` : undefined,
           },
         }}
       />
-    </>
+    </div>
   );
 };
 

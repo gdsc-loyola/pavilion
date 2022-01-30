@@ -1,7 +1,8 @@
 {
   "env": {
     "es6": true,
-    "browser": true
+    "browser": true,
+    "node": true
   },
   "parserOptions": {
     "ecmaFeatures": {
@@ -20,5 +21,6 @@
       "version": "detect"
     }
   },
+
   "ignorePatterns": ["webpack.config.js", "vite.config.js"]
 }

@@ -2,6 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 export const colors = {
   blue: {
+    50: '#F8F9FF',
     100: '#e8f0fe',
     200: '#d2e3fc',
     300: '#498af4',
@@ -75,6 +76,12 @@ export const typography = {
   },
 };
 
+export const background = {
+  blue: {
+    upDown: 'linear-gradient(180deg, #498AF4 0%, #1A73E8 100%)',
+  },
+};
+
 export const theme = createTheme({
   typography: {
     fontFamily: [
@@ -93,7 +100,7 @@ export const theme = createTheme({
   },
 
   ...typography,
-
+  background,
   colors,
   breakpoints: {
     values: {
@@ -129,6 +136,9 @@ export const theme = createTheme({
         },
         sizeSmall: {
           padding: '0.5rem 1.5rem',
+        },
+        root: {
+          textTransform: 'none',
         },
       },
     },
