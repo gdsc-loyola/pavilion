@@ -172,6 +172,7 @@ const EventPage = (props) => {
             <OtherEvents
               events={otherEvents}
               orgLogo={orgForm.orgLogo}
+              orgName={orgForm.orgName}
               orgShortName={orgForm.orgShortName}
             />
           )}

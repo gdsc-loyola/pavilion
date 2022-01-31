@@ -5,12 +5,13 @@ import EventCard from '$components/EventCard';
 
 /**
  * @type {(props: {
- * orgShortName: string,
+ * orgName: string,
+ * orgShortName: string
  * orgLogo: string,
  * events: Array<any>
  * }) => JSX.Element}
  */
-const OtherEvents = ({ orgLogo, orgShortName, events }) => {
+const OtherEvents = ({ orgLogo, orgName, orgShortName, events }) => {
   return (
     <>
       <Typography
@@ -18,7 +19,7 @@ const OtherEvents = ({ orgLogo, orgShortName, events }) => {
         fontSize={typography.fontSize.lg}
         fontWeight={typography.fontWeight.med}
       >
-        Other events by {orgShortName}
+        Other events by {orgName}
       </Typography>
       <Box
         sx={({ breakpoints }) => ({
