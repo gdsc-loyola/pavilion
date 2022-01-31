@@ -156,7 +156,14 @@ const EventPage = (props) => {
                     aspectRatio: '1.5',
                   }}
                 >
-                  <img width="100%" height="100%" src={photoUrl} />
+                  <img
+                    width="100%"
+                    height="100%"
+                    style={{
+                      objectFit: 'cover',
+                    }}
+                    src={photoUrl}
+                  />
                 </Box>
               );
             })}
