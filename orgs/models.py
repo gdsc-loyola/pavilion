@@ -48,6 +48,17 @@ class Organization(models.Model):
     def __str__(self):
         return "{}({}), {}. {}".format(self.name, self.short_name, self.org_body, self.user)
 
+class StudentToEvent(models.Model):
+    event = models.ForeignKey(Event, related_name='student')
+    name = models.CharField(max_length=1024)
+    id_number = models.IntegerField()
+    year = models.IntegerField()
+    course = models.CharField(max_length=32)
+    date_submitted = models.DateTimeField()
+    last_updated = models.DateTimeField()
+
+    def __str__(self):
+        return "{}-{}".format(self.event, self.name)
 """
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **kwargs):
