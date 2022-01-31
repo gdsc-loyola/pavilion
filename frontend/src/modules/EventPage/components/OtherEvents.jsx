@@ -26,12 +26,9 @@ const OtherEvents = ({ orgLogo, orgShortName, events }) => {
           width: '100%',
           paddingBottom: '5rem',
           paddingTop: '2rem',
-          gridTemplateColumns: 'repeat(4, 1fr)',
+          gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '2rem',
-          [breakpoints.down('lg')]: {
-            gridTemplateColumns: 'repeat(2, 1fr)',
-          },
-          [breakpoints.down('sm')]: {
+          [breakpoints.down('md')]: {
             gridTemplateColumns: 'repeat(1, 1fr)',
           },
         })}

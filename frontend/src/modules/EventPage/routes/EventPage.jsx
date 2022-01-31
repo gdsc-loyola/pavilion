@@ -7,6 +7,7 @@ import EventsDataService from '$services/events.service';
 import OrgsDataService from '$services/orgs.service';
 import OtherEvents from '../components/OtherEvents';
 import ScrollToTop from '$components/ScrollToTop';
+import { shuffleByDay } from '$lib/utils/shuffleByDay';
 
 const EventPage = (props) => {
   const { id, shortName } = props.match.params;
@@ -61,7 +62,12 @@ const EventPage = (props) => {
           orgShortName: res.data.short_name,
         });
 
-        setOtherEvents(res.data.events.filter((e) => e.id !== eventRes.data.id));
+        // Get first 3 events that are published and not this current event
+        setOtherEvents(
+          shuffleByDay(
+            res.data.events.filter((e) => e.id !== eventRes.data.id && e.status === 'Published')
+          ).slice(0, 3)
+        );
       });
     });
   }, [id, shortName]);
