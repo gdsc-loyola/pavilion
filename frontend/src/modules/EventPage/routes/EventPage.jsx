@@ -70,19 +70,22 @@ const EventPage = (props) => {
     <>
       <ScrollToTop />
       <Layout>
-        <div
-          style={{
+        <Box
+          sx={{
             height: '360px',
             width: '100%',
             position: 'absolute',
-            marginTop: ' 70px',
+            marginTop: '70px',
             maxWidth: '100vw',
             zIndex: '-1',
             backgroundImage: `url(${eventForm.coverPhoto})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            [theme.breakpoints.between('xs', 'sm')]: {
+              marginTop: '59px',
+            },
           }}
-        ></div>
+        ></Box>
         <Box
           sx={{
             paddingTop: '80px',
