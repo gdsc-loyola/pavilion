@@ -49,3 +49,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+pavenv/
+# Notes
+notes/

@@ -1,0 +1,9 @@
+@import "../variables.scss";
+
+input::placeholder {
+  color: $gray-400;
+}
+
+input:focus {
+  outline: none;
+}
