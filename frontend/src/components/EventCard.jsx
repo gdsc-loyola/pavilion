@@ -11,12 +11,12 @@ import {
   createTheme,
 } from '@mui/material';
 import { colors, typography } from '$lib/theme';
+
 /**
  * @description A MUI Card dedicated for events
  * @param {Omit<ControllerProps, 'render'> & React.ComponentPropsWithoutRef<typeof TextField>} props
  * @returns {React.Component}
  */
-
 const EventCard = (props) => {
   const theme = createTheme({
     breakpoints: {

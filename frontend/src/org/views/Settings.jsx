@@ -9,6 +9,7 @@ import Select from '@material-ui/core/Select';
 import OrgsDataService from '../../services/orgs.service';
 import { styled } from '@mui/material';
 import { colors } from '$lib/theme';
+import AdminLayout from '$components/Admin/AdminLayout';
 const Settings = () => {
   const FormField = styled(TextField)({
     '& .MuiOutlinedInput-root': {
@@ -147,8 +148,7 @@ const Settings = () => {
   };
 
   return (
-    <div>
-      <DashboardBase />
+    <AdminLayout>
       <div className="settings">
         <h1 className="title">Org Information</h1>
         <FormField
@@ -267,7 +267,7 @@ const Settings = () => {
           }}
         />
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 

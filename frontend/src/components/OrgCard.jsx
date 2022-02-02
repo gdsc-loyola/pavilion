@@ -5,7 +5,7 @@ import { theme } from '$lib/theme';
 
 const { fontSize, fontWeight, colors, breakpoints, typography } = theme;
 
-const OrgCard = ({ orgPhoto, orgBody, orgName, orgId }) => {
+const OrgCard = ({ orgPhoto, orgBody, orgName, orgSlug }) => {
   const history = useHistory();
 
   const smVW = useMediaQuery(theme.breakpoints.down(700));
@@ -49,7 +49,7 @@ const OrgCard = ({ orgPhoto, orgBody, orgName, orgId }) => {
       }}
     >
       <CardActionArea
-        onClick={() => history.push(`/organizations/${orgId}`)}
+        onClick={() => history.push(`/organizations/${orgSlug}`)}
         sx={{
           display: 'flex',
           flexDirection: 'column',

@@ -78,7 +78,12 @@ const OrgPage = (props) => {
           <a href="/organizations">
             <Typography
               color={colors.gray[500]}
-              sx={{ margin: '80px 0px' }}
+              sx={{
+                margin: '80px 0px',
+                [theme.breakpoints.down('sm')]: {
+                  margin: '30px 0',
+                },
+              }}
               fontSize={typography.fontSize.base}
               fontWeight={typography.fontWeight.reg}
             >
@@ -91,7 +96,6 @@ const OrgPage = (props) => {
           {openForSignUps ? (
             <Box
               sx={{
-                [theme.breakpoints.down('sm')]: { display: 'none' },
                 marginBottom: '40px',
                 padding: '24px 32px',
                 display: 'flex',
