@@ -37,6 +37,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = True
 CORS_ORIGIN_ALLOW_ALL = True
 
+MEDIA_URL = '/media/'  # or any prefix you choose
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 ALLOWED_HOSTS = [
     'dev.gpavilion.org',
     'gpavilion-dev.herokuapp.com',
@@ -58,6 +61,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
     'orgs',
     'rest_framework',
     'corsheaders',
@@ -217,3 +222,9 @@ DATABASES['default'].update(prod_db)
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ['CLOUDINARY_CLOUD_NAME'],
+    'API_KEY': os.environ['CLOUDINARY_API_KEY'],
+    'API_SECRET': os.environ['CLOUDINARY_API_SECRET']
+}

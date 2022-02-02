@@ -9,15 +9,15 @@ class Event(models.Model):
     ]
 
     name = models.CharField(max_length=100)
-    cover_photo = models.CharField(max_length=100)
+    cover_photo = models.ImageField(upload_to='coverphoto/', blank=True)
     start_date = models.DateField(auto_now=False, auto_now_add=False, blank=False)
     end_date = models.DateField(auto_now=False, auto_now_add=False, blank=False)
     location = models.CharField(max_length=100)
     desc = models.CharField(max_length=500)
-    event_photo1 = models.CharField(max_length=100)
-    event_photo2 = models.CharField(max_length=100)
-    event_photo3 = models.CharField(max_length=100)
-    event_photo4 = models.CharField(max_length=100)
+    event_photo1 = models.ImageField(upload_to='events/', blank=True)
+    event_photo2 = models.ImageField(upload_to='events/', blank=True)
+    event_photo3 = models.ImageField(upload_to='events/', blank=True)
+    event_photo4 = models.ImageField(upload_to='events/', blank=True)
     last_updated = models.DateField(auto_now=True, auto_now_add=False)
     status = models.CharField(max_length=50, choices=status_choices)
 
@@ -36,7 +36,7 @@ class Organization(models.Model):
     slug = models.CharField(max_length=15) 
     desc = models.CharField(max_length=500)
     org_body = models.CharField(max_length=100, choices=org_body_choices)
-    logo = models.CharField(max_length=100)
+    logo = models.ImageField(upload_to='logos/', blank=True)
     facebook = models.CharField(max_length=100, null=True)
     instagram = models.CharField(max_length=100, null=True)
     twitter = models.CharField(max_length=100, null=True)
@@ -49,7 +49,7 @@ class Organization(models.Model):
         return "{}({}), {}. {}".format(self.name, self.short_name, self.org_body, self.user)
 
 class StudentToEvent(models.Model):
-    event = models.ForeignKey(Event, related_name='student')
+    event = models.ForeignKey(Event, related_name='student', on_delete=models.CASCADE)
     name = models.CharField(max_length=1024)
     id_number = models.IntegerField()
     year = models.IntegerField()
