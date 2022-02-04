@@ -32,7 +32,6 @@ def jwt_get_username_from_payload_handler(payload):
     """
     gets called in order to authorize auth0 logins into django
     """
-    print(payload)
     username = payload.get('sub').replace('|', '.')
     authenticate(remote_user=username)
     return username
