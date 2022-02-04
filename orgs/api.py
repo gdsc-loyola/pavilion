@@ -22,7 +22,7 @@ class EventsViewSet(viewsets.ModelViewSet):
 class OrgsViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()
     permission_classes = [  
-        IsAuthenticated
+        IsGetOrIsAuthenticated
     ]
     serializer_class = OrgsSerializer
     lookup_field = 'slug'
