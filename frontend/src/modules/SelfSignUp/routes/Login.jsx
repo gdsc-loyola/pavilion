@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import Cotter from 'cotter';
 import * as auth from '$lib/auth';
 import axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
 import '$stylesheets/org/SelfSignUp.scss';
 
 const Login = (props) => {
+  const { loginWithRedirect } = useAuth0();
+
   useEffect(() => {
     const cotter = new Cotter('aa2398ab-3950-42dd-b3d1-4e383734a5ac');
     cotter
@@ -58,6 +61,7 @@ const Login = (props) => {
         <div id="cotter-form-container" style={{ width: 300, height: 150 }} />
         {/* <PrimaryButton button_copy="Log In"/> */}
       </div>
+      <button onClick={() => loginWithRedirect()}>Log In</button>;
     </div>
   );
 };

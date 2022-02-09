@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import { useHistory } from 'react-router';
 import { Grid, Box, Typography, createTheme, useMediaQuery, Button } from '@mui/material';
 
@@ -28,6 +29,8 @@ const theme = createTheme({
 
 const Landing = () => {
   const history = useHistory();
+  const { user } = useAuth0();
+  console.log(user);
 
   const [searchKey, setSearchKey] = useState('');
 
