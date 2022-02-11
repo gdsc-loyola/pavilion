@@ -4,7 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import '$stylesheets/org/SelfSignUp.scss';
 import { Button } from '@mui/material';
 
-const Login = (props) => {
+const Login = () => {
   const { loginWithRedirect, getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   useEffect(() => {
