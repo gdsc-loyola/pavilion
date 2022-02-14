@@ -4,8 +4,9 @@ from django.utils import timezone
 
 class Event(models.Model):
     status_choices = [
-        ("Published", "Published"),
-        ("Draft", "Draft")
+        ("Draft","Draft"),
+        ("Ongoing","Ongoing"),
+        ("Completed","Completed"),
     ]
 
     name = models.CharField(max_length=100)
@@ -20,6 +21,12 @@ class Event(models.Model):
     event_photo4 = models.ImageField(upload_to='events/', blank=True)
     last_updated = models.DateField(auto_now=True, auto_now_add=False)
     status = models.CharField(max_length=50, choices=status_choices)
+    accepting_responses = models.BooleanField(default=False)
+    is_past_event = models.BooleanField(default=False)
+
+    # Not required attributes when is_past_event = True
+    old_respondents = models.CharField(max_length=500, blank=True)
+    form_description = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return "{}, from {} to {}, {}. Modified on {}".format(self.name, self.start_date, self.end_date, self.status, self.last_updated)
