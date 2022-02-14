@@ -29,8 +29,6 @@ const theme = createTheme({
 
 const Landing = () => {
   const history = useHistory();
-  const { user } = useAuth0();
-  console.log(user);
 
   const [searchKey, setSearchKey] = useState('');
 
