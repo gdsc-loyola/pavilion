@@ -28,22 +28,20 @@ class OrgsViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
 
     def list(self, *args, **kwargs):
-        #getAll
-        orgToCheck = self.request.query_params.get('user', None)
-        print(orgToCheck)
-        if (orgToCheck == None):
-            queryset = Organization.objects.all()
-            serializer = [OrgsSerializer(query).data for query in queryset]
-
-            return Response(serializer)
-
         #getByOrgUser
-        else: 
-            query = Organization.objects.get(user__username=orgToCheck)
-            print(query)
+        if self.request.user.is_authenticated:
+            try:
+                query = Organization.objects.get(user=self.request.user)
+            except:
+                return Response("Organization not found", status=404)
             serializer = OrgsSerializer(query)
-
             return Response(serializer.data)
+
+        #getAll
+        queryset = Organization.objects.all()
+        serializer = [OrgsSerializer(query).data for query in queryset]
+        return Response(serializer)
+
     def update(self, id, *args, **kwargs):
         instance = Organization.objects.get( id = id )
 
