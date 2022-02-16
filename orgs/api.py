@@ -28,22 +28,20 @@ class OrgsViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
 
     def list(self, *args, **kwargs):
-        #getAll
-        orgToCheck = self.request.query_params.get('user', None)
-        print(orgToCheck)
-        if (orgToCheck == None):
-            queryset = Organization.objects.all()
-            serializer = [OrgsSerializer(query).data for query in queryset]
-
-            return Response(serializer)
-
         #getByOrgUser
-        else: 
-            query = Organization.objects.get(user__username=orgToCheck)
-            print(query)
+        if self.request.user.is_authenticated:
+            try:
+                query = Organization.objects.get(user=self.request.user)
+            except:
+                return Response("Organization not found", status=404)
             serializer = OrgsSerializer(query)
-
             return Response(serializer.data)
+
+        #getAll
+        queryset = Organization.objects.all()
+        serializer = [OrgsSerializer(query).data for query in queryset]
+        return Response(serializer)
+
     def update(self, id, *args, **kwargs):
         instance = Organization.objects.get( id = id )
 
@@ -57,6 +55,47 @@ class OrgsViewSet(viewsets.ModelViewSet):
             return Response("Serializer not valid.", status=401)
         serializer.save()
         return Response(serializer.data, status=200)
+
+    def create(self, request):
+        """
+        Method to create new orgs
+        data should be FormData in axios
+        """
+        # required attributes
+        name = request.data['name']
+        short_name = request.data['short_name']
+        slug = request.data['slug']
+        desc = request.data['desc']
+        org_body = request.data['org_body']
+        user = request.user
+
+        # optional attributes
+        # request.FILES=True if there's a file sent and request is sent with headers: { "Content-Type": "multipart/form-data" }
+        logo = request.FILES.get('logo') if request.FILES else ''
+        facebook = request.data['facebook'] if 'facebook' in request.data else ''
+        instagram = request.data['instagram'] if 'instagram' in request.data else ''
+        twitter = request.data['twitter'] if 'twitter' in request.data else ''
+        linkedin = request.data['linkedin'] if 'linkedin' in request.data else ''
+        website = request.data['website'] if 'website' in request.data else ''
+        
+        new_org = Organization.objects.create(
+            name=name,
+            short_name=short_name,
+            slug=slug,
+            desc=desc,
+            org_body=org_body,
+            user=user,
+            logo=logo,
+            facebook=facebook,
+            instagram=instagram,
+            twitter=twitter,
+            linkedin=linkedin,
+            website=website,
+        )
+        new_org.save()
+
+        serializer = OrgsSerializer(new_org)
+        return Response(serializer.data)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
