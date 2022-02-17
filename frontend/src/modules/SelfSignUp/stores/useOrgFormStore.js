@@ -5,10 +5,10 @@ import { mountStoreDevtool } from 'simple-zustand-devtools';
 /**
  * @typedef OrgForm
  * @property {string} name
- * @property {string} name
- * @property {string} description
- * @property {string} orgBody
- * @property {string} logo
+ * @property {string} short_name
+ * @property {string} desc
+ * @property {string} org_body
+ * @property {File} logo
  * @property {string} facebook
  * @property {string} twitter
  * @property {string} instagram
@@ -22,10 +22,10 @@ export const useOrgFormStore = create(
     (set) => ({
       orgForm: {
         name: '',
-        shortName: '',
-        description: '',
-        orgBody: '',
-        logo: '',
+        short_name: '',
+        desc: '',
+        org_body: '',
+        logo: null,
         facebook: '',
         instagram: '',
         twitter: '',
@@ -52,7 +52,8 @@ export const useOrgFormStore = create(
         ...state,
         orgForm: {
           ...state.orgForm,
-          logo: '',
+          logo: null,
+          step: 2,
         },
       }),
     }
@@ -60,5 +61,5 @@ export const useOrgFormStore = create(
 );
 
 if (process.env.NODE_ENV === 'development') {
-  mountStoreDevtool('Event Creation', useOrgFormStore);
+  mountStoreDevtool('Org Form', useOrgFormStore);
 }

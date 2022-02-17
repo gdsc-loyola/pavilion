@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core';
 import { theme } from '$lib/theme';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { AdminProvider } from '$lib/context/AdminContext';
 
 ReactDOM.render(
   <Auth0Provider
@@ -14,11 +15,13 @@ ReactDOM.render(
     audience="http://pavilion/api"
     redirectUri={window.location.origin}
   >
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </BrowserRouter>
+    <AdminProvider>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    </AdminProvider>
   </Auth0Provider>,
   document.getElementById('app')
 );

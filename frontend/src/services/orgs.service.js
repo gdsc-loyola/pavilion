@@ -9,6 +9,7 @@ class OrgsDataService {
 
   getByOrgUser = (user) => http.get(`orgs/?slug=${user}`);
 
+
   create = (data) => http.post(`orgs/`, data);
 
   update = (id, data) => http.put(`orgs/${id}/`, data);
