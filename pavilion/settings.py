@@ -40,6 +40,10 @@ DEBUG = False
 MEDIA_URL = '/media/'  # or any prefix you choose
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+INTERNAL_IPS = (
+    '127.0.0.1',
+)
+
 ALLOWED_HOSTS = [
     'dev.gpavilion.org',
     'gpavilion-dev.herokuapp.com',
@@ -64,7 +68,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'orgs',
     'rest_framework',
-    'frontend'
+    'frontend',
 ]
 
 MIDDLEWARE = [
@@ -141,6 +145,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Vite App Dir: point it to the folder your vite app is in.
+VITE_APP_DIR = BASE_DIR / "frontend" 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -151,7 +157,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'frontend/static'),
+        VITE_APP_DIR / "dist",
 )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

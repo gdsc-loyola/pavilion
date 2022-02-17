@@ -40,6 +40,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 MEDIA_URL = '/media/'  # or any prefix you choose
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+INTERNAL_IPS = (
+    '127.0.0.1',
+)
+
 ALLOWED_HOSTS = [
     'dev.gpavilion.org',
     'gpavilion-dev.herokuapp.com',
@@ -66,7 +70,7 @@ INSTALLED_APPS = [
     'orgs',
     'rest_framework',
     'corsheaders',
-    'frontend'
+    'frontend',
 ]
 
 MIDDLEWARE = [
@@ -153,6 +157,9 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Vite App Dir: point it to the folder your vite app is in.
+VITE_APP_DIR = BASE_DIR / "frontend" 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -162,7 +169,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'frontend/static'),
+        VITE_APP_DIR / "dist",
 )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -219,8 +226,30 @@ JWT_AUTH = {
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "cache-control",
+    "pragma",
 ]
 
 CLOUDINARY_STORAGE = {

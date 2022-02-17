@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import fs from 'fs/promises';
+const { resolve } = require('path');
 import react from '@vitejs/plugin-react';
 const reactSvgPlugin = require('vite-plugin-react-svg');
 
@@ -8,7 +9,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [tsconfigPaths(), react(), reactSvgPlugin()],
-
+  base: process.env.NODE_ENV === 'production' ? '/static/' : '/',
   // esbuild: {
   //   loader: 'jsx',
   //   include: /src\/.*\.jsx?$/,
@@ -32,4 +33,8 @@ export default defineConfig({
   //     ],
   //   },
   // },
+  build: {
+    manifest: true,
+    rollupOptions: {},
+  },
 });
