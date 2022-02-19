@@ -22,7 +22,7 @@ const DataPrivacyModal = (props) => {
             left: '50%',
             backgroundColor: 'white',
             transform: 'translate(-50%, -50%)',
-            width: '1130px',
+            width: '80%',
             height: '600px',
             boxShadow: 24,
           }}
