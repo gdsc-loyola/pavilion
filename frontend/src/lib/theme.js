@@ -139,6 +139,10 @@ export const theme = createTheme({
         },
         root: {
           textTransform: 'none',
+          '&:disabled': {
+            background: colors.gray['300'],
+            color: colors.gray['400'],
+          },
         },
       },
     },

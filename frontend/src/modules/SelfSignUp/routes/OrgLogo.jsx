@@ -37,13 +37,9 @@ const Label = styled('label')(({ theme }) => ({
 }));
 
 const OrgLogo = (props) => {
-  const [logo, setLogo] = useState(null);
-
   const handleLogoChange = (file) => {
-    const url = URL.createObjectURL(file);
-    setLogo(url);
     setOrgForm({
-      logo: url,
+      logo: file,
       step: 3,
     });
   };
@@ -62,6 +58,8 @@ const OrgLogo = (props) => {
     }
   };
   const { orgForm, setOrgForm } = useOrgFormStore();
+
+  const logo = typeof orgForm.logo?.name == 'string' ? URL.createObjectURL(orgForm.logo) : null;
 
   if (!orgForm.step || orgForm.step < 2) {
     // Redirect to the previous step
@@ -102,7 +100,18 @@ const OrgLogo = (props) => {
           Back
         </Button>
 
-        <Button size="small" color="primary" onClick={() => props.history.push('/org-links')}>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => {
+            if (orgForm.logo) {
+              setOrgForm({
+                step: 3,
+              });
+              props.history.push('/org-links');
+            }
+          }}
+        >
           Next
         </Button>
       </Stack>
