@@ -14,6 +14,7 @@ import { Landing } from '$modules/StudentLanding/routes';
 import { OrgCatalogue } from '$modules/OrgCatalogue/routes';
 import { EventCreationRoutes } from '$modules/EventCreation';
 import { DashboardRoutes } from '$modules/Dashboard';
+import { EventWizardRoutes } from '$modules/EventWizard';
 
 const App = () => {
   return (
@@ -41,6 +42,15 @@ const App = () => {
         <Admin exact path="/old/admin/" component={Dashboard} />
         <Admin exact path="/admin/events/" component={EventCreationRoutes} />
         <Admin exact path="/admin/settings/" component={Settings} />
+
+        <Route
+          path="/admin/events"
+          component={() => (
+            <>
+              <EventWizardRoutes />
+            </>
+          )}
+        />
 
         {/* SSU routes */}
         <Route exact path="/org-info/" component={OrgInfo} />

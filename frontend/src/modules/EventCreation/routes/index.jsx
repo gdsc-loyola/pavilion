@@ -5,7 +5,7 @@ import Events from './Events';
 export const EventCreationRoutes = () => {
   return (
     <Switch>
-      <Route exact path={`/admin/events`} component={Events} />
+      <Route exact path={`/admin/events/`} component={Events} />
     </Switch>
   );
 };

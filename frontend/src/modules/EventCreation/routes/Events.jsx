@@ -110,12 +110,13 @@ const Events = () => {
         subtitle="Fill up your webpage by adding an event for your organization."
         onSubmit={handleSubmit(onSubmit)}
         leftButtonProps={{
-          label: 'Never mind',
+          label: 'Past Event',
           onClick: closeModal,
         }}
         rightButtonProps={{
-          label: 'Create',
+          label: 'New Event',
           type: 'submit',
+          href: `events/${'HEY'}`,
         }}
       />
     </AdminLayout>
