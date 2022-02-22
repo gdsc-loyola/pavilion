@@ -9,7 +9,7 @@ export const EventWizardRoutes = () => {
 
   return (
     <Switch>
-      <Route exact path={`${path}/:eventName/responses`} component={Responses} />
+      <Route path={`${path}/:eventName/responses`} component={Responses} />
       <Route exact path={`${path}/:eventName`} component={EventWizardPage} />
     </Switch>
   );
