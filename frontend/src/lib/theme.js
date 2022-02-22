@@ -80,6 +80,9 @@ export const background = {
   blue: {
     upDown: 'linear-gradient(180deg, #498AF4 0%, #1A73E8 100%)',
   },
+  red: {
+    upDown: 'linear-gradient(180deg, #EB4A3D 0%, #C5221F 100%)',
+  },
 };
 
 export const theme = createTheme({

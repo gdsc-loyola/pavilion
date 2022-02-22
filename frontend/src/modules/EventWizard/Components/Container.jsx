@@ -14,6 +14,7 @@ const Container = ({ children }) => {
       fontSize: theme.fontSize.lg,
       fontWeight: theme.fontWeight.bold,
     },
+    position: 'relative',
   }));
 
   return (

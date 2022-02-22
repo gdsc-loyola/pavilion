@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material';
 import { colors, typography } from '$lib/theme';
+import { useBoolean } from '$lib/utils/useBoolean';
 
 import Layout from '../components/Layout';
 import TopBar from '../components/TopBar';
@@ -13,11 +14,35 @@ import LeftArrow from '../components/LeftArrow';
 import RightArrow from '../components/RightArrow';
 import ToggleButton from '../components/ToggleButton';
 import emptyState from '$static/assets/emptyState.svg';
+import Modal from '../components/Modal';
+import Banner from '../components/Banner';
 
 const Responses = () => {
   const { eventName } = useParams()
   const [search, setSearch] = useState('')
   const [accepting, setAccepting] = useState(true)
+  useEffect(() => {
+    if (!accepting) {
+      // TODO: update accepting status
+    }
+  }, [accepting])
+
+  const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
+  const { value: isBannerVisible, setFalse: hideBanner, setTrue: showBanner } = useBoolean();
+
+  useEffect(() => {
+    if (isBannerVisible) {
+      setTimeout(() => {
+        hideBanner()
+      }, 3000)
+    }
+  }, [isBannerVisible])
+
+  const handleAcceptToggle = (event) => {
+    if (!event.target.checked) {
+      openModal()
+    }
+  }
 
   return (
     <Layout>
@@ -31,7 +56,7 @@ const Responses = () => {
           <Button sx={{
             padding: '.5rem 1.5rem',
             color: colors.blue[300]
-          }} variant="outlined">
+          }} variant="outlined" onClick={showBanner}>
             <LinkIcon />
             <p style={{ margin: 'auto 0 auto 4px'}}>Copy event link</p>
           </Button>
@@ -91,7 +116,7 @@ const Responses = () => {
               <Typography component="p">
                 Accepting responses
               </Typography>
-              <ToggleButton value={accepting} onChange={(event) => setAccepting(event.target.checked) } />
+              <ToggleButton value={accepting} onChange={(e) => handleAcceptToggle(e)} />
             </Box>
           </Box>
         </Box>
@@ -99,8 +124,8 @@ const Responses = () => {
         <Box
           sx={{
             marginTop: '3rem',
-            marginBottom: '4rem',
-            padding: '3rem',
+            marginBottom: isBannerVisible ? '0' : '4rem',
+            padding: '2rem',
             backgroundColor: colors.blue[50],
             display: 'flex',
             flexDirection: 'column',
@@ -117,10 +142,34 @@ const Responses = () => {
         >
           <img src={emptyState} style={{ width: '400px' }} />
           <h4>You don&apos;t have any responses yet!</h4>
+          <Button>
+            <LinkIcon white />
+            <p style={{ margin: 'auto 0 auto 4px'}}>Copy event link</p>
+          </Button>
         </Box>
+
+        <Banner show={isBannerVisible} label={"Event link copied to clipboard!"} />
       </Container>
+
+      <Modal
+        open={isModalOpen}
+        onClose={closeModal}
+        withTextField={false}
+        warning={true}
+        title="Stop accepting responses"
+        subtitle="This event won&apos;t receive new respondents anymore."
+        onSubmit={() => setAccepting(false)}
+        leftButtonProps={{
+          label: 'Never mind',
+          onClick: closeModal,
+        }}
+        rightButtonProps={{
+          label: 'Stop accepting',
+          type: 'submit'
+        }}
+      />
     </Layout>
   )
 }
 
-export default Responses
+export default Responses;
