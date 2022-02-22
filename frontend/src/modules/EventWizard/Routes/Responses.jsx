@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 
+import Layout from '../components/Layout';
 import TopBar from '../components/TopBar';
 import LinkIcon from '../components/LinkIcon';
 import DownloadIcon from '../components/DownloadIcon';
 import Container from '../components/Container'
-import Sidebar from '../Components/SideBar'
 import Searchbar from '$components/Searchbar';
 import LeftArrow from '../components/LeftArrow';
 import RightArrow from '../components/RightArrow';
@@ -20,7 +20,7 @@ const Responses = () => {
   const [accepting, setAccepting] = useState(true)
 
   return (
-    <Sidebar>
+    <Layout>
       <TopBar eventName={eventName}>
         <Box
           sx={{
@@ -118,7 +118,7 @@ const Responses = () => {
           <h4>You don&apos;t have any event yet!</h4>
         </Box>
       </Container>
-    </Sidebar>
+    </Layout>
   )
 }
 
