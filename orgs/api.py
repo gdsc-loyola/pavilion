@@ -42,19 +42,19 @@ class OrgsViewSet(viewsets.ModelViewSet):
         serializer = [OrgsSerializer(query).data for query in queryset]
         return Response(serializer)
 
-    def update(self, id, *args, **kwargs):
-        instance = Organization.objects.get( id = id )
+#    def update(self, id, *args, **kwargs):
+#        instance = Organization.objects.get( id = id )
+#
+#        if not instance:
+#            # return Response(status=status.HTTP_404_NOT_FOUND)
+#            return Response("Instance not found.", status=404)
+#        print(self.request.data)
+#        serializer = self.get_serializer(instance, data=self.request.data, partial=True)
 
-        if not instance:
-            # return Response(status=status.HTTP_404_NOT_FOUND)
-            return Response("Instance not found.", status=404)
-        print(self.request.data)
-        serializer = self.get_serializer(instance, data=self.request.data, partial=True)
-
-        if not serializer.is_valid():
-            return Response("Serializer not valid.", status=401)
-        serializer.save()
-        return Response(serializer.data, status=200)
+#        if not serializer.is_valid():
+#            return Response("Serializer not valid.", status=401)
+#        serializer.save()
+#        return Response(serializer.data, status=200)
 
     def create(self, request):
         """
