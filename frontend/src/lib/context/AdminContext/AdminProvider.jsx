@@ -30,6 +30,9 @@ export const AdminProvider = ({ children }) => {
     const run = async () => {
       if (!accessToken) {
         const tok = await getAccessTokenSilently().catch(() => '');
+        if (tok === '') {
+          setIsLoading(false);
+        }
         setAccessToken(tok);
       }
 
