@@ -111,11 +111,10 @@ const Events = () => {
         onSubmit={handleSubmit(onSubmit)}
         leftButtonProps={{
           label: 'Past Event',
-          onClick: closeModal,
+          href: `events/${'HEY'}`,
         }}
         rightButtonProps={{
           label: 'New Event',
-          type: 'submit',
           href: `events/${'HEY'}`,
         }}
       />

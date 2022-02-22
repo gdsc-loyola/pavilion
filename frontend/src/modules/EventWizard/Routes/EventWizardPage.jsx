@@ -1,8 +1,12 @@
 import React from 'react';
-import Sidebar from '../Components/SideBar';
+import Sidebar from '../components/SideBar';
 
 const EventWizardPage = () => {
-  return <Sidebar />;
+  return (
+    <>
+      <Sidebar />
+    </>
+  );
 };
 
 export default EventWizardPage;
