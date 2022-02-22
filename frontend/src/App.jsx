@@ -53,9 +53,9 @@ const App = () => {
         />
 
         {/* SSU routes */}
-        <Route exact path="/org-info/" component={OrgInfo} />
-        <Route exact path="/org-logo/" component={OrgLogo} />
-        <Route exact path="/org-links/" component={OrgLinks} />
+        <Admin exact path="/org-info/" component={OrgInfo} />
+        <Admin exact path="/org-logo/" component={OrgLogo} />
+        <Admin exact path="/org-links/" component={OrgLinks} />
       </Switch>
     </ThemeProvider>
   );

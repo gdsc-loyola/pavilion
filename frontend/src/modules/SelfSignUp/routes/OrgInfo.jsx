@@ -19,9 +19,9 @@ import Layout from '../components/Layout';
 
 const ValidationSchema = yup.object().shape({
   name: yup.string().required('Name is a required'),
-  shortName: yup.string().required('Short Name is required'),
-  description: yup.string().required('Description is required'),
-  orgBody: yup.string().required('Org Body is required'),
+  short_name: yup.string().required('Short Name is required'),
+  desc: yup.string().required('Description is required'),
+  org_body: yup.string().required('Org Body is required'),
 });
 
 const OrgInfo = (props) => {
@@ -79,12 +79,12 @@ const OrgInfo = (props) => {
             fullWidth
             label="Shorthand Name (ex. GDSC-L)*"
             control={control}
-            name="shortName"
+            name="short_name"
             size="medium"
           />
 
           <ControlledTextField
-            name="description"
+            name="desc"
             label={'Short Description*'}
             control={control}
             multiline
@@ -93,7 +93,7 @@ const OrgInfo = (props) => {
           />
 
           <Controller
-            name="orgBody"
+            name="org_body"
             control={control}
             render={({ field, fieldState: { error } }) => (
               <FormControl fullWidth margin="dense" error={!!error}>

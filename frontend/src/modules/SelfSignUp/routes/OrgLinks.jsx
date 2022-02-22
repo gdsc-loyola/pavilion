@@ -1,4 +1,5 @@
 import ControlledTextField from '$components/ControlledTextField';
+import { useHistory } from 'react-router-dom';
 import { useOrgFormStore } from '../stores/useOrgFormStore';
 import { Stack, Box, InputLabel, Button } from '@mui/material';
 import * as yup from 'yup';
@@ -8,6 +9,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import Layout from '../components/Layout';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAdminUser } from '$lib/context/AdminContext';
+import { kebabCase } from '$lib/utils/kebabCase';
+import http from '$lib/http';
 
 const Label = styled(InputLabel)(({ theme }) => ({
   fontWeight: 600,
@@ -42,6 +46,11 @@ const links = [
     name: 'instagram',
   },
   {
+    label: 'Twitter',
+    placeholder: 'https://twitter.com/',
+    name: 'twitter',
+  },
+  {
     label: 'LinkedIn',
     placeholder: 'https://linkedin.com/',
     name: 'linkedin',
@@ -62,14 +71,40 @@ const ValidationSchema = yup.object().shape({
 
 const OrgLinks = (props) => {
   const { orgForm, setOrgForm } = useOrgFormStore();
+  const { userData, setOrg, accessToken } = useAdminUser();
+  const router = useHistory();
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, formState } = useForm({
     defaultValues: orgForm,
     resolver: yupResolver(ValidationSchema),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setOrgForm(data);
+
+    const fd = new FormData();
+
+    Object.entries(orgForm).forEach(([key, value]) => {
+      if (key === 'step') {
+        return;
+      }
+      fd.append(key, value);
+    });
+
+    fd.append('user', userData.id);
+
+    fd.append('slug', kebabCase(orgForm.short_name));
+
+    const res = await http.post('/orgs/', fd, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (res.status === 200) {
+      setOrg(res.data);
+      router.push('/admin');
+    }
   };
 
   if (!orgForm.step || orgForm.step < 3) {
@@ -101,7 +136,7 @@ const OrgLinks = (props) => {
             Back
           </Button>
 
-          <Button size="small" color="primary" type="submit">
+          <Button size="small" color="primary" type="submit" disabled={formState.isSubmitting}>
             Save Details
           </Button>
         </Stack>

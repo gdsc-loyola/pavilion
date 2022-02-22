@@ -1,14 +1,15 @@
 import React from 'react';
-import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import '$stylesheets/org/SelfSignUp.scss';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import http from '$lib/http';
 
 const Login = () => {
   const { loginWithPopup, getAccessTokenSilently } = useAuth0();
 
   const router = useHistory();
+
   return (
     <div className="form-container login">
       <div className="blue-bg"></div>
@@ -25,7 +26,7 @@ const Login = () => {
             }
 
             // This call to the api creates a user row in the table for newly signed up users
-            await axios(`http://localhost:8000/api/orgs/`, {
+            await http.get(`/orgs/`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
