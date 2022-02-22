@@ -46,17 +46,18 @@ const Responses = () => {
       </TopBar>
 
       <Container>
-        <h1>
+        <Typography variant='h6' fontWeight={700}>
         {
           // TODO: number of responses
         }
           Responses (0)
-        </h1>
+        </Typography>
 
         <Box component={'div'} sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          marginTop: '2rem'
         }}>
           <Searchbar onChange={(e) => setSearch(e.target.value)} value={search} label="Search responses" placeholder="Search responses" size='medium' />
           <Box sx={{
@@ -115,7 +116,7 @@ const Responses = () => {
           }}
         >
           <img src={emptyState} style={{ width: '400px' }} />
-          <h4>You don&apos;t have any event yet!</h4>
+          <h4>You don&apos;t have any responses yet!</h4>
         </Box>
       </Container>
     </Layout>
