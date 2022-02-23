@@ -508,6 +508,11 @@ const Responses = () => {
               selectionModel={selectedItems} 
               onSelectionModelChange={setSelectedItems}
               sortModel={sortModel}
+              onCellClick={(param, event) => {
+                if (param.field === "__check__") return event.stopPropagation()
+                alert(`edit ${param.row.id}`)
+                // TODO: edit response
+              }}
             />
           </Box>
           :

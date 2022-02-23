@@ -25,6 +25,7 @@ const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSe
       selectionModel={selectionModel}
       onSelectionModelChange={onSelectionModelChange}
       onCellClick={onCellClick}
+      disableSelectionOnClick
       sx={{
         border: 'none',
         '& .MuiDataGrid-columnHeaders': {
