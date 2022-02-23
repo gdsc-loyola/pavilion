@@ -152,7 +152,6 @@ const Settings = () => {
   };
 
   const saveChanges = async () => {
-    setOpen(true);
     const fd = new FormData();
     Object.entries(orgForm).forEach(([key, value]) => {
       if (key === 'step') {
@@ -169,6 +168,7 @@ const Settings = () => {
         'Content-Type': 'multipart/form-data',
       },
     });
+    setOpen(true);
   };
   return (
     <AdminLayout>
@@ -234,6 +234,7 @@ const Settings = () => {
             <img
               src={`${logoUploaded ? orgLogoFile.file : '../../static/assets/image.png'}`}
               alt=""
+              width="100"
             />
           </div>
         </label>
@@ -299,7 +300,7 @@ const Settings = () => {
                 setOpen(false);
               }}
             >
-              This is a success alert!
+              Changes saved!
             </Alert>
           ) : null}
         </Box>
