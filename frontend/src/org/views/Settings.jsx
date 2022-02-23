@@ -152,6 +152,7 @@ const Settings = () => {
   };
 
   const saveChanges = async () => {
+    setOpen(true);
     const fd = new FormData();
     Object.entries(orgForm).forEach(([key, value]) => {
       if (key === 'step') {
@@ -291,7 +292,15 @@ const Settings = () => {
         <Button size="small" sx={{ marginBottom: '64px' }} onClick={saveChanges}>
           Save Changes
         </Button>
-        {open ? <Alert onClose={() => {}}>This is a success alert!</Alert> : null}
+        {open ? (
+          <Alert
+            onClose={() => {
+              setOpen(false);
+            }}
+          >
+            This is a success alert!
+          </Alert>
+        ) : null}
       </div>
     </AdminLayout>
   );
