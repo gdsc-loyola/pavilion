@@ -54,6 +54,7 @@
     "@mui/icons-material": "^5.2.0",
     "@mui/material": "^5.1.0",
     "@mui/styles": "^5.1.0",
+    "@mui/x-data-grid": "^5.5.1",
     "axios": "^0.21.3",
     "cotter-react": "^0.1.0",
     "css-loader": "^6.2.0",
