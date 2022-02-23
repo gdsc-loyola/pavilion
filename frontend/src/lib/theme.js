@@ -11,6 +11,7 @@ export const colors = {
     600: '#2160bf',
     700: '#174ea6',
     bg10: '#A9B8FF0A',
+    main: '#1a73e8',
   },
   gray: {
     100: '#f3f4f6',
@@ -47,6 +48,9 @@ export const colors = {
     500: '#188038',
     600: '#1C783B',
     700: '#0D652D',
+  },
+  background: {
+    blue: '#F8F9FF',
   },
 };
 
@@ -112,7 +116,9 @@ export const theme = createTheme({
     },
   },
 
-  palette: {},
+  palette: {
+    primary: colors.blue,
+  },
   components: {
     MuiTextField: {
       defaultProps: {
