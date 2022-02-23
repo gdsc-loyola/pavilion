@@ -289,7 +289,7 @@ const Responses = () => {
               <Typography component="p">
                 Accepting responses
               </Typography>
-              <ToggleSwitch value={accepting} onChange={(e) => handleAcceptToggle(e)} />
+              <ToggleSwitch defaultChecked={accepting} value={accepting} onChange={(e) => handleAcceptToggle(e)} />
             </Box>
           </Box>
         </Box>
