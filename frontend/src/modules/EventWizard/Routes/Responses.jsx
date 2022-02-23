@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, Switch, styled } from '@mui/material';
 import { GridActionsCellItem } from '@mui/x-data-grid'
 import { colors, typography } from '$lib/theme';
 import { useBoolean } from '$lib/utils/useBoolean';
@@ -13,7 +13,6 @@ import Container from '../components/Container'
 import Searchbar from '$components/Searchbar';
 import LeftArrow from '../components/LeftArrow';
 import RightArrow from '../components/RightArrow';
-import ToggleButton from '../components/ToggleButton';
 import emptyState from '$static/assets/emptyState.svg';
 import Modal from '../components/Modal';
 import Banner from '../components/Banner';
@@ -141,6 +140,55 @@ const rows = [{
   "course": "Tagopia"
 }]
 
+const ToggleSwitch = styled((props) => (
+  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+  width: 42,
+  height: 26,
+  padding: 0,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    color: '#fff',
+    '&.Mui-checked': {
+      transform: 'translateX(16px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: colors.blue[300],
+        opacity: 1,
+        border: 0,
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.5,
+      },
+    },
+    '&.Mui-focusVisible .MuiSwitch-thumb': {
+      color: colors.blue[300],
+      border: '6px solid #fff',
+    },
+    '&.Mui-disabled .MuiSwitch-thumb': {
+      color: theme.palette.grey[100],
+    },
+    '&.Mui-disabled + .MuiSwitch-track': {
+      opacity: 0.7,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 22,
+    height: 22,
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 26 / 2,
+    backgroundColor: colors.gray[400],
+    opacity: 1,
+    transition: theme.transitions.create(['background-color'], {
+      duration: 500,
+    }),
+  },
+}));
+
 const Responses = () => {
   const { eventName } = useParams()
   const [responses, setResponses] = useState(rows)
@@ -241,7 +289,7 @@ const Responses = () => {
               <Typography component="p">
                 Accepting responses
               </Typography>
-              <ToggleButton value={accepting} onChange={(e) => handleAcceptToggle(e)} />
+              <ToggleSwitch value={accepting} onChange={(e) => handleAcceptToggle(e)} />
             </Box>
           </Box>
         </Box>

@@ -1,11 +1,19 @@
 import React from 'react';
-import { Container, Box, Typography } from '@mui/material';
+import { Box, Typography, styled } from '@mui/material';
 
 import EditIcon from './EditIcon';
 
+const CustomContainer = styled('div')({
+  'MuiContainer-root': {
+    maxWidth: '100%',
+    paddingLeft: '68px !important',
+    paddingRight: '68px !important',
+  },
+});
+
 const TopBar = ({ eventName, children }) => {
   return (
-    <Container
+    <CustomContainer
       sx={{
         maxWidth: '100%',
         display: 'flex',
@@ -29,7 +37,7 @@ const TopBar = ({ eventName, children }) => {
       </Box>
 
       {children}
-    </Container>
+    </CustomContainer>
   );
 };
 
