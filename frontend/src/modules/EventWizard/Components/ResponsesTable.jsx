@@ -1,19 +1,30 @@
 import React from 'react'
+import { Checkbox, styled } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { colors } from '$lib/theme'
-import '$stylesheets/org/EventResponses.scss'
 
-const ResponsesTable = ({ columns, rows, page, onPageSizeChange }) => {
+const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSelectionModelChange, sortModel }) => {
+  const CustomCheckbox = styled(Checkbox)({
+    '&.Mui-checked': {
+      color: colors.green[300],
+    },
+  })
+
   return (
     <DataGrid
       page={page}
       hideFooterPagination
+      hideFooter
       columns={columns}
       rows={rows}
       pageSize={7}
       rowsPerPageOptions={[7]}
       checkboxSelection
       autoHeight
+      disableColumnMenu
+      selectionModel={selectionModel}
+      onSelectionModelChange={onSelectionModelChange}
+      onCellClick={onCellClick}
       sx={{
         border: 'none',
         '& .MuiDataGrid-columnHeaders': {
@@ -24,8 +35,20 @@ const ResponsesTable = ({ columns, rows, page, onPageSizeChange }) => {
         '& .MuiDataGrid-columnSeparator--sideRight': {
           display: 'none'
         },
+        "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer": {
+          display: "none"
+        },
+        "& .Mui-selected": {
+          backgroundColor: `${colors.blue[200]} !important`,
+        },
+        '& .MuiDataGrid-row:nth-child(even)': {
+          backgroundColor: colors.blue[50]
+        }
       }}
-      getRowClassName={(params) => params.row.id % 2 == 0 ? 'even-data-row' : 'odd-data-row'}
+      components={{
+        BaseCheckbox: CustomCheckbox
+      }}
+      sortModel={sortModel}
     />
   )
 }

@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Button, Switch, styled } from '@mui/material';
+import { Box, Typography, Button, Switch, Checkbox, Menu, MenuItem, styled, createTheme, ThemeProvider } from '@mui/material';
+import { KeyboardArrowDown, FileDownload as DownloadIcon } from '@mui/icons-material';
 import { GridActionsCellItem } from '@mui/x-data-grid'
 import { colors, typography } from '$lib/theme';
 import { useBoolean } from '$lib/utils/useBoolean';
 
-import '$stylesheets/org/EventResponses.scss'
 import Layout from '../components/Layout';
 import TopBar from '../components/TopBar';
 import LinkIcon from '../components/LinkIcon';
-import DownloadIcon from '../components/DownloadIcon';
 import Container from '../components/Container'
 import Searchbar from '$components/Searchbar';
 import LeftArrow from '../components/LeftArrow';
@@ -17,7 +16,32 @@ import RightArrow from '../components/RightArrow';
 import emptyState from '$static/assets/emptyState.svg';
 import Modal from '../components/Modal';
 import Banner from '../components/Banner';
+import DeleteIcon from '../components/DeleteIcon';
 import ResponsesTable from '../components/ResponsesTable';
+import SortIcon from '../components/SortIcon';
+
+const DefaultTheme = createTheme({
+  palette: {
+    primary: { main: colors.blue[400] },
+    secondary: { main: colors.gray[300] },
+    disabled: { main: colors.gray[400] }
+  },
+  typography: {
+    fontFamily: [
+      'Rubik',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
+})
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -25,11 +49,11 @@ const columns = [
   { field: 'id', type: 'number', headerName: 'ID #', valueFormatter: (params) => `#${('000' + params.value).substr(-3)}`, flex: 0.1, sortable: false },
   { field: 'fullName', headerName: 'Full Name', flex: 0.7, sortable: false },
   { field: 'email', headerName: 'Email', flex: 1, sortable: false },
-  { field: 'dateCreated', headerName: 'Submission Date', valueFormatter: (params) => { 
+  { field: 'dateCreated', type: 'dateTime', headerName: 'Submission Date', valueFormatter: (params) => { 
     const date = new Date(params.value)
     return `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`
   }, flex: 0.5, sortable: false },
-  { field: 'updatedAt', headerName: 'Last Updated On', valueFormatter: (params) => { 
+  { field: 'updatedAt', type: 'dateTime', headerName: 'Last Updated On', valueFormatter: (params) => { 
     const date = new Date(params.value)
     return `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`
   }, flex: 0.5, sortable: false },
@@ -190,10 +214,35 @@ const ToggleSwitch = styled((props) => (
   },
 }));
 
+const CustomCheckbox = styled(Checkbox)({
+  '&.Mui-checked': {
+    color: colors.green[300],
+  },
+  '&.MuiCheckbox-indeterminate': {
+    color: colors.green[300],
+  },
+})
+
+const StyledMenu = styled(Menu)(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRaidus: 6,
+    border: `1px solid ${theme.colors.gray[300]}`,
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+  },
+}));
+
+const FileDownload = styled(DownloadIcon)({
+  '&.MuiIcon-colorDisabled': {
+    color: colors.gray[400],
+  }
+})
+
 const Responses = () => {
   const { eventName } = useParams()
   const [responses, setResponses] = useState(rows)
   const [page, setPage] = useState(0)
+  const [selectedItems, setSelectedItems] = useState([])
   const [search, setSearch] = useState('')
   const [accepting, setAccepting] = useState(true)
   useEffect(() => {
@@ -201,6 +250,11 @@ const Responses = () => {
       // TODO: update accepting status
     }
   }, [accepting])
+
+  const [sortModel, setSortModel] = useState([{ field: 'id', sort: 'asc' }])
+  useEffect(() => {
+    console.log('sortModel', sortModel)
+  }, [sortModel])
 
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
   const { value: isBannerVisible, setFalse: hideBanner, setTrue: showBanner } = useBoolean();
@@ -219,6 +273,68 @@ const Responses = () => {
     }
   }
 
+  const SortByButton = () => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const handleClick = (event) => {
+      console.log('event anchorEl', event.target)
+      setAnchorEl(anchorEl ? null : event.target);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+    const open = Boolean(anchorEl);
+
+    return (
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        alignContent: 'center',
+        borderLeft: '1px solid #D1D5DB',
+        padding: '4px 24px',
+      }}>
+        <Box
+          onClick={handleClick}
+          sx={{
+            display: 'flex',
+            alignContent: 'center',
+            alignItems: 'center',
+            margin: 'auto 0',
+            cursor: 'pointer',
+            gap: '8px',
+          }}
+        >
+          Sort by
+          <KeyboardArrowDown sx={{ width: '18px', color: colors.gray[500] }} />
+        </Box>
+        <StyledMenu
+          MenuListProps={{
+            'aria-labelledby': 'customized-button',
+          }}
+          anchorEl={anchorEl}
+          
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={() => setSortModel([{field: 'dateCreated', sort: sortModel[0]['sort']}])} disableRipple>
+            Submission date
+          </MenuItem>
+          <MenuItem onClick={() => setSortModel([{field: 'updatedAt', sort: sortModel[0]['sort']}])} disableRipple>
+            Last updated
+          </MenuItem>
+          <MenuItem onClick={() => setSortModel([{field: 'fullName', sort: sortModel[0]['sort']}])} disableRipple>
+            Name
+          </MenuItem>
+          <MenuItem onClick={() => setSortModel([{field: 'email', sort: sortModel[0]['sort']}])} disableRipple>
+            Email
+          </MenuItem>
+          <MenuItem onClick={() => setSortModel([{field: 'id', sort: sortModel[0]['sort']}])} disableRipple>
+            ID #
+          </MenuItem>
+        </StyledMenu>
+      </Box>
+    )
+  }
+
   return (
     <Layout>
       <TopBar eventName={eventName}>
@@ -228,20 +344,25 @@ const Responses = () => {
             gap: '16px'
           }}
         >
-          <Button sx={{
-            padding: '.5rem 1.5rem',
-            color: colors.blue[300]
-          }} variant="outlined" onClick={showBanner}>
-            <LinkIcon />
-            <p style={{ margin: 'auto 0 auto 4px'}}>Copy event link</p>
-          </Button>
-          <Button sx={{
-            padding: '.5rem 1.5rem',
-            color: colors.blue[300]
-          }} variant="outlined">
-            <DownloadIcon />
-            <p style={{ margin: 'auto 0 auto 4px'}}>Download all</p>
-          </Button>
+          <ThemeProvider theme={DefaultTheme}>
+            <Button sx={{
+              padding: '.5rem 1.5rem',
+              color: colors.blue[300],
+              textTransform: 'none'
+            }} variant="outlined" onClick={showBanner}>
+              <LinkIcon />
+              <p style={{ margin: 'auto 0 auto 4px'}}>Copy event link</p>
+            </Button>
+            <Button sx={{
+              padding: '.5rem 1.5rem',
+              color: colors.blue[300],
+              textTransform: 'none',
+              boxShadow: 'none',
+            }} disabled={selectedItems.length > 0} variant={selectedItems.length > 0 ? 'contained' : 'outlined'} color={selectedItems.length > 0 ? 'secondary' : 'primary'}>
+            <FileDownload color={selectedItems.length > 0 ? 'disabled' : 'primary'} />
+              <p style={{ margin: 'auto 0 auto 4px', color: selectedItems.length > 0 ? colors.gray[400] : colors.blue[300] }}>Download all</p>
+            </Button>
+          </ThemeProvider>
         </Box>
       </TopBar>
 
@@ -298,7 +419,78 @@ const Responses = () => {
         </Box>
 
         {
-          responses.length > 0 ? <ResponsesTable page={page} columns={columns} rows={rows} /> :
+          responses.length > 0 ?
+          <Box>
+            <Box sx={{
+              display: 'flex',
+            }}>
+              <Box onClick={() => selectedItems.length === responses.length ? setSelectedItems([]) : setSelectedItems(responses.map(res => res.id))} sx={{
+                display: 'flex',
+                cursor: 'pointer',
+                alignItems: 'center',
+                alignContent: 'center',
+                gap: '24px',
+                paddingRight: '24px',
+              }}>
+                <CustomCheckbox checked={selectedItems.length === responses.length} indeterminate={selectedItems.length < responses.length && selectedItems.length > 0 } />
+                {
+                  selectedItems.length > 0 ?
+                  `${selectedItems.length} of ${responses.length} responses` : 'Select all responses'
+                }
+              </Box>
+              {
+                selectedItems.length > 0 ?
+                <Box sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  alignContent: 'center',
+                }}>
+                  <Box sx={{
+                    display: 'flex',
+                    color: colors.blue[300],
+                    gap: '4px',
+                    borderRight: '1px solid #D1D5DB',
+                    borderLeft: '1px solid #D1D5DB',
+                    padding: '4px 24px',
+                  }}>
+                    <FileDownload />
+                    Download
+                  </Box>
+                  <Box sx={{
+                    display: 'flex',
+                    color: colors.gray[700],
+                    gap: '4px',
+                    paddingLeft: '24px'
+                  }}>
+                    <DeleteIcon />
+                    Delete
+                  </Box>
+                </Box>
+                :
+                <Box sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  alignContent: 'center',
+                }}>
+                  <SortByButton />
+                  <Box onClick={() => setSortModel([{sort: sortModel[0]['sort'] === 'asc' ? 'desc' : 'asc', field: sortModel[0].field}])} sx={{
+                    cursor: 'pointer',
+                  }}>
+                    <SortIcon />
+                  </Box>
+                </Box>
+              }
+            </Box>
+            <ResponsesTable
+              page={page}
+              columns={columns}
+              rows={rows}
+              selectionModel={selectedItems} 
+              onSelectionModelChange={setSelectedItems}
+              sortModel={sortModel}
+            />
+          </Box>
+          :
           <Box
             sx={{
               marginTop: '3rem',
