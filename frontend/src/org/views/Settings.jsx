@@ -7,7 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import OrgsDataService from '../../services/orgs.service';
-import { styled, Button, Alert } from '@mui/material';
+import { styled, Button, Alert, Box } from '@mui/material';
 import { colors } from '$lib/theme';
 import AdminLayout from '$components/Admin/AdminLayout';
 import { useAdminUser } from '$lib/context/AdminContext';
@@ -289,18 +289,20 @@ const Settings = () => {
             handleWebsiteChange(e.target.value);
           }}
         />
-        <Button size="small" sx={{ marginBottom: '64px' }} onClick={saveChanges}>
-          Save Changes
-        </Button>
-        {open ? (
-          <Alert
-            onClose={() => {
-              setOpen(false);
-            }}
-          >
-            This is a success alert!
-          </Alert>
-        ) : null}
+        <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '64px' }}>
+          <Button size="small" sx={{ marginRight: '80px' }} onClick={saveChanges}>
+            Save Changes
+          </Button>
+          {open ? (
+            <Alert
+              onClose={() => {
+                setOpen(false);
+              }}
+            >
+              This is a success alert!
+            </Alert>
+          ) : null}
+        </Box>
       </div>
     </AdminLayout>
   );
