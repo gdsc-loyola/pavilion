@@ -5,6 +5,7 @@ import { GridActionsCellItem } from '@mui/x-data-grid'
 import { colors, typography } from '$lib/theme';
 import { useBoolean } from '$lib/utils/useBoolean';
 
+import '$stylesheets/org/EventResponses.scss'
 import Layout from '../components/Layout';
 import TopBar from '../components/TopBar';
 import LinkIcon from '../components/LinkIcon';
@@ -192,6 +193,7 @@ const ToggleSwitch = styled((props) => (
 const Responses = () => {
   const { eventName } = useParams()
   const [responses, setResponses] = useState(rows)
+  const [page, setPage] = useState(0)
   const [search, setSearch] = useState('')
   const [accepting, setAccepting] = useState(true)
   useEffect(() => {
@@ -271,13 +273,14 @@ const Responses = () => {
               gap: '16px'
             }}>
               <Typography component="p">
-                {
-                  // TODO: Pagination
-                }
-                Page 1 of 1
+                Page {page+1} of {Math.ceil(responses.length/7)}
               </Typography>
-              <LeftArrow />
-              <RightArrow />
+              <div onClick={() => page < 1 ? null : setPage(page-1)}>
+                <LeftArrow />
+              </div>
+              <div onClick={() => page+1 >= Math.ceil(responses.length/7) ? null : setPage(page+1)}>
+                <RightArrow />
+              </div>
             </Box>
             
             {/* accept toggle */}
@@ -295,7 +298,7 @@ const Responses = () => {
         </Box>
 
         {
-          responses.length > 0 ? <ResponsesTable columns={columns} rows={rows} /> :
+          responses.length > 0 ? <ResponsesTable page={page} columns={columns} rows={rows} /> :
           <Box
             sx={{
               marginTop: '3rem',

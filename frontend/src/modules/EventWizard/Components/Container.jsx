@@ -6,7 +6,7 @@ const Container = ({ children }) => {
     display: 'flex',
     flexDirection: 'column',
     padding: '1rem 3rem',
-    flex: 1,
+    height: '75vh',
     '.MuiButton-root': {
       fontWeight: theme.fontWeight.med,
     },
