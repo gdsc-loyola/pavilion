@@ -30,7 +30,8 @@ const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSe
         '& .MuiDataGrid-columnHeaders': {
           backgroundColor: colors.gray[100],
           color: colors.gray[500],
-          borderBottom: 'none'
+          border: 'none',
+          padding: '0 34px',
         },
         '& .MuiDataGrid-columnSeparator--sideRight': {
           display: 'none'
@@ -41,8 +42,15 @@ const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSe
         "& .Mui-selected": {
           backgroundColor: `${colors.blue[200]} !important`,
         },
+        '& .MuiDataGrid-row': {
+          padding: '0 40px',
+        },
         '& .MuiDataGrid-row:nth-child(even)': {
           backgroundColor: colors.blue[50]
+        },
+        '& .MuiDataGrid-cell': {
+          border: 'none',
+          outline: 'none !important',
         }
       }}
       components={{
