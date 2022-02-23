@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Button, Switch, Checkbox, Menu, MenuItem, styled, createTheme, ThemeProvider } from '@mui/material';
+import { Box, Typography, Button, Switch, Checkbox, Menu, MenuItem as MItem, styled, createTheme, ThemeProvider } from '@mui/material';
 import { KeyboardArrowDown, FileDownload as DownloadIcon } from '@mui/icons-material';
 import { GridActionsCellItem } from '@mui/x-data-grid'
 import { colors, typography } from '$lib/theme';
@@ -46,8 +46,8 @@ const DefaultTheme = createTheme({
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 const columns = [
-  { field: 'id', type: 'number', headerName: 'ID #', valueFormatter: (params) => `#${('000' + params.value).substr(-3)}`, flex: 0.1, sortable: false },
-  { field: 'fullName', headerName: 'Full Name', flex: 0.7, sortable: false },
+  { field: 'id', type: 'number', headerName: 'ID #', valueFormatter: (params) => `#${('000' + params.value).substr(-3)}`, sortable: false },
+  { field: 'fullName', headerName: 'Full Name', flex: 1, sortable: false },
   { field: 'email', headerName: 'Email', flex: 1, sortable: false },
   { field: 'dateCreated', type: 'dateTime', headerName: 'Submission Date', valueFormatter: (params) => { 
     const date = new Date(params.value)
@@ -57,7 +57,7 @@ const columns = [
     const date = new Date(params.value)
     return `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`
   }, flex: 0.5, sortable: false },
-  { field: 'actions', type: 'actions', flex: 0.1, getActions: (params) => [
+  { field: 'actions', type: 'actions', getActions: (params) => [
     <GridActionsCellItem 
       key={params.id}
       label='Edit'
@@ -70,7 +70,7 @@ const columns = [
       onClick={() => alert(`delete field num: ${params.id}`)}
       showInMenu
     />
-  ]}
+  ], flex: 0.5,}
 ]
 
 const rows = [{
@@ -230,7 +230,26 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
     boxShadow:
       'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
   },
+  '& .MuiMenu-list': {
+    margin: 0,
+    padding: 0
+  }
 }));
+
+const MenuItem = styled(MItem)(({
+  fontSize: '14px',
+  fontWeight: 400,
+  padding: '1rem 2rem',
+  color: colors.gray[500],
+  justifyContent: 'center',
+  '&.MuiMenuItem-root:hover': {
+    backgroundColor: colors.blue[100],
+  },
+  '&.Mui-selected': {
+    backgroundColor: colors.blue[300],
+    color: '#fff',
+  },
+}))
 
 const FileDownload = styled(DownloadIcon)({
   '&.MuiIcon-colorDisabled': {
@@ -315,19 +334,19 @@ const Responses = () => {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem onClick={() => setSortModel([{field: 'dateCreated', sort: sortModel[0]['sort']}])} disableRipple>
+          <MenuItem selected={sortModel[0].field === 'dateCreated'} onClick={() => setSortModel([{field: 'dateCreated', sort: sortModel[0]['sort']}])} disableRipple>
             Submission date
           </MenuItem>
-          <MenuItem onClick={() => setSortModel([{field: 'updatedAt', sort: sortModel[0]['sort']}])} disableRipple>
+          <MenuItem selected={sortModel[0].field === 'updatedAt'} onClick={() => setSortModel([{field: 'updatedAt', sort: sortModel[0]['sort']}])} disableRipple>
             Last updated
           </MenuItem>
-          <MenuItem onClick={() => setSortModel([{field: 'fullName', sort: sortModel[0]['sort']}])} disableRipple>
+          <MenuItem selected={sortModel[0].field === 'fullName'} onClick={() => setSortModel([{field: 'fullName', sort: sortModel[0]['sort']}])} disableRipple>
             Name
           </MenuItem>
-          <MenuItem onClick={() => setSortModel([{field: 'email', sort: sortModel[0]['sort']}])} disableRipple>
+          <MenuItem selected={sortModel[0].field === 'email'} onClick={() => setSortModel([{field: 'email', sort: sortModel[0]['sort']}])} disableRipple>
             Email
           </MenuItem>
-          <MenuItem onClick={() => setSortModel([{field: 'id', sort: sortModel[0]['sort']}])} disableRipple>
+          <MenuItem selected={sortModel[0].field === 'id'} onClick={() => setSortModel([{field: 'id', sort: sortModel[0]['sort']}])} disableRipple>
             ID #
           </MenuItem>
         </StyledMenu>
@@ -423,6 +442,7 @@ const Responses = () => {
           <Box>
             <Box sx={{
               display: 'flex',
+              padding: '16px 40px'
             }}>
               <Box onClick={() => selectedItems.length === responses.length ? setSelectedItems([]) : setSelectedItems(responses.map(res => res.id))} sx={{
                 display: 'flex',
