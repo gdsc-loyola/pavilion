@@ -255,6 +255,8 @@ const Responses = () => {
   const { value: isBannerVisible, setFalse: hideBanner, setTrue: showBanner } = useBoolean();
   const { value: isEdit, setFalse: endEdit, setTrue: startEdit } = useBoolean();
   const { value: isCancelEdit, setFalse: abortCancelEdit, setTrue: confirmCancelEdit } = useBoolean();
+  const { value: isCloseAndSave, setFalse: hideCloseAndSave, setTrue: showCloseAndSave } = useBoolean();
+  const { value: isSaveConfirmed, setFalse: abortSaveConfirm, setTrue: confirmSave } = useBoolean();
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -278,6 +280,11 @@ const Responses = () => {
   const handleCloseDetails = () => {
     endEdit()
     setOpenDetails(null)
+  }
+
+  const handleSaveDetails = (old, update) => {
+    // TODO
+    alert(`${old.fullName} vs ${update.fullName}`)
   }
 
   const columns = [
@@ -591,7 +598,7 @@ const Responses = () => {
         warning={true}
         title="Stop accepting responses"
         subtitle="This event won&apos;t receive new respondents anymore."
-        onSubmit={() => setAccepting(false)}
+        onSubmit={(e) => {e.preventDefault(); setAccepting(false); closeAcceptingModal()}}
         leftButtonProps={{
           label: 'Never mind',
           onClick: closeAcceptingModal,
@@ -609,7 +616,7 @@ const Responses = () => {
         warning={true}
         title="Delete response"
         subtitle="This will delete all the information about this entry."
-        onSubmit={() => onConfirmDeleteEntry(deleteEntry)}
+        onSubmit={(e) => {e.preventDefault(); onConfirmDeleteEntry(deleteEntry);}}
         leftButtonProps={{
           label: 'Never mind',
           onClick: () => setDeleteEntry(null),
@@ -638,6 +645,23 @@ const Responses = () => {
         }}
       />
 
+      <Modal
+        open={isCloseAndSave}
+        onClose={hideCloseAndSave}
+        withTextField={false}
+        title="Close and save"
+        subtitle="You can go back to editing this entry anytime."
+        onSubmit={(e) => {e.preventDefault(); confirmSave(); hideCloseAndSave();}}
+        leftButtonProps={{
+          label: 'Never mind',
+          onClick: hideCloseAndSave,
+        }}
+        rightButtonProps={{
+          label: 'Save',
+          type: 'submit'
+        }}
+      />
+
       <ResponseDetails
         edit={isEdit}
         endEdit={endEdit}
@@ -649,6 +673,9 @@ const Responses = () => {
         onPrevEntry={() => openDetails.id <= 1 ? null : setOpenDetails(responses[(openDetails.id - 1) - 1])}
         onDelete={() => setDeleteEntry(openDetails)}
         onCancelEdit={confirmCancelEdit}
+        showCloseAndSave={showCloseAndSave}
+        handleSaveDetails={handleSaveDetails}
+        isSaveConfirmed={isSaveConfirmed}
       />
     </Layout>
   )

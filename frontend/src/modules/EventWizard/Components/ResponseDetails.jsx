@@ -110,7 +110,7 @@ const EntryFieldText = styled(Typography)({
   color: colors.gray[700],
 })
 
-const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntry, edit, endEdit, onDelete, onCancelEdit }) => {
+const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntry, edit, endEdit, onDelete, onCancelEdit, showCloseAndSave, handleSaveDetails, isSaveConfirmed }) => {
   const [updatedDetails, setUpdatedDetails] = useState(null);
   useEffect(() => {
     if (open) setUpdatedDetails(open)
@@ -146,6 +146,18 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
     edit ? startEditMode() : endEditMode()
   }, [edit])
 
+  useEffect(() => {
+    if (!isEditMode && open) {
+      setUpdatedDetails(open)
+    }
+  }, [isEditMode])
+
+  useEffect(() => {
+    if (isSaveConfirmed) {
+      handleSaveDetails(open, updatedDetails)
+    }
+  }, [isSaveConfirmed])
+
   const onSubmit = (data) => {
     // TODO: update response
   }
@@ -158,11 +170,28 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
     }
   }
 
+  const closeTabWarning = () => {
+    if (JSON.stringify(open) !== JSON.stringify(updatedDetails)) {
+      showCloseAndSave()
+    } else {
+      onClose()
+    }
+  }
+
+  useEffect(() => {
+    if (JSON.stringify(open) !== JSON.stringify(updatedDetails)) {
+      window.addEventListener("beforeunload", closeTabWarning);
+    } else {
+      window.removeEventListener('beforeunload', closeTabWarning)
+    }
+    console.log('updatedDetails', updatedDetails)
+  }, [updatedDetails])
+
   return (
     <Drawer
       anchor={anchor}
       open={open ? true : false}
-      onClose={onClose}
+      onClose={closeTabWarning}
       BackdropProps={{
         sx: {
           backgroundColor: 'transparent',
@@ -356,12 +385,14 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
               options={[ '1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year' ]}
               defaultValue={updatedDetails?.year}
               renderInput={(params) => <TextField {...params} label="Year" />}
+              onChange={(e, value) => setUpdatedDetails({ ...updatedDetails, year: value })}
             />
             <Autocomplete
               disablePortal
               options={courses}
               defaultValue={updatedDetails?.course}
               renderInput={(params) => <TextField {...params} label="Course" />}
+              onChange={(e, value) => setUpdatedDetails({ ...updatedDetails, course: value })}
             />
           </Box>
           :
