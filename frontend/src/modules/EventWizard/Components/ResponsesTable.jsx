@@ -52,6 +52,9 @@ const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSe
         '& .MuiDataGrid-cell': {
           border: 'none',
           outline: 'none !important',
+        },
+        '& .MuiDataGrid-menuList': {
+          padding: '0 !important'
         }
       }}
       components={{

@@ -243,13 +243,18 @@ const Responses = () => {
       // TODO: update accepting status
     }
   }, [accepting])
+  const [deleteEntry, setDeleteEntry] = useState(null)
+  const onConfirmDeleteEntry = (entry) => {
+    alert(`deleting entry no. ${entry}`)
+    setDeleteEntry(null)
+  }
 
   const [sortModel, setSortModel] = useState([{ field: 'id', sort: 'asc' }])
   useEffect(() => {
     console.log('sortModel', sortModel)
   }, [sortModel])
 
-  const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
+  const { value: isAcceptingModalOpen, setFalse: closeAcceptingModal, setTrue: openAcceptingModal } = useBoolean();
   const { value: isBannerVisible, setFalse: hideBanner, setTrue: showBanner } = useBoolean();
 
   useEffect(() => {
@@ -262,7 +267,7 @@ const Responses = () => {
 
   const handleAcceptToggle = (event) => {
     if (!event.target.checked) {
-      openModal()
+      openAcceptingModal()
     }
   }
 
@@ -284,12 +289,32 @@ const Responses = () => {
         label='Edit'
         onClick={() => setOpenDetails(responses[params.row.id - 1])}
         showInMenu
+        sx={{
+          fontSize: '14px',
+          fontWeight: 400,
+          padding: '0.8rem 4.5rem',
+          color: colors.gray[700],
+          justifyContent: 'center',
+          '&.MuiMenuItem-root:hover': {
+            backgroundColor: colors.blue[100],
+          },
+        }}
       />,
       <GridActionsCellItem
         key={params.id}
         label='Delete'
-        onClick={() => alert(`delete field num: ${params.id}`)}
+        onClick={() => setDeleteEntry(params.id)}
         showInMenu
+        sx={{
+          fontSize: '14px',
+          fontWeight: 400,
+          padding: '0.8rem 4.5rem',
+          color: colors.red[300],
+          justifyContent: 'center',
+          '&.MuiMenuItem-root:hover': {
+            backgroundColor: colors.red[100],
+          },
+        }}
       />
     ], flex: 0.5,}
   ]
@@ -446,7 +471,7 @@ const Responses = () => {
               display: 'flex',
               padding: '16px 40px'
             }}>
-              <Box onClick={() => selectedItems.length === responses.length || selectedItems.length < responses.length ? setSelectedItems([]) : setSelectedItems(responses.map(res => res.id))} sx={{
+              <Box onClick={() => selectedItems.length === 0 ? setSelectedItems(responses.map(res => res.id)) : setSelectedItems([])} sx={{
                 display: 'flex',
                 cursor: 'pointer',
                 alignItems: 'center',
@@ -550,8 +575,8 @@ const Responses = () => {
       </Container>
 
       <Modal
-        open={isModalOpen}
-        onClose={closeModal}
+        open={isAcceptingModalOpen}
+        onClose={closeAcceptingModal}
         withTextField={false}
         warning={true}
         title="Stop accepting responses"
@@ -559,10 +584,28 @@ const Responses = () => {
         onSubmit={() => setAccepting(false)}
         leftButtonProps={{
           label: 'Never mind',
-          onClick: closeModal,
+          onClick: closeAcceptingModal,
         }}
         rightButtonProps={{
           label: 'Stop accepting',
+          type: 'submit'
+        }}
+      />
+
+      <Modal
+        open={deleteEntry}
+        onClose={() => setDeleteEntry(null)}
+        withTextField={false}
+        warning={true}
+        title="Delete response"
+        subtitle="This will delete all the information about this entry."
+        onSubmit={() => onConfirmDeleteEntry(deleteEntry)}
+        leftButtonProps={{
+          label: 'Never mind',
+          onClick: () => setDeleteEntry(null),
+        }}
+        rightButtonProps={{
+          label: 'Delete response',
           type: 'submit'
         }}
       />
