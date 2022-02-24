@@ -555,7 +555,7 @@ const Responses = () => {
             <ResponsesTable
               page={page}
               columns={columns}
-              rows={rows}
+              rows={responses}
               selectionModel={selectedItems} 
               onSelectionModelChange={setSelectedItems}
               sortModel={sortModel}
@@ -569,9 +569,9 @@ const Responses = () => {
           :
           <Box
             sx={{
-              marginTop: '3rem',
+              marginTop: '2.5rem',
               marginBottom: isBannerVisible ? '0' : '4rem',
-              padding: '2rem',
+              padding: '1.5rem',
               backgroundColor: colors.blue[50],
               display: 'flex',
               flexDirection: 'column',
@@ -586,9 +586,9 @@ const Responses = () => {
               },
             }}
           >
-            <img src={emptyState} style={{ width: '400px' }} />
+            <img src={emptyState} style={{ width: '370px' }} />
             <h4>You don&apos;t have any responses yet!</h4>
-            <Button>
+            <Button onClick={showBanner}>
               <LinkIcon white />
               <p style={{ margin: 'auto 0 auto 4px'}}>Copy event link</p>
             </Button>

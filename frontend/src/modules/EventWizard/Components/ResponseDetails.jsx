@@ -182,6 +182,7 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
       onCancelEdit()
     } else {
       endEditMode()
+      endEdit()
     }
   }
 
