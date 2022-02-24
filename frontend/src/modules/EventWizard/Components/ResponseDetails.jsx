@@ -4,6 +4,8 @@ import { KeyboardArrowDown, KeyboardArrowUp, MoreVert } from '@mui/icons-materia
 import { colors } from '$lib/theme'
 import { useBoolean } from '$lib/utils/useBoolean';
 
+import Banner from './Banner';
+
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const courses = [
@@ -127,6 +129,14 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
   const submissionDateTime = new Date(open?.dateCreated);
   const updatedDateTime = open?.updatedAt ? new Date(open?.updatedAt) : null;
 
+  const { value: isSaveBannerVisible, setFalse: hideSaveBanner, setTrue: showSaveBanner } = useBoolean();
+  useEffect(() => {
+    if (isSaveBannerVisible) {
+      setTimeout(() => {
+        hideSaveBanner()
+      }, 3000)
+    }
+  }, [isSaveBannerVisible])
   const { value: isEditMode, setFalse: endEditMode, setTrue: startEditMode } = useBoolean();
   const handleEdit = () => {
     startEditMode();
@@ -155,11 +165,15 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
   useEffect(() => {
     if (isSaveConfirmed) {
       handleSaveDetails(open, updatedDetails)
+      onClose()
     }
   }, [isSaveConfirmed])
 
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     // TODO: update response
+    alert('saving')
+    showSaveBanner()
+    endEditMode()
   }
 
   const handleCancelEdit = () => {
@@ -170,8 +184,9 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
     }
   }
 
-  const closeTabWarning = () => {
+  const closeTabWarning = (e) => {
     if (JSON.stringify(open) !== JSON.stringify(updatedDetails)) {
+      e.preventDefault()
       showCloseAndSave()
     } else {
       onClose()
@@ -184,7 +199,6 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
     } else {
       window.removeEventListener('beforeunload', closeTabWarning)
     }
-    console.log('updatedDetails', updatedDetails)
   }, [updatedDetails])
 
   return (
@@ -268,7 +282,7 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
               </Button>
               <Button
                 variant='outlined'
-                type="submit"
+                onClick={onSubmit}
               >
                 Save
               </Button>
@@ -347,7 +361,7 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
               display: 'flex',
               flexDirection: 'column',
               gap: '24px',
-              padding: '32px 24px'
+              padding: '32px 24px 24px'
             }}
           >
             <TextField
@@ -401,7 +415,7 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
               display: 'flex',
               flexDirection: 'column',
               gap: '24px',
-              padding: '32px 24px'
+              padding: '32px 24px 24px'
             }}
           >
             <EntryField>
@@ -446,6 +460,11 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
             </EntryField>
           </Box>
         }
+        <Box sx={{
+          padding: '0 24px',
+        }}>
+          <Banner show={isSaveBannerVisible} label={"Event was successfully updated!"} />
+        </Box>
       </Box>
     </Drawer>
   )

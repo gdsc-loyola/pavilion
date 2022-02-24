@@ -257,6 +257,7 @@ const Responses = () => {
   const { value: isCancelEdit, setFalse: abortCancelEdit, setTrue: confirmCancelEdit } = useBoolean();
   const { value: isCloseAndSave, setFalse: hideCloseAndSave, setTrue: showCloseAndSave } = useBoolean();
   const { value: isSaveConfirmed, setFalse: abortSaveConfirm, setTrue: confirmSave } = useBoolean();
+  const { value: isSaveBannerVisible, setFalse: hideSaveBanner, setTrue: showSaveBanner } = useBoolean();
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -264,7 +265,12 @@ const Responses = () => {
         hideBanner()
       }, 3000)
     }
-  }, [isBannerVisible])
+    if (isSaveBannerVisible) {
+      setTimeout(() => {
+        hideSaveBanner()
+      }, 3000)
+    }
+  }, [isBannerVisible, isSaveBannerVisible])
 
   const handleAcceptToggle = (event) => {
     if (!event.target.checked) {
@@ -285,6 +291,7 @@ const Responses = () => {
   const handleSaveDetails = (old, update) => {
     // TODO
     alert(`${old.fullName} vs ${update.fullName}`)
+    showSaveBanner()
   }
 
   const columns = [
@@ -589,6 +596,7 @@ const Responses = () => {
         }
 
         <Banner show={isBannerVisible} label={"Event link copied to clipboard!"} />
+        <Banner show={isSaveBannerVisible} label={"Response was successfully updated!"} />
       </Container>
 
       <Modal
