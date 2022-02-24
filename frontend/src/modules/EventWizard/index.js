@@ -1,1 +1,1 @@
-export * from './routes/index.jsx';
+export * from './routes';

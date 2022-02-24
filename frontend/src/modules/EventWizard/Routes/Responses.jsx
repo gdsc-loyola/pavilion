@@ -72,7 +72,7 @@ const CustomContainer = styled('div')(({ theme }) => ({
     fontWeight: theme.fontWeight.bold,
   },
   position: 'relative',
-}))
+}));
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -288,7 +288,7 @@ const Responses = () => {
     } else {
       setResponses(rows);
     }
-  }, [search])
+  }, [search]);
   const [openDetails, setOpenDetails] = useState(null);
   const [accepting, setAccepting] = useState(true);
   useEffect(() => {
