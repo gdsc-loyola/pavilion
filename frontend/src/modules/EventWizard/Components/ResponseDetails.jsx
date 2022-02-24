@@ -68,6 +68,7 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
   const menuOpen = Boolean(anchorEl);
 
   const submissionDateTime = new Date(open?.dateCreated);
+  const updatedDateTime = open?.updatedAt ? new Date(open?.updatedAt) : null;
 
   const { value: isEditMode, setFalse: endEditMode, setTrue: startEditMode } = useBoolean();
 
@@ -158,7 +159,7 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
       >
           <p
             style={{ 
-              margin: 0, 
+              margin: '0 0 10px 0', 
               padding: 0,
               color: colors.gray[700],
               fontSize: '20px',
@@ -171,10 +172,25 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
             style={{
               color: colors.gray[500],
               fontSize: '14px',
+              margin: 0,
+              padding: 0
             }}
           >
             Submitted on {months[submissionDateTime.getUTCMonth()]} {submissionDateTime.getUTCDate()}, {submissionDateTime.getUTCFullYear()} at {submissionDateTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
           </p>
+          {
+            open?.updatedAt &&
+            <p 
+              style={{
+                color: colors.gray[500],
+                fontSize: '14px',
+                margin: '6px 0 0 0',
+                padding: 0
+              }}
+            >
+              Updated on {months[updatedDateTime.getUTCMonth()]} {updatedDateTime.getUTCDate()}, {updatedDateTime.getUTCFullYear()} at {updatedDateTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+            </p>
+          }
       </Box>
       {
         isEditMode ?

@@ -69,7 +69,6 @@ const rows = [{
   "fullName": "Billie Finnes",
   "email": "bfinnes2@accuweather.com",
   "dateCreated": "2022-02-22T11:48:35Z",
-  "updatedAt": "2022-02-03T22:09:02Z",
   "idNum": "01",
   "year": 3,
   "course": "Dynabox"
@@ -78,7 +77,6 @@ const rows = [{
   "fullName": "Cordula Hadland",
   "email": "chadland3@wikimedia.org",
   "dateCreated": "2022-02-18T16:13:13Z",
-  "updatedAt": "2022-01-15T12:27:09Z",
   "idNum": "89555",
   "year": 4,
   "course": "Topicware"
@@ -132,7 +130,6 @@ const rows = [{
   "fullName": "Cathi Flann",
   "email": "cflann9@de.vu",
   "dateCreated": "2022-01-09T21:46:41Z",
-  "updatedAt": "2021-12-20T03:59:37Z",
   "idNum": "663",
   "year": 10,
   "course": "Tagopia"
@@ -281,7 +278,7 @@ const Responses = () => {
     }, flex: 0.5, sortable: false },
     { field: 'updatedAt', type: 'dateTime', headerName: 'Last Updated On', valueFormatter: (params) => { 
       const date = new Date(params.value)
-      return `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`
+      return !params.value ? '-' : `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`
     }, flex: 0.5, sortable: false },
     { field: 'actions', type: 'actions', getActions: (params) => [
       <GridActionsCellItem 
