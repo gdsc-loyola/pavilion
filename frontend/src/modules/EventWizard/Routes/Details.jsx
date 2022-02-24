@@ -25,9 +25,8 @@ const Label = styled('label')({
     backgroundColor: colors.gray['300'],
   },
   img: {
-    width: '70px',
     height: 'auto',
-    maxWidth: '24%',
+    maxWidth: '552px',
   },
 });
 
@@ -38,8 +37,6 @@ const HelperText = styled('p')({
   fontWeight: typography.fontWeight.reg,
 });
 
-const coverphoto = null;
-
 const Details = () => {
   const { eventName } = useParams();
   const [details, setDetails] = React.useState({
@@ -47,12 +44,81 @@ const Details = () => {
     endDate: '',
     location: '',
     description: '',
-    coverphoto: '',
-    eventphoto1: '',
-    eventphoto2: '',
-    eventphoto3: '',
-    eventphoto4: '',
+    coverphoto: null,
+    eventphoto1: null,
+    eventphoto2: null,
+    eventphoto3: null,
+    eventphoto4: null,
   });
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e, imageID) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.includes('image')) {
+      if (imageID == 1) {
+        handleCoverPhotoChange(file);
+      } else if (imageID == 2) {
+        handleEventPhoto1Change(file);
+      } else if (imageID == 3) {
+        handleEventPhoto2Change(file);
+      } else if (imageID == 4) {
+        handleEventPhoto3Change(file);
+      } else if (imageID == 5) {
+        handleEventPhoto4Change(file);
+      }
+    }
+  };
+
+  const handleCoverPhotoChange = (e) => {
+    setDetails((prevState) => {
+      return {
+        ...prevState,
+        coverphoto: e,
+      };
+    });
+  };
+
+  const handleEventPhoto1Change = (e) => {
+    setDetails((prevState) => {
+      return {
+        ...prevState,
+        eventphoto1: e,
+      };
+    });
+  };
+
+  const handleEventPhoto2Change = (e) => {
+    setDetails((prevState) => {
+      return {
+        ...prevState,
+        eventphoto2: e,
+      };
+    });
+  };
+
+  const handleEventPhoto3Change = (e) => {
+    setDetails((prevState) => {
+      return {
+        ...prevState,
+        eventphoto3: e,
+      };
+    });
+  };
+
+  const handleEventPhoto4Change = (e) => {
+    setDetails((prevState) => {
+      return {
+        ...prevState,
+        eventphoto4: e,
+      };
+    });
+  };
 
   const handleStartDateChange = (e) => {
     setDetails((prevState) => {
@@ -90,6 +156,16 @@ const Details = () => {
     });
   };
 
+  const coverphoto =
+    typeof details.coverphoto?.name == 'string' ? URL.createObjectURL(details.coverphoto) : null;
+  const eventphoto1 =
+    typeof details.eventphoto1?.name == 'string' ? URL.createObjectURL(details.eventphoto1) : null;
+  const eventphoto2 =
+    typeof details.eventphoto2?.name == 'string' ? URL.createObjectURL(details.eventphoto2) : null;
+  const eventphoto3 =
+    typeof details.eventphoto3?.name == 'string' ? URL.createObjectURL(details.eventphoto3) : null;
+  const eventphoto4 =
+    typeof details.eventphoto4?.name == 'string' ? URL.createObjectURL(details.eventphoto4) : null;
   return (
     <Layout>
       <TopBar eventName={eventName}>
@@ -145,8 +221,7 @@ const Details = () => {
         <input
           type="file"
           accept="image/*"
-          id="cover-photo
-        "
+          id="cover-photo"
           style={{ display: 'none' }}
           onChange={(e) => {
             handleCoverPhotoChange(e.target.files[0]);
@@ -157,12 +232,13 @@ const Details = () => {
             sx={{ width: '552px', height: '208px' }}
             htmlFor="cover-photo"
             onDragOver={(e) => handleDragOver(e)}
-            onDrop={(e) => handleDrop(e)}
+            onDrop={(e) => handleDrop(e, 1)}
           >
             <img
               src={coverphoto ? coverphoto : '../../../../static/assets/image.png'}
               alt="coverPhoto"
-              width="552"
+              width={coverphoto ? '80%' : '70px'}
+              style={{ maxHeight: '208px' }}
             />
             {!coverphoto && (
               <p>
@@ -230,6 +306,7 @@ const Details = () => {
               textAlign: 'right',
             },
           }}
+          inputProps={{ maxLength: 100 }}
         />
         <TextField
           margin="normal"
@@ -248,6 +325,7 @@ const Details = () => {
               textAlign: 'right',
             },
           }}
+          inputProps={{ maxLength: 100 }}
         />
       </Box>
       <Box
@@ -290,26 +368,26 @@ const Details = () => {
           <input
             type="file"
             accept="image/*"
-            id="cover-photo
-        "
+            id="eventphoto1"
             style={{ display: 'none' }}
             onChange={(e) => {
-              handleCoverPhotoChange(e.target.files[0]);
+              handleEventPhoto1Change(e.target.files[0]);
             }}
           />
           <Stack sx={{ textAlign: 'center' }} spacing={1}>
             <Label
               sx={{ width: '552px', height: '400px' }}
-              htmlFor="cover-photo"
+              htmlFor="eventphoto1"
               onDragOver={(e) => handleDragOver(e)}
-              onDrop={(e) => handleDrop(e)}
+              onDrop={(e) => handleDrop(e, 2)}
             >
               <img
-                src={coverphoto ? coverphoto : '../../../../static/assets/image.png'}
-                alt="coverPhoto"
-                width="552"
+                src={eventphoto1 ? eventphoto1 : '../../../../static/assets/image.png'}
+                alt="eventPhoto1"
+                width={eventphoto1 ? '80%' : '70px'}
+                style={{ maxHeight: '400px' }}
               />
-              {!coverphoto && (
+              {!eventphoto1 && (
                 <p>
                   <Typography sx={{ color: colors.gray[700] }}>
                     Drag a cover photo for your event here,
@@ -328,26 +406,26 @@ const Details = () => {
           <input
             type="file"
             accept="image/*"
-            id="cover-photo
-        "
+            id="eventphoto2"
             style={{ display: 'none' }}
             onChange={(e) => {
-              handleCoverPhotoChange(e.target.files[0]);
+              handleEventPhoto2Change(e.target.files[0]);
             }}
           />
           <Stack sx={{ textAlign: 'center' }} spacing={1}>
             <Label
               sx={{ width: '552px', height: '400px' }}
-              htmlFor="cover-photo"
+              htmlFor="eventphoto2"
               onDragOver={(e) => handleDragOver(e)}
-              onDrop={(e) => handleDrop(e)}
+              onDrop={(e) => handleDrop(e, 3)}
             >
               <img
-                src={coverphoto ? coverphoto : '../../../../static/assets/image.png'}
-                alt="coverPhoto"
-                width="552"
+                src={eventphoto2 ? eventphoto2 : '../../../../static/assets/image.png'}
+                alt="eventPhoto2"
+                width={eventphoto2 ? '80%' : '70px'}
+                style={{ maxHeight: '400px' }}
               />
-              {!coverphoto && (
+              {!eventphoto2 && (
                 <p>
                   <Typography sx={{ color: colors.gray[700] }}>
                     Drag a cover photo for your event here,
@@ -368,26 +446,26 @@ const Details = () => {
           <input
             type="file"
             accept="image/*"
-            id="cover-photo
-        "
+            id="eventphoto3"
             style={{ display: 'none' }}
             onChange={(e) => {
-              handleCoverPhotoChange(e.target.files[0]);
+              handleEventPhoto3Change(e.target.files[0]);
             }}
           />
           <Stack sx={{ textAlign: 'center' }} spacing={1}>
             <Label
               sx={{ width: '552px', height: '400px' }}
-              htmlFor="cover-photo"
+              htmlFor="eventphoto3"
               onDragOver={(e) => handleDragOver(e)}
-              onDrop={(e) => handleDrop(e)}
+              onDrop={(e) => handleDrop(e, 4)}
             >
               <img
-                src={coverphoto ? coverphoto : '../../../../static/assets/image.png'}
-                alt="coverPhoto"
-                width="552"
+                src={eventphoto3 ? eventphoto3 : '../../../../static/assets/image.png'}
+                alt="eventPhoto3"
+                width={eventphoto3 ? '80%' : '70px'}
+                style={{ maxHeight: '400px' }}
               />
-              {!coverphoto && (
+              {!eventphoto3 && (
                 <p>
                   <Typography sx={{ color: colors.gray[700] }}>
                     Drag a cover photo for your event here,
@@ -406,26 +484,26 @@ const Details = () => {
           <input
             type="file"
             accept="image/*"
-            id="cover-photo
-        "
+            id="eventphoto4"
             style={{ display: 'none' }}
             onChange={(e) => {
-              handleCoverPhotoChange(e.target.files[0]);
+              handleEventPhoto4Change(e.target.files[0]);
             }}
           />
           <Stack sx={{ textAlign: 'center' }} spacing={1}>
             <Label
               sx={{ width: '552px', height: '400px' }}
-              htmlFor="cover-photo"
+              htmlFor="eventphoto4"
               onDragOver={(e) => handleDragOver(e)}
-              onDrop={(e) => handleDrop(e)}
+              onDrop={(e) => handleDrop(e, 5)}
             >
               <img
-                src={coverphoto ? coverphoto : '../../../../static/assets/image.png'}
-                alt="coverPhoto"
-                width="552"
+                src={eventphoto4 ? eventphoto4 : '../../../../static/assets/image.png'}
+                alt="eventPhoto4"
+                width={eventphoto4 ? '80%' : '70px'}
+                style={{ maxHeight: '400px' }}
               />
-              {!coverphoto && (
+              {!eventphoto4 && (
                 <p>
                   <Typography sx={{ color: colors.gray[700] }}>
                     Drag a cover photo for your event here,
