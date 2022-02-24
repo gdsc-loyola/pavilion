@@ -19,6 +19,7 @@ import Banner from '../components/Banner';
 import DeleteIcon from '../components/DeleteIcon';
 import ResponsesTable from '../components/ResponsesTable';
 import SortIcon from '../components/SortIcon';
+import ResponseDetails from '../components/ResponseDetails';
 
 const DefaultTheme = createTheme({
   palette: {
@@ -44,34 +45,6 @@ const DefaultTheme = createTheme({
 })
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-const columns = [
-  { field: 'id', type: 'number', headerName: 'ID #', valueFormatter: (params) => `#${('000' + params.value).substr(-3)}`, sortable: false },
-  { field: 'fullName', headerName: 'Full Name', flex: 1, sortable: false },
-  { field: 'email', headerName: 'Email', flex: 1, sortable: false },
-  { field: 'dateCreated', type: 'dateTime', headerName: 'Submission Date', valueFormatter: (params) => { 
-    const date = new Date(params.value)
-    return `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`
-  }, flex: 0.5, sortable: false },
-  { field: 'updatedAt', type: 'dateTime', headerName: 'Last Updated On', valueFormatter: (params) => { 
-    const date = new Date(params.value)
-    return `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`
-  }, flex: 0.5, sortable: false },
-  { field: 'actions', type: 'actions', getActions: (params) => [
-    <GridActionsCellItem 
-      key={params.id}
-      label='Edit'
-      onClick={() => alert(`edit field num: ${params.id}`)}
-      showInMenu
-    />,
-    <GridActionsCellItem
-      key={params.id}
-      label='Delete'
-      onClick={() => alert(`delete field num: ${params.id}`)}
-      showInMenu
-    />
-  ], flex: 0.5,}
-]
 
 const rows = [{
   "id": 1,
@@ -263,6 +236,7 @@ const Responses = () => {
   const [page, setPage] = useState(0)
   const [selectedItems, setSelectedItems] = useState([])
   const [search, setSearch] = useState('')
+  const [openDetails, setOpenDetails] = useState(null)
   const [accepting, setAccepting] = useState(true)
   useEffect(() => {
     if (!accepting) {
@@ -291,6 +265,34 @@ const Responses = () => {
       openModal()
     }
   }
+
+  const columns = [
+    { field: 'id', type: 'number', headerName: 'ID #', valueFormatter: (params) => `#${('000' + params.value).substr(-3)}`, sortable: false },
+    { field: 'fullName', headerName: 'Full Name', flex: 1, sortable: false },
+    { field: 'email', headerName: 'Email', flex: 1, sortable: false },
+    { field: 'dateCreated', type: 'dateTime', headerName: 'Submission Date', valueFormatter: (params) => { 
+      const date = new Date(params.value)
+      return `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`
+    }, flex: 0.5, sortable: false },
+    { field: 'updatedAt', type: 'dateTime', headerName: 'Last Updated On', valueFormatter: (params) => { 
+      const date = new Date(params.value)
+      return `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`
+    }, flex: 0.5, sortable: false },
+    { field: 'actions', type: 'actions', getActions: (params) => [
+      <GridActionsCellItem 
+        key={params.id}
+        label='Edit'
+        onClick={() => setOpenDetails(responses[params.row.id - 1])}
+        showInMenu
+      />,
+      <GridActionsCellItem
+        key={params.id}
+        label='Delete'
+        onClick={() => alert(`delete field num: ${params.id}`)}
+        showInMenu
+      />
+    ], flex: 0.5,}
+  ]
 
   const SortByButton = () => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -444,7 +446,7 @@ const Responses = () => {
               display: 'flex',
               padding: '16px 40px'
             }}>
-              <Box onClick={() => selectedItems.length === responses.length ? setSelectedItems([]) : setSelectedItems(responses.map(res => res.id))} sx={{
+              <Box onClick={() => selectedItems.length === responses.length || selectedItems.length < responses.length ? setSelectedItems([]) : setSelectedItems(responses.map(res => res.id))} sx={{
                 display: 'flex',
                 cursor: 'pointer',
                 alignItems: 'center',
@@ -509,9 +511,9 @@ const Responses = () => {
               onSelectionModelChange={setSelectedItems}
               sortModel={sortModel}
               onCellClick={(param, event) => {
-                if (param.field === "__check__") return event.stopPropagation()
-                alert(`edit ${param.row.id}`)
-                // TODO: edit response
+                console.log(param.field)
+                if (param.field === "__check__" || param.field === "actions") return event.stopPropagation()
+                setOpenDetails(responses[param.row.id - 1])
               }}
             />
           </Box>
@@ -563,6 +565,12 @@ const Responses = () => {
           label: 'Stop accepting',
           type: 'submit'
         }}
+      />
+
+      <ResponseDetails
+        anchor={'right'}
+        open={openDetails}
+        onClose={() => setOpenDetails(null)}
       />
     </Layout>
   )
