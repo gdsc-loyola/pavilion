@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Drawer, Box, Button, styled, Menu, MenuItem as MItem, Typography, Select, TextField, InputLabel, Autocomplete } from '@mui/material'
+import { Drawer, Box, Button, styled, Menu, MenuItem as MItem, Typography, TextField, Autocomplete } from '@mui/material'
 import { KeyboardArrowDown, KeyboardArrowUp, MoreVert } from '@mui/icons-material'
 import { colors } from '$lib/theme'
 import { useBoolean } from '$lib/utils/useBoolean';
+import '$stylesheets/org/ResponseDetails.scss'
 
 import Banner from './Banner';
 
