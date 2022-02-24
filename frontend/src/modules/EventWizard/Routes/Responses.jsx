@@ -322,7 +322,6 @@ const Responses = () => {
   const SortByButton = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const handleClick = (event) => {
-      console.log('event anchorEl', event.target)
       setAnchorEl(anchorEl ? null : event.target);
     };
     const handleClose = () => {
@@ -613,7 +612,10 @@ const Responses = () => {
       <ResponseDetails
         anchor={'right'}
         open={openDetails}
+        title={`${openDetails?.id} of ${responses.length} responses`}
         onClose={() => setOpenDetails(null)}
+        onNextEntry={() => openDetails.id >= responses.length ? null : setOpenDetails(responses[(openDetails.id - 1) + 1])}
+        onPrevEntry={() => openDetails.id <= 1 ? null : setOpenDetails(responses[(openDetails.id - 1) - 1])}
       />
     </Layout>
   )
