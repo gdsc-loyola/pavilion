@@ -5,7 +5,17 @@ import TopBar from '../components/TopBar';
 import Layout from '../components/Layout';
 import LinkIcon from '../components/LinkIcon';
 import DownloadIcon from '../components/DownloadIcon';
-import { Button, Box, styled, Typography, Stack, TextField, SvgIcon } from '@mui/material';
+
+import {
+  Button,
+  Box,
+  styled,
+  Typography,
+  Stack,
+  TextField,
+  SvgIcon,
+  FormHelperText,
+} from '@mui/material';
 import { colors, typography } from '$lib/theme';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
@@ -37,8 +47,9 @@ const HelperText = styled('p')({
   fontWeight: typography.fontWeight.reg,
 });
 
-const Details = () => {
+const Details = (props) => {
   const { eventName } = useParams();
+
   const [details, setDetails] = React.useState({
     startDate: '',
     endDate: '',
@@ -49,6 +60,7 @@ const Details = () => {
     eventphoto2: null,
     eventphoto3: null,
     eventphoto4: null,
+    responsesSheet: '',
   });
 
   const handleDragOver = (e) => {
@@ -156,6 +168,16 @@ const Details = () => {
     });
   };
 
+  const handleResponsesSheetChange = (e) => {
+    setDetails((prevState) => {
+      return {
+        ...prevState,
+        responsesSheet: e,
+      };
+    });
+  };
+
+  const pastevent = true;
   const coverphoto =
     typeof details.coverphoto?.name == 'string' ? URL.createObjectURL(details.coverphoto) : null;
   const eventphoto1 =
@@ -167,8 +189,8 @@ const Details = () => {
   const eventphoto4 =
     typeof details.eventphoto4?.name == 'string' ? URL.createObjectURL(details.eventphoto4) : null;
   return (
-    <Layout>
-      <TopBar eventName={eventName}>
+    <Layout sidebar={!pastevent}>
+      <TopBar eventName={eventName} sidebar={pastevent}>
         <Box
           sx={{
             display: 'flex',
@@ -206,7 +228,7 @@ const Details = () => {
         </Box>
       </TopBar>
 
-      <Box sx={{ marginLeft: '56px', marginTop: '40px', width: '552px' }}>
+      <Box sx={{ marginLeft: pastevent ? '144px' : '56px', marginTop: '40px', width: '552px' }}>
         <Typography
           sx={{
             color: colors.gray[700],
@@ -304,6 +326,8 @@ const Details = () => {
           FormHelperTextProps={{
             sx: {
               textAlign: 'right',
+              marginRight: '0px',
+              marginLeft: '0px',
             },
           }}
           inputProps={{ maxLength: 100 }}
@@ -316,21 +340,74 @@ const Details = () => {
           size="normal"
           variant="outlined"
           label="Describe this event!"
-          helperText={`${details.description.length}/100`}
+          helperText={`${details.description.length}/500`}
           onChange={(e) => {
             handleDescriptionChange(e.target.value);
           }}
           FormHelperTextProps={{
             sx: {
               textAlign: 'right',
+              marginRight: '0px',
+              marginLeft: '0px',
             },
           }}
-          inputProps={{ maxLength: 100 }}
+          inputProps={{ maxLength: 500 }}
         />
+        {pastevent ? (
+          <>
+            <TextField
+              fullWidth
+              margin="normal"
+              size="normal"
+              variant="outlined"
+              label="Link to responses"
+              onChange={(e) => {
+                handleResponsesSheetChange(e.target.value);
+              }}
+              sx={{ marginBottom: '0px' }}
+              inputProps={{ maxLength: 500 }}
+            />
+            <FormHelperText>
+              <Typography
+                display="inline"
+                sx={{
+                  color: 'rgba(0, 0, 0, 0.6)',
+                  fontSize: '0.75rem',
+                  textAlign: 'left',
+                }}
+              >
+                <svg
+                  style={{ verticalAlign: 'middle', marginRight: '6.67px' }}
+                  width="12"
+                  height="12"
+                  fill="none"
+                  s
+                >
+                  <path
+                    d="M6 .833a5.167 5.167 0 1 0 .002 10.335A5.167 5.167 0 0 0 6.001.833Zm0 2.292a.875.875 0 1 1 0 1.75.875.875 0 0 1 0-1.75Zm1.167 5.292a.25.25 0 0 1-.25.25H5.084a.25.25 0 0 1-.25-.25v-.5a.25.25 0 0 1 .25-.25h.25V6.333h-.25a.25.25 0 0 1-.25-.25v-.5a.25.25 0 0 1 .25-.25h1.333a.25.25 0 0 1 .25.25v2.084h.25a.25.25 0 0 1 .25.25v.5Z"
+                    fill="#498AF4"
+                  />
+                </svg>
+                Sheet of registration responses for your event, if any.
+              </Typography>
+              <Typography
+                display="inline-block"
+                sx={{
+                  width: '238.90px',
+                  color: 'rgba(0, 0, 0, 0.6)',
+                  fontSize: '0.75rem',
+                  textAlign: 'right',
+                }}
+              >
+                {`${details.responsesSheet.length}/500`}
+              </Typography>
+            </FormHelperText>
+          </>
+        ) : null}
       </Box>
       <Box
         sx={{
-          marginLeft: '56px',
+          marginLeft: pastevent ? '144px' : '56px',
           marginRight: '56px',
           marginTop: '104px',
           display: 'flex',
@@ -363,6 +440,7 @@ const Details = () => {
             gap: '24px',
             marginTop: '24px',
             marginBottom: '24px',
+            flexWrap: 'wrap',
           }}
         >
           <input
@@ -442,7 +520,15 @@ const Details = () => {
             <HelperText>Suggested ratio — 3:2 (ex. 1080x720)</HelperText>
           </Stack>
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row', gap: '24px', marginBottom: '135px' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '24px',
+            marginBottom: pastevent ? '135px' : '105px',
+            flexWrap: 'wrap',
+          }}
+        >
           <input
             type="file"
             accept="image/*"
@@ -521,21 +607,23 @@ const Details = () => {
           </Stack>
         </Box>
       </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          height: '72px',
-          border: '1px solid #D1D5DB',
-        }}
-      >
-        <Button size="small" sx={{ marginRight: '56px' }}>
-          Next
-          <SvgIcon fontSize="small" component={KeyboardArrowRightIcon} />
-        </Button>
-      </Box>
+      {pastevent ? null : (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            height: '72px',
+            border: '1px solid #D1D5DB',
+          }}
+        >
+          <Button size="small" sx={{ marginRight: '56px' }}>
+            Next
+            <SvgIcon fontSize="small" component={KeyboardArrowRightIcon} />
+          </Button>
+        </Box>
+      )}
     </Layout>
   );
 };

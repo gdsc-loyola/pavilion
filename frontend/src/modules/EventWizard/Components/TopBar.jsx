@@ -11,14 +11,17 @@ const CustomContainer = styled('div')({
   },
 });
 
-const TopBar = ({ eventName, children }) => {
+const TopBar = ({ eventName, children, sidebar }) => {
   return (
     <CustomContainer
       sx={{
         maxWidth: '100%',
         display: 'flex',
         justifyContent: 'space-between',
-        padding: '1.75rem 3.5rem',
+        paddingTop: '1.75rem',
+        paddingBottom: '1.75rem',
+        paddingLeft: sidebar ? '144px' : '3.5rem',
+        paddingRight: sidebar ? '144px' : '3.5rem',
         borderBottom: '1px solid #D1D5DB',
         alignItems: 'center',
       }}
