@@ -20,7 +20,6 @@ import { useBoolean } from '$lib/utils/useBoolean';
 import Layout from '../components/Layout';
 import TopBar from '../components/TopBar';
 import LinkIcon from '../components/LinkIcon';
-import Container from '../components/Container';
 import Searchbar from '$components/Searchbar';
 import LeftArrow from '../components/LeftArrow';
 import RightArrow from '../components/RightArrow';
@@ -54,6 +53,26 @@ const DefaultTheme = createTheme({
     ].join(','),
   },
 });
+
+const CustomContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  padding: '1rem 3rem',
+  height: '75vh',
+  '.MuiButton-root': {
+    fontWeight: theme.fontWeight.med,
+  },
+  'MuiContainer-root': {
+    maxWidth: '100%',
+    paddingLeft: '68px !important',
+    paddingRight: '68px !important',
+  },
+  h1: {
+    fontSize: theme.fontSize.lg,
+    fontWeight: theme.fontWeight.bold,
+  },
+  position: 'relative',
+}))
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -255,6 +274,21 @@ const Responses = () => {
   const [page, setPage] = useState(0);
   const [selectedItems, setSelectedItems] = useState([]);
   const [search, setSearch] = useState('');
+  useEffect(() => {
+    if (search !== '' || search !== ' ' || search != null) {
+      const filtered = rows.filter((row) => {
+        return (
+          row.fullName.toLowerCase().includes(search.toLowerCase()) ||
+          row.email.toLowerCase().includes(search.toLowerCase()) ||
+          row.idNum.toLowerCase().includes(search.toLowerCase()) ||
+          row.course.toLowerCase().includes(search.toLowerCase())
+        );
+      });
+      setResponses(filtered);
+    } else {
+      setResponses(rows);
+    }
+  }, [search])
   const [openDetails, setOpenDetails] = useState(null);
   const [accepting, setAccepting] = useState(true);
   useEffect(() => {
@@ -542,7 +576,7 @@ const Responses = () => {
         </Box>
       </TopBar>
 
-      <Container>
+      <CustomContainer>
         <Typography variant="h6" fontWeight={700}>
           {
             // TODO: number of responses
@@ -756,7 +790,7 @@ const Responses = () => {
 
         <Banner show={isBannerVisible} label={'Event link copied to clipboard!'} />
         <Banner show={isSaveBannerVisible} label={'Response was successfully updated!'} />
-      </Container>
+      </CustomContainer>
 
       <Modal
         open={isAcceptingModalOpen}
