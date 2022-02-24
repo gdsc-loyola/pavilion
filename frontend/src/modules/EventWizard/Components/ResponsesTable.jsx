@@ -46,12 +46,19 @@ const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSe
         '& .MuiDataGrid-row': {
           padding: '0 40px',
         },
+        '& .MuiDataGrid-row:hover': {
+          backgroundColor: colors.gray[100],
+        },
         '& .MuiDataGrid-row:nth-child(even)': {
           backgroundColor: colors.blue[50]
+        },
+        '& .MuiDataGrid-row:nth-child(even):hover': {
+          backgroundColor: colors.gray[100],
         },
         '& .MuiDataGrid-cell': {
           border: 'none',
           outline: 'none !important',
+          cursor: 'pointer'
         },
         '& .MuiDataGrid-menuList': {
           padding: '0 !important'

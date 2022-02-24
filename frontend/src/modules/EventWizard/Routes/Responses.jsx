@@ -53,7 +53,7 @@ const rows = [{
   "dateCreated": "2022-01-06T06:04:54Z",
   "updatedAt": "2021-12-31T03:24:23Z",
   "idNum": "3",
-  "year": 1,
+  "year": "1st Year",
   "course": "Bluezoom"
 }, {
   "id": 2,
@@ -62,7 +62,7 @@ const rows = [{
   "dateCreated": "2022-02-16T18:29:57Z",
   "updatedAt": "2022-02-02T09:34:47Z",
   "idNum": "27",
-  "year": 2,
+  "year": "3rd Year",
   "course": "Jamia"
 }, {
   "id": 3,
@@ -70,7 +70,7 @@ const rows = [{
   "email": "bfinnes2@accuweather.com",
   "dateCreated": "2022-02-22T11:48:35Z",
   "idNum": "01",
-  "year": 3,
+  "year": "1st Year",
   "course": "Dynabox"
 }, {
   "id": 4,
@@ -78,7 +78,7 @@ const rows = [{
   "email": "chadland3@wikimedia.org",
   "dateCreated": "2022-02-18T16:13:13Z",
   "idNum": "89555",
-  "year": 4,
+  "year": "1st Year",
   "course": "Topicware"
 }, {
   "id": 5,
@@ -87,7 +87,7 @@ const rows = [{
   "dateCreated": "2021-12-21T04:07:47Z",
   "updatedAt": "2022-01-10T12:05:45Z",
   "idNum": "05",
-  "year": 5,
+  "year": "4th Year",
   "course": "Quamba"
 }, {
   "id": 6,
@@ -96,7 +96,7 @@ const rows = [{
   "dateCreated": "2022-01-05T12:32:05Z",
   "updatedAt": "2022-02-17T00:10:35Z",
   "idNum": "744",
-  "year": 6,
+  "year": "2nd Year",
   "course": "Ailane"
 }, {
   "id": 7,
@@ -105,7 +105,7 @@ const rows = [{
   "dateCreated": "2022-01-13T00:56:04Z",
   "updatedAt": "2022-01-23T05:11:42Z",
   "idNum": "6",
-  "year": 7,
+  "year": "2nd Year",
   "course": "Edgeify"
 }, {
   "id": 8,
@@ -114,7 +114,7 @@ const rows = [{
   "dateCreated": "2022-02-20T13:03:26Z",
   "updatedAt": "2022-02-18T17:38:42Z",
   "idNum": "06097",
-  "year": 8,
+  "year": "4th Year",
   "course": "Oyonder"
 }, {
   "id": 9,
@@ -123,7 +123,7 @@ const rows = [{
   "dateCreated": "2022-02-10T04:16:15Z",
   "updatedAt": "2022-02-01T21:16:13Z",
   "idNum": "886",
-  "year": 9,
+  "year": "3rd Year",
   "course": "Skinder"
 }, {
   "id": 10,
@@ -131,7 +131,7 @@ const rows = [{
   "email": "cflann9@de.vu",
   "dateCreated": "2022-01-09T21:46:41Z",
   "idNum": "663",
-  "year": 10,
+  "year": "1st Year",
   "course": "Tagopia"
 }]
 
@@ -621,12 +621,14 @@ const Responses = () => {
 
       <ResponseDetails
         edit={isEdit}
+        endEdit={endEdit}
         anchor={'right'}
         open={openDetails}
         title={`${openDetails?.id} of ${responses.length} responses`}
         onClose={handleCloseDetails}
         onNextEntry={() => openDetails.id >= responses.length ? null : setOpenDetails(responses[(openDetails.id - 1) + 1])}
         onPrevEntry={() => openDetails.id <= 1 ? null : setOpenDetails(responses[(openDetails.id - 1) - 1])}
+        onDelete={() => setDeleteEntry(openDetails)}
       />
     </Layout>
   )
