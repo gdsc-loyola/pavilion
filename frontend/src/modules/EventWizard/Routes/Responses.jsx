@@ -403,8 +403,8 @@ const Responses = () => {
               color: colors.blue[300],
               textTransform: 'none',
               boxShadow: 'none',
-            }} disabled={selectedItems.length > 0} variant={selectedItems.length > 0 ? 'contained' : 'outlined'} color={selectedItems.length > 0 ? 'secondary' : 'primary'}>
-            <FileDownload color={selectedItems.length > 0 ? 'disabled' : 'primary'} />
+            }} disabled={selectedItems.length > 0 && selectedItems.length <= responses.length} variant={selectedItems.length > 0 ? 'contained' : 'outlined'} color={selectedItems.length > 0 ? 'secondary' : 'primary'}>
+            <FileDownload color={selectedItems.length > 0 && selectedItems.length <= responses.length ? 'disabled' : 'primary'} />
               <p style={{ margin: 'auto 0 auto 4px', color: selectedItems.length > 0 ? colors.gray[400] : colors.blue[300] }}>Download all</p>
             </Button>
           </ThemeProvider>
@@ -498,6 +498,7 @@ const Responses = () => {
                     borderRight: '1px solid #D1D5DB',
                     borderLeft: '1px solid #D1D5DB',
                     padding: '4px 24px',
+                    cursor: 'pointer'
                   }}>
                     <FileDownload />
                     Download
@@ -506,7 +507,8 @@ const Responses = () => {
                     display: 'flex',
                     color: colors.gray[700],
                     gap: '4px',
-                    paddingLeft: '24px'
+                    paddingLeft: '24px',
+                    cursor: 'pointer'
                   }}>
                     <DeleteIcon />
                     Delete
