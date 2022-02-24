@@ -142,14 +142,20 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
     }
   }, [open])
 
+  useEffect(() => {
+    edit ? startEditMode() : endEditMode()
+  }, [edit])
+
   const onSubmit = (data) => {
     // TODO: update response
   }
 
   const handleCancelEdit = () => {
-    endEditMode()
-    endEdit()
-    // onCancelEdit()
+    if (JSON.stringify(open) !== JSON.stringify(updatedDetails)) {
+      onCancelEdit()
+    } else {
+      endEditMode()
+    }
   }
 
   return (

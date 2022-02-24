@@ -254,6 +254,7 @@ const Responses = () => {
   const { value: isAcceptingModalOpen, setFalse: closeAcceptingModal, setTrue: openAcceptingModal } = useBoolean();
   const { value: isBannerVisible, setFalse: hideBanner, setTrue: showBanner } = useBoolean();
   const { value: isEdit, setFalse: endEdit, setTrue: startEdit } = useBoolean();
+  const { value: isCancelEdit, setFalse: abortCancelEdit, setTrue: confirmCancelEdit } = useBoolean();
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -619,6 +620,24 @@ const Responses = () => {
         }}
       />
 
+      <Modal
+        open={isCancelEdit}
+        onClose={abortCancelEdit}
+        withTextField={false}
+        warning={true}
+        title="Cancel edits"
+        subtitle="This will discard all the changes you’ve done so far."
+        onSubmit={() => {abortCancelEdit(); endEdit();}}
+        leftButtonProps={{
+          label: 'Never mind',
+          onClick: abortCancelEdit,
+        }}
+        rightButtonProps={{
+          label: 'Discard edits',
+          type: 'submit'
+        }}
+      />
+
       <ResponseDetails
         edit={isEdit}
         endEdit={endEdit}
@@ -629,6 +648,7 @@ const Responses = () => {
         onNextEntry={() => openDetails.id >= responses.length ? null : setOpenDetails(responses[(openDetails.id - 1) + 1])}
         onPrevEntry={() => openDetails.id <= 1 ? null : setOpenDetails(responses[(openDetails.id - 1) - 1])}
         onDelete={() => setDeleteEntry(openDetails)}
+        onCancelEdit={confirmCancelEdit}
       />
     </Layout>
   )
