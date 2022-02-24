@@ -17,9 +17,7 @@ const Main = styled('main')({
 const Layout = (props) => {
   return (
     <>
-      <Main>
-        {props.children}
-      </Main>
+      <Main>{props.children}</Main>
       <Sidebar />
     </>
   );

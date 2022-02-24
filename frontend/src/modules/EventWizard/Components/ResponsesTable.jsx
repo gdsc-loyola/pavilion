@@ -1,14 +1,22 @@
-import React from 'react'
-import { Checkbox, styled } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
-import { colors } from '$lib/theme'
+import React from 'react';
+import { Checkbox, styled } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { colors } from '$lib/theme';
 
-const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSelectionModelChange, sortModel }) => {
+const ResponsesTable = ({
+  columns,
+  rows,
+  page,
+  onCellClick,
+  selectionModel,
+  onSelectionModelChange,
+  sortModel,
+}) => {
   const CustomCheckbox = styled(Checkbox)({
     '&.Mui-checked': {
       color: colors.green[300],
     },
-  })
+  });
 
   return (
     <DataGrid
@@ -35,12 +43,12 @@ const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSe
           padding: '0 34px',
         },
         '& .MuiDataGrid-columnSeparator--sideRight': {
-          display: 'none'
+          display: 'none',
         },
-        "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer": {
-          display: "none"
+        '& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer': {
+          display: 'none',
         },
-        "& .Mui-selected": {
+        '& .Mui-selected': {
           backgroundColor: `${colors.blue[200]} !important`,
         },
         '& .MuiDataGrid-row': {
@@ -50,7 +58,7 @@ const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSe
           backgroundColor: colors.gray[100],
         },
         '& .MuiDataGrid-row:nth-child(even)': {
-          backgroundColor: colors.blue[50]
+          backgroundColor: colors.blue[50],
         },
         '& .MuiDataGrid-row:nth-child(even):hover': {
           backgroundColor: colors.gray[100],
@@ -58,18 +66,18 @@ const ResponsesTable = ({ columns, rows, page, onCellClick, selectionModel, onSe
         '& .MuiDataGrid-cell': {
           border: 'none',
           outline: 'none !important',
-          cursor: 'pointer'
+          cursor: 'pointer',
         },
         '& .MuiDataGrid-menuList': {
-          padding: '0 !important'
-        }
+          padding: '0 !important',
+        },
       }}
       components={{
-        BaseCheckbox: CustomCheckbox
+        BaseCheckbox: CustomCheckbox,
       }}
       sortModel={sortModel}
     />
-  )
-}
+  );
+};
 
-export default ResponsesTable
+export default ResponsesTable;

@@ -98,12 +98,17 @@ const Modal = (props) => {
             </Grid>
 
             <Grid item xs={6}>
-              <Button size="small" fullWidth {...rightButtonProps} sx={{
-                background: warning ? colors.red[300] : colors.blue[300],
-                ':hover': {
-                  backgroundColor: warning ? colors.red[300] : colors.blue[300],
-                }
-              }}>
+              <Button
+                size="small"
+                fullWidth
+                {...rightButtonProps}
+                sx={{
+                  background: warning ? colors.red[300] : colors.blue[300],
+                  ':hover': {
+                    backgroundColor: warning ? colors.red[300] : colors.blue[300],
+                  },
+                }}
+              >
                 {rightButtonProps?.label}
               </Button>
             </Grid>
