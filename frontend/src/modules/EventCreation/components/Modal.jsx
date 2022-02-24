@@ -19,10 +19,12 @@ const Modal = (props) => {
     title,
     subtitle,
     withTextField = true,
+    withButtons = true,
     onSubmit,
     TextFieldProps,
     leftButtonProps,
     rightButtonProps,
+    children,
     ...rest
   } = props;
   return (
@@ -88,19 +90,22 @@ const Modal = (props) => {
               {...TextFieldProps}
             />
           )}
-          <Grid container spacing={4} paddingTop={3} sx={{}}>
-            <Grid item xs={6}>
-              <Button size="medium" variant="outlined" fullWidth {...leftButtonProps}>
-                {leftButtonProps?.label}
-              </Button>
-            </Grid>
+          {withButtons && (
+            <Grid container spacing={4} paddingTop={3} sx={{}}>
+              <Grid item xs={6}>
+                <Button size="medium" variant="outlined" fullWidth {...leftButtonProps}>
+                  {leftButtonProps?.label}
+                </Button>
+              </Grid>
 
-            <Grid item xs={6}>
-              <Button size="small" fullWidth {...rightButtonProps}>
-                {rightButtonProps?.label}
-              </Button>
+              <Grid item xs={6}>
+                <Button size="small" fullWidth {...rightButtonProps}>
+                  {rightButtonProps?.label}
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
+          {children}
         </Box>
       </Box>
     </MuiModal>
