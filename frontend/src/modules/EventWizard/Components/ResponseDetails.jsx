@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Drawer, Box, Button, styled, Menu, MenuItem as MItem, Typography } from '@mui/material'
 import { KeyboardArrowDown, KeyboardArrowUp, MoreVert } from '@mui/icons-material'
 import { colors } from '$lib/theme'
@@ -57,7 +57,7 @@ const EntryFieldText = styled(Typography)({
   color: colors.gray[700],
 })
 
-const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntry }) => {
+const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntry, edit }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.target);
@@ -71,6 +71,18 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
   const updatedDateTime = open?.updatedAt ? new Date(open?.updatedAt) : null;
 
   const { value: isEditMode, setFalse: endEditMode, setTrue: startEditMode } = useBoolean();
+  const handleEdit = () => {
+    startEditMode();
+    handleClose();
+  }
+
+  useEffect(() => {
+    if (edit) {
+      startEditMode()
+    } else {
+      endEditMode()
+    }
+  }, [open])
 
   return (
     <Drawer
@@ -105,27 +117,33 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
           alignItems: 'center',
           gap: '12px'
         }}>
-          <Button
-            variant='outlined'
-            sx={{
-              padding: '4px',
-              minWidth: 0,
-            }}
-            onClick={onPrevEntry}
-          >
-            <KeyboardArrowUp />
-          </Button>
-          <Button
-            variant='outlined'
-            sx={{
-              padding: '4px',
-              minWidth: 0,
-            }}
-            onClick={onNextEntry}
-          >
-            <KeyboardArrowDown />
-          </Button>
-          <p style={{ color: colors.gray[700], margin: 'auto 0', fontSize: '16px', fontWeight: 500 }}>{ title }</p>
+          { !isEditMode &&
+            <>
+              <Button
+                variant='outlined'
+                sx={{
+                  padding: '4px',
+                  minWidth: 0,
+                }}
+                onClick={onPrevEntry}
+              >
+                <KeyboardArrowUp />
+              </Button>
+              <Button
+                variant='outlined'
+                sx={{
+                  padding: '4px',
+                  minWidth: 0,
+                }}
+                onClick={onNextEntry}
+              >
+                <KeyboardArrowDown />
+              </Button>
+            </>
+          }
+          <p style={{ color: colors.gray[700], margin: 'auto 0', fontSize: '16px', fontWeight: 500 }}>
+            { isEditMode ? 'Edit response' : title }
+          </p>
         </Box>
         <MoreVert
           onClick={handleClick}
@@ -143,7 +161,7 @@ const ResponseDetails = ({ anchor, title, open, onClose, onNextEntry, onPrevEntr
           open={menuOpen}
           onClose={handleClose}
         >
-          <MenuItem onClick={startEditMode} disableRipple>
+          <MenuItem onClick={handleEdit} disableRipple>
             Edit
           </MenuItem>
           <DeleteMenuItem onClick={() => alert('open delete modal')} disableRipple>

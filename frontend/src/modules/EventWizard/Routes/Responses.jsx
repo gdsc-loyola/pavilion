@@ -253,6 +253,7 @@ const Responses = () => {
 
   const { value: isAcceptingModalOpen, setFalse: closeAcceptingModal, setTrue: openAcceptingModal } = useBoolean();
   const { value: isBannerVisible, setFalse: hideBanner, setTrue: showBanner } = useBoolean();
+  const { value: isEdit, setFalse: endEdit, setTrue: startEdit } = useBoolean();
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -266,6 +267,16 @@ const Responses = () => {
     if (!event.target.checked) {
       openAcceptingModal()
     }
+  }
+
+  const handleEdit = (response) => {
+    startEdit()
+    setOpenDetails(response)
+  }
+
+  const handleCloseDetails = () => {
+    endEdit()
+    setOpenDetails(null)
   }
 
   const columns = [
@@ -284,7 +295,7 @@ const Responses = () => {
       <GridActionsCellItem 
         key={params.id}
         label='Edit'
-        onClick={() => setOpenDetails(responses[params.row.id - 1])}
+        onClick={() => handleEdit(responses[params.row.id - 1])}
         showInMenu
         sx={{
           fontSize: '14px',
@@ -609,10 +620,11 @@ const Responses = () => {
       />
 
       <ResponseDetails
+        edit={isEdit}
         anchor={'right'}
         open={openDetails}
         title={`${openDetails?.id} of ${responses.length} responses`}
-        onClose={() => setOpenDetails(null)}
+        onClose={handleCloseDetails}
         onNextEntry={() => openDetails.id >= responses.length ? null : setOpenDetails(responses[(openDetails.id - 1) + 1])}
         onPrevEntry={() => openDetails.id <= 1 ? null : setOpenDetails(responses[(openDetails.id - 1) - 1])}
       />
