@@ -201,7 +201,7 @@ const Details = (props) => {
     typeof details.eventphoto4?.name == 'string' ? URL.createObjectURL(details.eventphoto4) : null;
   return (
     <Layout sidebar={!pastevent}>
-      <TopBar eventName={eventName} sidebar={pastevent}>
+      <TopBar eventName={eventName} sidebar={!pastevent}>
         <Box
           sx={{
             display: 'flex',
@@ -232,7 +232,6 @@ const Details = (props) => {
               fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.med,
             }}
-            inputprops
             variant="outlined"
             onClick={() => {
               handleWarningState(false);
