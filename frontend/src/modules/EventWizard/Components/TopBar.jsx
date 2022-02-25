@@ -12,6 +12,12 @@ const CustomContainer = styled('div')({
 });
 
 const TopBar = ({ eventName, children, sidebar }) => {
+  const [eventTitle, setEventTitle] = React.useState(eventName);
+
+  const handleEventTitleChange = (e) => {
+    setEventTitle(e);
+  };
+
   return (
     <CustomContainer
       sx={{
@@ -39,8 +45,12 @@ const TopBar = ({ eventName, children, sidebar }) => {
             disableUnderline: true,
             endAdornment: <EditIcon />,
           }}
-          defaultValue={eventName}
+          onChange={(e) => {
+            handleEventTitleChange(e.target.value);
+          }}
+          defaultValue={eventTitle}
           sx={{
+            width: eventTitle.length * 7 + 100,
             border: 'none',
           }}
         />
