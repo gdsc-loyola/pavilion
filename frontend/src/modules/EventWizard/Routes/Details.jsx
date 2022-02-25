@@ -17,6 +17,7 @@ import {
   TextField,
   SvgIcon,
   FormHelperText,
+  Link,
 } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -188,7 +189,7 @@ const Details = (props) => {
     });
   };
 
-  const pastevent = true;
+  const pastevent = false;
   const coverphoto =
     typeof details.coverphoto?.name == 'string' ? URL.createObjectURL(details.coverphoto) : null;
   const eventphoto1 =
@@ -687,7 +688,7 @@ const Details = (props) => {
             border: '1px solid #D1D5DB',
           }}
         >
-          <Button size="small" sx={{ marginRight: '56px' }}>
+          <Button href="registration" size="small" sx={{ marginRight: '56px' }}>
             Next
             <SvgIcon fontSize="small" component={KeyboardArrowRightIcon} />
           </Button>

@@ -4,11 +4,12 @@ import TopBar from '../components/TopBar';
 import Layout from '../components/Layout';
 import Modal from '../Components/Modal';
 import { useBoolean } from '$lib/utils/useBoolean';
-import { Button, Box, Typography, TextField, SvgIcon } from '@mui/material';
+import { Button, Box, Typography, TextField, SvgIcon, Link } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 const Registration = (props) => {
   const { eventName } = useParams();
+  const eventHasResponses = true;
   const [warning, setWarningState] = React.useState(true);
   const [formDescription, setFormDescription] = React.useState('');
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
@@ -81,7 +82,7 @@ const Registration = (props) => {
           sx={{
             width: '100%',
             height: '80px',
-            backgroundColor: colors.blue[100],
+            backgroundColor: eventHasResponses ? colors.red[100] : colors.blue[100],
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
@@ -96,17 +97,19 @@ const Registration = (props) => {
           >
             <path
               d="M16 2.667C8.64 2.667 2.665 8.64 2.665 16s5.973 13.333 13.333 13.333S29.333 23.36 29.333 16 23.359 2.667 15.999 2.667Zm1.333 20h-2.667v-8h2.667v8Zm0-10.667h-2.667V9.333h2.667V12Z"
-              fill="#498AF4"
+              fill={eventHasResponses ? colors.red[300] : colors.blue[300]}
             />
           </svg>
           <Typography
             sx={{
-              color: colors.blue[300],
+              color: eventHasResponses ? colors.red[300] : colors.blue[300],
               fontSize: typography.fontSize.base,
               fontWeight: typography.fontWeight.reg,
             }}
           >
-            Basic Information cannot be edited for now. Stay tuned for future updates!
+            {eventHasResponses
+              ? 'This event has responses so the form can no longer be edited.'
+              : 'Basic Information cannot be edited for now. Stay tuned for future updates!'}
           </Typography>
         </Box>
         <Typography
@@ -270,7 +273,7 @@ const Registration = (props) => {
           border: '1px solid #D1D5DB',
         }}
       >
-        <Button size="small" sx={{ marginLeft: '56px' }}>
+        <Button href="details" size="small" sx={{ marginLeft: '56px' }}>
           <SvgIcon fontSize="small" component={KeyboardArrowLeftIcon} />
           Previous
         </Button>
