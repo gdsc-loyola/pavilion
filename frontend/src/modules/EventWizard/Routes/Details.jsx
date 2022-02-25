@@ -1,10 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Sidebar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import Layout from '../components/Layout';
-import LinkIcon from '../components/LinkIcon';
-import DownloadIcon from '../components/DownloadIcon';
+import Modal from '../Components/Modal';
+import { useBoolean } from '$lib/utils/useBoolean';
 
 import {
   Button,
@@ -49,7 +48,9 @@ const HelperText = styled('p')({
 
 const Details = (props) => {
   const { eventName } = useParams();
+  const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
 
+  const [warning, setWarningState] = React.useState(true);
   const [details, setDetails] = React.useState({
     startDate: '',
     endDate: '',
@@ -63,6 +64,13 @@ const Details = (props) => {
     responsesSheet: '',
   });
 
+  const handleWarningState = (state) => {
+    if (state == true) {
+      setWarningState(true);
+    } else {
+      setWarningState(false);
+    }
+  };
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -206,6 +214,10 @@ const Details = (props) => {
               fontWeight: typography.fontWeight.med,
             }}
             variant="outlined"
+            onClick={() => {
+              handleWarningState(true);
+              openModal();
+            }}
           >
             Discard
           </Button>
@@ -219,6 +231,10 @@ const Details = (props) => {
             }}
             inputprops
             variant="outlined"
+            onClick={() => {
+              handleWarningState(false);
+              openModal();
+            }}
           >
             Save as draft
           </Button>
@@ -290,10 +306,17 @@ const Details = (props) => {
         >
           <TextField
             fullWidth
-            sx={{ marginRight: '13px' }}
+            sx={{ marginRight: '13px', marginBottom: '16px', marginTop: '16px' }}
             size="normal"
             variant="outlined"
             label="Start date"
+            InputLabelProps={{
+              sx: {
+                fontSize: typography.fontSize.sm,
+                fontWeight: typography.fontWeight.reg,
+                color: colors.gray[400],
+              },
+            }}
           />
           <Typography
             sx={{
@@ -307,11 +330,18 @@ const Details = (props) => {
           </Typography>
           <TextField
             fullWidth
-            sx={{ marginLeft: '13px' }}
+            sx={{ marginLeft: '13px', marginBottom: '16px', marginTop: '16px' }}
             size="normal"
             variant="outlined"
             label="End date"
             margin="normal"
+            InputLabelProps={{
+              sx: {
+                fontSize: typography.fontSize.sm,
+                fontWeight: typography.fontWeight.reg,
+                color: colors.gray[400],
+              },
+            }}
           />
         </Box>
         <TextField
@@ -331,6 +361,13 @@ const Details = (props) => {
             },
           }}
           inputProps={{ maxLength: 100 }}
+          InputLabelProps={{
+            sx: {
+              fontSize: typography.fontSize.sm,
+              fontWeight: typography.fontWeight.reg,
+              color: colors.gray[400],
+            },
+          }}
         />
         <TextField
           margin="normal"
@@ -352,6 +389,13 @@ const Details = (props) => {
             },
           }}
           inputProps={{ maxLength: 500 }}
+          InputLabelProps={{
+            sx: {
+              fontSize: typography.fontSize.sm,
+              fontWeight: typography.fontWeight.reg,
+              color: colors.gray[400],
+            },
+          }}
         />
         {pastevent ? (
           <>
@@ -366,6 +410,13 @@ const Details = (props) => {
               }}
               sx={{ marginBottom: '0px' }}
               inputProps={{ maxLength: 500 }}
+              InputLabelProps={{
+                sx: {
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: typography.fontWeight.reg,
+                  color: colors.gray[400],
+                },
+              }}
             />
             <FormHelperText>
               <Typography
@@ -624,6 +675,44 @@ const Details = (props) => {
           </Button>
         </Box>
       )}
+      <Modal
+        withTextField={false}
+        warning={warning}
+        open={isModalOpen}
+        onClose={closeModal}
+        asForm={true}
+        title={warning ? 'Discard Event' : 'Close and save as draft'}
+        subtitle={
+          warning
+            ? 'This will delete all the information you’ve added so far.'
+            : 'You can go back to editing this event anytime.'
+        }
+        leftButtonProps={{
+          label: 'Never Mind',
+          onClick: closeModal,
+          sx: {
+            fontSize: typography.fontSize.sm,
+            fontWeight: typography.fontWeight.med,
+          },
+        }}
+        rightButtonProps={{
+          label: warning ? 'Discard Event' : 'Save as draft',
+          onClick: closeModal,
+          sx: {
+            fontSize: typography.fontSize.sm,
+            fontWeight: typography.fontWeight.med,
+            color: '#FFF',
+            background: warning
+              ? colors.red[300]
+              : 'linear-gradient(90deg, #498af4 0%, #1a73e8 100%)',
+            ':hover': {
+              background: warning
+                ? colors.red[300]
+                : 'linear-gradient(90deg, #498af4 0%, #1a73e8 100%)',
+            },
+          },
+        }}
+      />
     </Layout>
   );
 };
