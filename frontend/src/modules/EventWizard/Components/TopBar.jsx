@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, styled } from '@mui/material';
+import { Box, Typography, styled, TextField } from '@mui/material';
 
 import EditIcon from './EditIcon';
 
@@ -33,10 +33,17 @@ const TopBar = ({ eventName, children, sidebar }) => {
           alignItems: 'center',
         }}
       >
-        <Typography variant="p" fontWeight={500}>
-          {eventName}
-        </Typography>
-        <EditIcon />
+        <TextField
+          variant="standard"
+          InputProps={{
+            disableUnderline: true,
+            endAdornment: <EditIcon />,
+          }}
+          defaultValue={eventName}
+          sx={{
+            border: 'none',
+          }}
+        />
       </Box>
 
       {children}
