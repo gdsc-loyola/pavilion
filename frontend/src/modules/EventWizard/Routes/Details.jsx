@@ -4,6 +4,9 @@ import TopBar from '../components/TopBar';
 import Layout from '../components/Layout';
 import Modal from '../Components/Modal';
 import { useBoolean } from '$lib/utils/useBoolean';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import {
   Button,
@@ -52,8 +55,8 @@ const Details = (props) => {
 
   const [warning, setWarningState] = React.useState(true);
   const [details, setDetails] = React.useState({
-    startDate: '',
-    endDate: '',
+    startDate: null,
+    endDate: null,
     location: '',
     description: '',
     coverphoto: null,
@@ -304,45 +307,64 @@ const Details = (props) => {
             justifyContent: 'space-between',
           }}
         >
-          <TextField
-            fullWidth
-            sx={{ marginRight: '13px', marginBottom: '16px', marginTop: '16px' }}
-            size="normal"
-            variant="outlined"
-            label="Start date"
-            InputLabelProps={{
-              sx: {
-                fontSize: typography.fontSize.sm,
-                fontWeight: typography.fontWeight.reg,
-                color: colors.gray[400],
-              },
-            }}
-          />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              value={details.startDate}
+              label="Start date"
+              onChange={(e) => {
+                handleStartDateChange(e);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  fullWidth
+                  size="normal"
+                  variant="outlined"
+                  sx={{
+                    fontWeight: typography.fontWeight.reg,
+                    color: colors.gray[400],
+                    marginRight: '13px',
+                    marginBottom: '16px',
+                    marginTop: '16px',
+                  }}
+                  {...params}
+                />
+              )}
+            />
+          </LocalizationProvider>
+
           <Typography
             sx={{
               color: colors.gray[400],
-              fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.reg,
             }}
           >
-            {' '}
-            to{' '}
+            to
           </Typography>
-          <TextField
-            fullWidth
-            sx={{ marginLeft: '13px', marginBottom: '16px', marginTop: '16px' }}
-            size="normal"
-            variant="outlined"
-            label="End date"
-            margin="normal"
-            InputLabelProps={{
-              sx: {
-                fontSize: typography.fontSize.sm,
-                fontWeight: typography.fontWeight.reg,
-                color: colors.gray[400],
-              },
-            }}
-          />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              sx={{ marginLeft: '13px', marginBottom: '16px', marginTop: '16px' }}
+              value={details.endDate}
+              label="End date"
+              onChange={(e) => {
+                handleEndDateChange(e);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  fullWidth
+                  size="normal"
+                  variant="outlined"
+                  sx={{
+                    fontWeight: typography.fontWeight.reg,
+                    color: colors.gray[400],
+                    marginLeft: '13px',
+                    marginBottom: '16px',
+                    marginTop: '16px',
+                  }}
+                  {...params}
+                />
+              )}
+            />
+          </LocalizationProvider>
         </Box>
         <TextField
           fullWidth
@@ -363,7 +385,6 @@ const Details = (props) => {
           inputProps={{ maxLength: 100 }}
           InputLabelProps={{
             sx: {
-              fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.reg,
               color: colors.gray[400],
             },
@@ -391,7 +412,6 @@ const Details = (props) => {
           inputProps={{ maxLength: 500 }}
           InputLabelProps={{
             sx: {
-              fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.reg,
               color: colors.gray[400],
             },
@@ -412,7 +432,6 @@ const Details = (props) => {
               inputProps={{ maxLength: 500 }}
               InputLabelProps={{
                 sx: {
-                  fontSize: typography.fontSize.sm,
                   fontWeight: typography.fontWeight.reg,
                   color: colors.gray[400],
                 },
