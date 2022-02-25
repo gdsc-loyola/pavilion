@@ -26,8 +26,8 @@ const TopBar = ({ eventName, children, sidebar }) => {
         justifyContent: 'space-between',
         paddingTop: '1.75rem',
         paddingBottom: '1.75rem',
-        paddingLeft: sidebar ? '144px' : '3.5rem',
-        paddingRight: sidebar ? '144px' : '3.5rem',
+        paddingLeft: sidebar ? '3.5rem' : '144px',
+        paddingRight: sidebar ? '3.5rem' : '144px',
         borderBottom: '1px solid #D1D5DB',
         alignItems: 'center',
       }}

@@ -201,7 +201,7 @@ const Details = (props) => {
     typeof details.eventphoto4?.name == 'string' ? URL.createObjectURL(details.eventphoto4) : null;
   return (
     <Layout sidebar={!pastevent}>
-      <TopBar eventName={eventName} sidebar={pastevent}>
+      <TopBar eventName={eventName} sidebar={!pastevent}>
         <Box
           sx={{
             display: 'flex',
