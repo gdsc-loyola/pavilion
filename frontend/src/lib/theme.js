@@ -84,6 +84,14 @@ export const background = {
   blue: {
     upDown: 'linear-gradient(180deg, #498AF4 0%, #1A73E8 100%)',
   },
+  red: {
+    upDown: 'linear-gradient(180deg, #EB4A3D 0%, #C5221F 100%)',
+  },
+};
+
+export const boxShadows = {
+  black1: '0px 4px 10px rgba(0, 0, 0, 0.08);',
+  blue: '0px 4px 10px rgba(73, 138, 244, 0.2);',
 };
 
 export const theme = createTheme({
@@ -106,6 +114,7 @@ export const theme = createTheme({
   ...typography,
   background,
   colors,
+  boxShadows,
   breakpoints: {
     values: {
       xs: 0,
@@ -151,6 +160,17 @@ export const theme = createTheme({
           },
         },
       },
+      variants: [
+        {
+          props: { variant: 'blank' },
+          style: {
+            boxShadow: 'none',
+            background: 'none',
+
+            color: colors.gray['700'],
+          },
+        },
+      ],
     },
     MuiSelect: {
       defaultProps: {

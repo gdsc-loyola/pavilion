@@ -5,12 +5,16 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Box, Divider, Checkbox } from '@mui/material';
+import { Box, Divider, Checkbox, Button } from '@mui/material';
 import * as dayjs from 'dayjs';
+import { Delete } from '@mui/icons-material';
 import { defaultComparator } from '../utils/sorting';
 import EventTableRow from './EventTableRow';
 import { styled } from '@mui/material';
 import { useEventsStore } from '../stores/useEventsStore';
+import { colors } from '$lib/theme';
+import http from '$lib/http';
+import { useAdminUser } from '$lib/context/AdminContext';
 
 const StyledTable = styled(Table)(() => ({
   'td, th': {
@@ -44,7 +48,8 @@ const createRow = (event) => {
 const EventsTable = ({ data }) => {
   const sortedData = data.sort(defaultComparator);
   const rows = sortedData.map(createRow);
-  const { setSelectedEvents, selectedEvents } = useEventsStore();
+  const { setSelectedEvents, selectedEvents, setEvents, events } = useEventsStore();
+  const { accessToken } = useAdminUser();
 
   const onSelectRow = useCallback(
     (e, row) => {
@@ -52,6 +57,19 @@ const EventsTable = ({ data }) => {
     },
     [setSelectedEvents]
   );
+
+  const deleteTable = async (id) => {
+    // Optimistic UI update
+    setEvents(events.filter((e) => e.id !== id));
+
+    const res = await http.delete(`/events/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return res;
+  };
 
   const isSelecting = selectedEvents.length > 0;
 
@@ -65,7 +83,8 @@ const EventsTable = ({ data }) => {
           pl: 4,
           pb: 1,
           '& hr': {
-            mx: 3,
+            ml: 3,
+            mr: 1,
           },
         }}
       >
@@ -90,6 +109,21 @@ const EventsTable = ({ data }) => {
               {selectedEvents.length} of {rows.length} events
             </Box>
             <Divider orientation="vertical" variant="middle" flexItem />
+            <Button
+              size="small"
+              variant="blank"
+              sx={{ display: 'flex', alignItems: 'center' }}
+              onClick={() => {
+                http.delete('/events', {
+                  data: {},
+                });
+              }}
+            >
+              <Delete
+                sx={{ color: colors.gray['400'], width: '20px', height: '20px', mb: 0.3, mr: 0.5 }}
+              />
+              <span>Delete</span>
+            </Button>
           </>
         ) : (
           <>
@@ -137,6 +171,7 @@ const EventsTable = ({ data }) => {
             <EventTableRow
               row={row}
               key={row.id}
+              onDelete={deleteTable}
               selected={selectedEvents.includes(row.id)}
               onSelected={onSelectRow}
             />

@@ -90,10 +90,10 @@ const Events = () => {
   });
 
   useEffect(() => {
-    setEvents(sampleRows);
-    setFilteredEvents(sampleRows);
-    // setEvents(org.events);
-    // setFilteredEvents(org.events);
+    // setEvents(sampleRows);
+    // setFilteredEvents(sampleRows);
+    setEvents(org.events);
+    setFilteredEvents(org.events);
   }, [org.events, setEvents, setFilteredEvents]);
 
   const onSubmit = (data) => {
@@ -135,12 +135,13 @@ const Events = () => {
     requestSearch(searchVal, tabValue);
   }, [requestSearch, searchVal, tabValue]);
 
+  const hasEvents = events.length > 0;
   return (
     <AdminLayout>
       <Container>
         <h1>Events</h1>
         <Grid container sx={{ paddingBottom: '2em' }}>
-          <Grid item xs={4} xl={3}>
+          <Grid item xs={8} sm={5} md={6} lg={5} xl={3}>
             <Searchbar
               value={searchVal}
               size="medium"
@@ -151,7 +152,7 @@ const Events = () => {
               }}
             />
           </Grid>
-          <Grid item container xs={8} xl={9} justifyItems="flex-end">
+          <Grid item container xs={4} sm={7} md={6} lg={7} xl={9} justifyItems="flex-end">
             <Button
               onClick={openModal}
               size="small"
@@ -164,49 +165,55 @@ const Events = () => {
             </Button>
           </Grid>
         </Grid>
-        <Tabs
-          value={tabValue}
-          sx={{ paddingBottom: '2rem' }}
-          onChange={(_e, newVal) => {
-            setTabValue(newVal);
-            setSelectedEvents('removeAll');
-          }}
-        >
-          <Tab
-            value="Draft"
-            label={`Draft (${events.filter((e) => e.status === 'Draft').length})`}
-          />
-          <Tab
-            value="Published"
-            label={`Published (${
-              events.filter((e) => e.status === 'Published' || e.status === 'Ongoing').length
-            })`}
-          />
-        </Tabs>
-        <EventsTable data={filteredEvents.sort(defaultComparator)} />
-        {/* <Box
-          sx={(theme) => ({
-            marginTop: '3rem',
-            marginBottom: '4rem',
-            padding: '3rem',
-            backgroundColor: theme.colors.blue[50],
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            gap: '2rem',
-            height: '100%',
-            flex: 1,
-            h4: {
-              fontSize: theme.fontSize.md,
-              fontWeight: theme.fontWeight.med,
-            },
-          })}
-        >
-          <img src={emptyState} style={{ width: '400px' }} />
-          <h4>You don&apos;t have any event yet!</h4>
-          <Button onClick={openModal}>Create an event</Button>
-        </Box> */}
+
+        {hasEvents ? (
+          <>
+            <Tabs
+              value={tabValue}
+              sx={{ paddingBottom: '2rem' }}
+              onChange={(_e, newVal) => {
+                setTabValue(newVal);
+                setSelectedEvents('removeAll');
+              }}
+            >
+              <Tab
+                value="Draft"
+                label={`Draft (${events.filter((e) => e.status === 'Draft').length})`}
+              />
+              <Tab
+                value="Published"
+                label={`Published (${
+                  events.filter((e) => e.status === 'Published' || e.status === 'Ongoing').length
+                })`}
+              />
+            </Tabs>
+            <EventsTable data={filteredEvents.sort(defaultComparator)} />
+          </>
+        ) : (
+          <Box
+            sx={(theme) => ({
+              marginTop: '3rem',
+              marginBottom: '4rem',
+              padding: '3rem',
+              backgroundColor: theme.colors.blue[50],
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              gap: '2rem',
+              height: '100%',
+              flex: 1,
+              h4: {
+                fontSize: theme.fontSize.md,
+                fontWeight: theme.fontWeight.med,
+              },
+            })}
+          >
+            <img src={emptyState} style={{ width: '400px' }} />
+            <h4>You don&apos;t have any event yet!</h4>
+            <Button onClick={openModal}>Create an event</Button>
+          </Box>
+        )}
       </Container>
       <Modal
         open={isModalOpen}
@@ -221,7 +228,6 @@ const Events = () => {
         }}
         title="Create an event"
         subtitle="Fill up your webpage by adding an event for your organization."
-        onSubmit={handleSubmit(onSubmit)}
         withButtons={false}
         withTextField={false}
         // leftButtonProps={{

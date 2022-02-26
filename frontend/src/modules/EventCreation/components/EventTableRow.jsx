@@ -1,10 +1,11 @@
-import { Button, TableCell, styled, Checkbox } from '@mui/material';
+import { Button, TableCell, styled, Checkbox, Popper, ClickAwayListener, Box } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import MUITableRow from '@mui/material/TableRow';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import compare from 'just-compare';
 import React, { useRef, useState } from 'react';
+import { colors } from '$lib/theme';
+import Modal from './Modal';
+import { useBoolean } from '$lib/utils/useBoolean';
 
 const StyledTableRow = styled(MUITableRow)(({ theme }) => ({
   '&:nth-of-type(2n)': {
@@ -37,32 +38,14 @@ const StyledTableRow = styled(MUITableRow)(({ theme }) => ({
   },
 }));
 
-const StyledMenu = styled(Menu)(({ theme }) => ({
-  '.MuiPaper-root': {
-    filter: 'drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.08))',
-    boxShadow: 'none',
-  },
-  '.MuiList-root': {
-    padding: 0,
-  },
-  '.MuiMenuItem-root': {
-    justifyContent: 'center',
-    width: 200,
-    padding: '.75rem',
-    ':hover': { background: theme.colors.background.blue },
-  },
-  '.delete-button': {
-    color: theme.colors.red[300],
-  },
-}));
-
 /**
  * @type {(props: {
  * row: any
  * }) => JSX.Element}
  */
-const EventTableRow = ({ row, selected, onSelected }) => {
+const EventTableRow = ({ row, selected, onSelected, onDelete }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
   const iconRef = useRef();
   const open = Boolean(anchorEl);
 
@@ -71,6 +54,11 @@ const EventTableRow = ({ row, selected, onSelected }) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const id = open ? `row-${row.id}-popper` : undefined;
+
+  const deleteCurrentEvent = async () => {
+    await onDelete(row.id);
   };
 
   return (
@@ -90,37 +78,67 @@ const EventTableRow = ({ row, selected, onSelected }) => {
         <span className={`status status--${row.status.toLowerCase()}`}>{row.status}</span>
       </TableCell>
       <TableCell padding="checkbox">
-        <Button
-          variant="text"
-          sx={({ colors }) => ({ color: colors.gray[500] })}
-          onClick={handleClick}
-        >
-          <MoreVert ref={iconRef} />
-        </Button>
-        <StyledMenu
-          className="menu"
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+        <ClickAwayListener onClickAway={handleClose}>
+          <div>
+            <Button
+              variant="text"
+              sx={({ colors }) => ({ color: colors.gray[500] })}
+              onClick={handleClick}
+            >
+              <MoreVert ref={iconRef} />
+            </Button>
+            <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
+              <Box
+                sx={(theme) => ({
+                  background: 'white',
+                  boxShadow: theme.boxShadows['black1'],
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '200px',
+                  '.MuiButton-root': {
+                    color: theme.colors.gray['700'],
+                    borderRadius: 0,
+                    padding: '.75rem 0',
+                  },
+                  '.MuiButton-root.danger': {
+                    color: colors.red['300'],
+                  },
+                  '.MuiButton-root:hover': {
+                    background: theme.colors.blue['100'],
+                  },
+                })}
+              >
+                <Button variant="blank">Edit</Button>
+
+                <Button
+                  variant="blank"
+                  className="danger"
+                  onClick={() => {
+                    openModal();
+                  }}
+                >
+                  Delete
+                </Button>
+              </Box>
+            </Popper>
+          </div>
+        </ClickAwayListener>
+        <Modal
+          open={isModalOpen}
+          onClose={closeModal}
+          isDanger
+          withTextField={false}
+          title="Delete Event"
+          subtitle="This will delete all the information you’ve added so far."
+          leftButtonProps={{
+            label: 'Never Mind',
+            onClick: closeModal,
           }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+          rightButtonProps={{
+            label: 'Delete Event',
+            onClick: deleteCurrentEvent,
           }}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <MenuItem onClick={handleClose}>Edit</MenuItem>
-          <MenuItem onClick={handleClose}>Unpublish</MenuItem>
-          <MenuItem onClick={handleClose} className={`delete-button`}>
-            Delete
-          </MenuItem>
-        </StyledMenu>
+        />
       </TableCell>
     </StyledTableRow>
   );
