@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Grid, Button, Modal as MuiModal, Typography } from '@mui/material';
 import ControlledTextField from '$components/ControlledTextField';
 import { Error } from '@mui/icons-material';
-import { colors } from '$lib/theme';
 
 /**
  * @param {import('@mui/material').ModalProps & {

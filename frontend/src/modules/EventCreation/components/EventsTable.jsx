@@ -58,9 +58,10 @@ const EventsTable = ({ data }) => {
     [setSelectedEvents]
   );
 
-  const deleteTable = async (id) => {
+  const deleteEvent = async (id) => {
     // Optimistic UI update
     setEvents(events.filter((e) => e.id !== id));
+    setSelectedEvents('removeAll');
 
     const res = await http.delete(`/events/${id}`, {
       headers: {
@@ -69,6 +70,19 @@ const EventsTable = ({ data }) => {
     });
 
     return res;
+  };
+
+  const deleteSelected = async () => {
+    setEvents(events.filter((e) => !selectedEvents.includes(e.id)));
+    setSelectedEvents('removeAll');
+
+    selectedEvents.map(async (id) => {
+      await http.delete(`/events/${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    });
   };
 
   const isSelecting = selectedEvents.length > 0;
@@ -113,11 +127,7 @@ const EventsTable = ({ data }) => {
               size="small"
               variant="blank"
               sx={{ display: 'flex', alignItems: 'center' }}
-              onClick={() => {
-                http.delete('/events', {
-                  data: {},
-                });
-              }}
+              onClick={deleteSelected}
             >
               <Delete
                 sx={{ color: colors.gray['400'], width: '20px', height: '20px', mb: 0.3, mr: 0.5 }}
@@ -171,7 +181,7 @@ const EventsTable = ({ data }) => {
             <EventTableRow
               row={row}
               key={row.id}
-              onDelete={deleteTable}
+              onDelete={deleteEvent}
               selected={selectedEvents.includes(row.id)}
               onSelected={onSelectRow}
             />
