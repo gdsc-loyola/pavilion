@@ -1,7 +1,8 @@
-import { background, colors, typography } from '$lib/theme';
+import { background, colors, typography, boxShadows } from '$lib/theme';
 import '@mui/material/styles';
 
 import '@mui/material/TextField';
+import '@mui/material/Button';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -10,11 +11,18 @@ declare module '@mui/material/styles' {
     fontSize: typeof typography.fontSize;
     lineHeight: typeof typography.lineHeight;
     background: typeof background;
+    boxShadows: typeof boxShadows;
   }
 }
 
 declare module '@mui/material/TextField' {
   interface TextFieldPropsVariantOverrides {
     bordered: true;
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    blank: true;
   }
 }
