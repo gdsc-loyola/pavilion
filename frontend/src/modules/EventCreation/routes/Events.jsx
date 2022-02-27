@@ -5,12 +5,7 @@ import Searchbar from '$components/Searchbar';
 import emptyState from '$static/assets/emptyState.svg';
 import { useBoolean } from '$lib/utils/useBoolean';
 import Modal from '../components/Modal';
-import { useForm } from 'react-hook-form';
-import { useEventCreationFormStore } from '../stores/useEventCreationStore';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import EventsTable from '../components/EventsTable';
-import { defaultComparator } from '../utils/sorting';
 import { useEventsStore } from '../stores/useEventsStore';
 import { useAdminUser } from '$lib/context/AdminContext';
 
@@ -27,36 +22,35 @@ const Container = styled('div')(({ theme }) => ({
     fontWeight: theme.fontWeight.bold,
   },
 }));
-
-const ValidationSchema = yup.object().shape({
-  name: yup.string().required('Event name is required'),
-});
-
 const sampleRows = [
   {
     id: '1',
     name: 'Tech Everywhere 2020',
     status: 'Draft',
     start_date: '2020-12-02',
+    last_updated: '2020-12-02',
   },
   {
     id: '2',
     name: 'Hackathon',
     status: 'Draft',
     start_date: '2020-12-02',
+    last_updated: '2021-08-02',
   },
   {
     id: '3',
     name: 'IM Summit',
     status: 'Published',
     start_date: '2022-01-01',
+    last_updated: '2022-01-02',
   },
   {
     id: '4',
     name: 'Tambayan Session',
-    status: 'Published',
+    status: 'Ongoing',
     start_date: '2021-01-01',
     end_date: '2020-01-01',
+    last_updated: '2022-01-02',
   },
   {
     id: '5',
@@ -64,6 +58,7 @@ const sampleRows = [
     status: 'Draft',
     start_date: '2021-01-01',
     end_date: '2020-01-01',
+    last_updated: '2022-01-08',
   },
   {
     id: '6',
@@ -71,11 +66,11 @@ const sampleRows = [
     status: 'Draft',
     start_date: '2020-01-01',
     end_date: '2020-01-01',
+    last_updated: '2022-02-01',
   },
 ];
 
 const Events = () => {
-  const { eventCreationForm, setEventCreationForm } = useEventCreationFormStore();
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
   const { events, filteredEvents, setFilteredEvents, setEvents, setSelectedEvents } =
     useEventsStore();
@@ -84,24 +79,12 @@ const Events = () => {
 
   const { org } = useAdminUser();
 
-  const { control, handleSubmit } = useForm({
-    defaultValues: eventCreationForm,
-    resolver: yupResolver(ValidationSchema),
-  });
-
   useEffect(() => {
-    // setEvents(sampleRows);
-    // setFilteredEvents(sampleRows);
-    setEvents(org.events);
-    setFilteredEvents(org.events);
+    setEvents(sampleRows);
+    setFilteredEvents(sampleRows);
+    // setEvents(org.events);
+    // setFilteredEvents(org.events);
   }, [org.events, setEvents, setFilteredEvents]);
-
-  const onSubmit = (data) => {
-    setEventCreationForm({
-      ...data,
-    });
-    // TODO: create event
-  };
 
   const requestSearch = useCallback(
     (val, tabVal) => {
@@ -187,7 +170,7 @@ const Events = () => {
                 })`}
               />
             </Tabs>
-            <EventsTable data={filteredEvents.sort(defaultComparator)} />
+            <EventsTable data={filteredEvents} />
           </>
         ) : (
           <Box
@@ -219,25 +202,10 @@ const Events = () => {
         open={isModalOpen}
         onClose={closeModal}
         asForm={true}
-        TextFieldProps={{
-          placeholder: 'Event Name',
-          size: 'medium',
-          label: 'Event Name',
-          control,
-          name: 'name',
-        }}
         title="Create an event"
         subtitle="Fill up your webpage by adding an event for your organization."
         withButtons={false}
         withTextField={false}
-        // leftButtonProps={{
-        //   label: 'Never mind',
-        //   onClick: closeModal,
-        // }}
-        // rightButtonProps={{
-        //   label: 'Create',
-        //   type: 'submit',
-        // }}
       >
         <Grid container spacing={4} paddingTop={3}>
           <Grid

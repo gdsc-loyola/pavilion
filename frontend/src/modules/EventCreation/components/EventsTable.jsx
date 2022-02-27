@@ -1,12 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Box, Divider, Checkbox, Button } from '@mui/material';
+import { Box, Divider, Checkbox, Button, TableSortLabel } from '@mui/material';
 import * as dayjs from 'dayjs';
+import Modal from './Modal';
 import { Delete } from '@mui/icons-material';
 import { defaultComparator } from '../utils/sorting';
 import EventTableRow from './EventTableRow';
@@ -15,6 +16,7 @@ import { useEventsStore } from '../stores/useEventsStore';
 import { colors } from '$lib/theme';
 import http from '$lib/http';
 import { useAdminUser } from '$lib/context/AdminContext';
+import { useBoolean } from '$lib/utils/useBoolean';
 
 const StyledTable = styled(Table)(() => ({
   'td, th': {
@@ -40,6 +42,67 @@ const createRow = (event) => {
     status: event.status,
   };
 };
+
+const dateIds = ['start_date', 'last_updated'];
+function descendingComparator(a, b, orderBy) {
+  if (dateIds.includes(orderBy)) {
+    const aTime = new Date(a[orderBy]).getTime();
+    const bTime = new Date(b[orderBy]).getTime();
+
+    // If a is later than b, then a should come after b.
+    if (bTime < aTime) {
+      return -1;
+    }
+
+    // If a is earlier than b, then a should come before b.
+    if (bTime > aTime) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  if (order === '') {
+    return (a, b) => defaultComparator(a, b);
+  }
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+const headCells = [
+  {
+    id: 'name',
+    numeric: false,
+    label: 'Event Name',
+  },
+
+  {
+    id: 'start_date',
+    numeric: false,
+    label: 'Event Dates',
+  },
+  {
+    id: 'last_updated',
+    numeric: false,
+    label: 'Last updated on',
+  },
+  {
+    id: 'status',
+    numeric: false,
+    label: 'Status',
+  },
+];
 /**
  * @type {(props: {
  * data: Array<import('$services/events.service').Event>
@@ -50,6 +113,9 @@ const EventsTable = ({ data }) => {
   const rows = sortedData.map(createRow);
   const { setSelectedEvents, selectedEvents, setEvents, events } = useEventsStore();
   const { accessToken } = useAdminUser();
+  const [orderBy, setOrderBy] = useState('');
+  const [order, setOrder] = useState('asc');
+  const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
 
   const onSelectRow = useCallback(
     (e, row) => {
@@ -75,6 +141,7 @@ const EventsTable = ({ data }) => {
   const deleteSelected = async () => {
     setEvents(events.filter((e) => !selectedEvents.includes(e.id)));
     setSelectedEvents('removeAll');
+    closeModal();
 
     selectedEvents.map(async (id) => {
       await http.delete(`/events/${id}`, {
@@ -85,8 +152,19 @@ const EventsTable = ({ data }) => {
     });
   };
 
-  const isSelecting = selectedEvents.length > 0;
+  const handleRequestSort = (_event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    const isDesc = orderBy === property && order === 'desc';
+    setOrder(isAsc ? 'desc' : isDesc ? '' : 'asc');
+    setOrderBy(isDesc ? '' : property);
+  };
 
+  const createSortHandler = (property) => (event) => {
+    handleRequestSort(event, property);
+  };
+
+  const isSelecting = selectedEvents.length > 0;
+  const selectedEventsCount = selectedEvents.length;
   return (
     <TableContainer>
       <Box
@@ -108,7 +186,7 @@ const EventsTable = ({ data }) => {
               <Checkbox
                 key="a"
                 sx={{ pr: 2 }}
-                checked={selectedEvents.length >= rows.length}
+                checked={selectedEventsCount >= rows.length}
                 onChange={(e) => {
                   if (e.currentTarget.checked) {
                     setSelectedEvents(
@@ -120,14 +198,14 @@ const EventsTable = ({ data }) => {
                   }
                 }}
               />
-              {selectedEvents.length} of {rows.length} events
+              {selectedEventsCount} of {rows.length} events
             </Box>
             <Divider orientation="vertical" variant="middle" flexItem />
             <Button
               size="small"
               variant="blank"
               sx={{ display: 'flex', alignItems: 'center' }}
-              onClick={deleteSelected}
+              onClick={openModal}
             >
               <Delete
                 sx={{ color: colors.gray['400'], width: '20px', height: '20px', mb: 0.3, mr: 0.5 }}
@@ -169,15 +247,24 @@ const EventsTable = ({ data }) => {
             })}
           >
             <TableCell align="center" padding="checkbox"></TableCell>
-            <TableCell align="left">Event Name</TableCell>
-            <TableCell align="left">Event Dates</TableCell>
-            <TableCell align="left">Last updated on</TableCell>
-            <TableCell align="left">Status</TableCell>
+            {headCells.map((headCell) => {
+              return (
+                <TableCell align="left" key={headCell.id} padding={headCell.padding || 'normal'}>
+                  <TableSortLabel
+                    direction={orderBy === headCell.id ? order : 'asc'}
+                    onClick={createSortHandler(headCell.id)}
+                    active={orderBy === headCell.id}
+                  >
+                    {headCell.label}
+                  </TableSortLabel>
+                </TableCell>
+              );
+            })}
             <TableCell align="center" padding="checkbox"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.sort(getComparator(order, orderBy)).map((row) => (
             <EventTableRow
               row={row}
               key={row.id}
@@ -187,6 +274,22 @@ const EventsTable = ({ data }) => {
             />
           ))}
         </TableBody>
+        <Modal
+          open={isModalOpen}
+          onClose={closeModal}
+          isDanger
+          withTextField={false}
+          title={`Delete ${selectedEventsCount} Event${selectedEventsCount > 1 ? 's' : ''}`}
+          subtitle="This will delete all the information you’ve added so far."
+          leftButtonProps={{
+            label: 'Never Mind',
+            onClick: closeModal,
+          }}
+          rightButtonProps={{
+            label: 'Delete Events',
+            onClick: deleteSelected,
+          }}
+        />
       </StyledTable>
     </TableContainer>
   );
