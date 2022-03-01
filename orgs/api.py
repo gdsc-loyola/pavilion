@@ -21,8 +21,12 @@ class EventsViewSet(viewsets.ModelViewSet):
     serializer_class = EventsSerializer
 
     def retrieve(self, request, pk, *args, **kwargs):
-        query = Event.objects.get(pk=pk).student.all() #.student comes from related_name in models.py
-        serializer = StudentToEventSerializer(query, many=True)
+        current_event = Event.objects.get(pk=pk)
+        query = current_event.student.all() #.student comes from related_name in models.py
+        if query:
+            serializer = StudentToEventSerializer(query, many=True)
+            return Response(serializer.data)
+        serializer = EventsSerializer(current_event)
         return Response(serializer.data)
 
 class StudentToEventViewSet(viewsets.ModelViewSet):
