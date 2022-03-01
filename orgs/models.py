@@ -56,13 +56,24 @@ class Organization(models.Model):
         return "{}({}), {}. {}".format(self.name, self.short_name, self.org_body, self.user)
 
 class StudentToEvent(models.Model):
+    year_choices = [
+        ('1st Year', '1st Year'),
+        ('2nd Year', '2nd Year'),
+        ('3rd Year', '3rd Year'),
+        ('4th Year', '4th Year'),
+        ('5th Year', '5th Year'),
+        ('6th Year', '6th Year'),
+        ('7th Year', '7th Year'),
+    ]
+
     event = models.ForeignKey(Event, related_name='student', on_delete=models.CASCADE)
     name = models.CharField(max_length=1024)
     id_number = models.IntegerField()
-    year = models.IntegerField()
+    email = models.EmailField(max_length=200, null=True)
+    year = models.CharField(max_length=100, choices=year_choices)
     course = models.CharField(max_length=32)
-    date_submitted = models.DateTimeField()
-    last_updated = models.DateTimeField()
+    date_submitted = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "{}-{}".format(self.event, self.name)
