@@ -150,6 +150,7 @@ const ResponseDetails = ({
   showCloseAndSave,
   handleSaveDetails,
   isSaveConfirmed,
+  isCancelEdit
 }) => {
   const [updatedDetails, setUpdatedDetails] = useState(null);
   useEffect(() => {
@@ -164,8 +165,8 @@ const ResponseDetails = ({
   };
   const menuOpen = Boolean(anchorEl);
 
-  const submissionDateTime = new Date(open?.dateCreated);
-  const updatedDateTime = open?.updatedAt ? new Date(open?.updatedAt) : null;
+  const submissionDateTime = new Date(open?.date_submitted);
+  const updatedDateTime = open?.last_updated ? new Date(open?.last_updated) : null;
 
   const {
     value: isSaveBannerVisible,
@@ -195,6 +196,7 @@ const ResponseDetails = ({
   }, [open]);
 
   useEffect(() => {
+    alert(edit)
     edit ? startEditMode() : endEditMode();
   }, [edit]);
 
@@ -210,6 +212,10 @@ const ResponseDetails = ({
       onClose();
     }
   }, [isSaveConfirmed]);
+
+  useEffect(() => {
+    isCancelEdit && endEditMode()
+  }, [isCancelEdit])
 
   const onSubmit = () => {
     // TODO: update response
@@ -371,7 +377,7 @@ const ResponseDetails = ({
               fontWeight: 500,
             }}
           >
-            {open?.id}. {open?.fullName}
+            {open?.id}. {open?.name}
           </p>
           <p
             style={{
@@ -389,7 +395,7 @@ const ResponseDetails = ({
               hour12: true,
             })}
           </p>
-          {open?.updatedAt && (
+          {open?.last_updated && (
             <p
               style={{
                 color: colors.gray[500],
@@ -418,12 +424,12 @@ const ResponseDetails = ({
             }}
           >
             <TextField
-              defaultValue={updatedDetails?.fullName}
-              value={updatedDetails?.fullName}
+              defaultValue={updatedDetails?.name}
+              value={updatedDetails?.name}
               fullWidth
               label="Full name"
-              name="fullName"
-              onChange={(e) => setUpdatedDetails({ ...updatedDetails, fullName: e.target.value })}
+              name="name"
+              onChange={(e) => setUpdatedDetails({ ...updatedDetails, name: e.target.value })}
               size="small"
               type="text"
             />
@@ -438,12 +444,12 @@ const ResponseDetails = ({
               type="text"
             />
             <TextField
-              defaultValue={updatedDetails?.idNum}
-              value={updatedDetails?.idNum}
+              defaultValue={updatedDetails?.id_number}
+              value={updatedDetails?.id_number}
               fullWidth
               label="ID Number"
-              name="idNum"
-              onChange={(e) => setUpdatedDetails({ ...updatedDetails, idNum: e.target.value })}
+              name="id_number"
+              onChange={(e) => setUpdatedDetails({ ...updatedDetails, id_number: e.target.value })}
               size="small"
               type="number"
             />
@@ -473,7 +479,7 @@ const ResponseDetails = ({
           >
             <EntryField>
               <EntryFieldTitle>Full name</EntryFieldTitle>
-              <EntryFieldText>{open?.fullName}</EntryFieldText>
+              <EntryFieldText>{open?.name}</EntryFieldText>
             </EntryField>
             <EntryField>
               <EntryFieldTitle>Email</EntryFieldTitle>
@@ -481,7 +487,7 @@ const ResponseDetails = ({
             </EntryField>
             <EntryField>
               <EntryFieldTitle>ID Number</EntryFieldTitle>
-              <EntryFieldText>{open?.idNum}</EntryFieldText>
+              <EntryFieldText>{open?.id_number}</EntryFieldText>
             </EntryField>
             <EntryField>
               <EntryFieldTitle>Year level</EntryFieldTitle>

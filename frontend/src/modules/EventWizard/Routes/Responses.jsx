@@ -17,6 +17,8 @@ import { GridActionsCellItem } from '@mui/x-data-grid';
 import { colors, typography } from '$lib/theme';
 import { useBoolean } from '$lib/utils/useBoolean';
 
+import http from '$lib/http';
+import { useAdminUser } from '$lib/context/AdminContext';
 import Layout from '../components/Layout';
 import TopBar from '../components/TopBar';
 import LinkIcon from '../components/LinkIcon';
@@ -269,6 +271,24 @@ const FileDownload = styled(DownloadIcon)({
 });
 
 const Responses = () => {
+  const { org, accessToken, userData } = useAdminUser();
+  useEffect(() => {
+    fetchResponses()
+  }, [])
+  useEffect(() => {
+    if (org) {
+      console.log('org', org)
+    }
+  }, [org, accessToken])
+  const fetchResponses = async () => {
+    // TODO: fetch responses
+    const res = await http.get(`/event-student/`)
+    console.log('res', res.data)
+    setResponses(res.data)
+
+    // TODO: set event details (accepting responses)
+    // TODO: event link
+  }
   const { eventName } = useParams();
   const [responses, setResponses] = useState(rows);
   const [page, setPage] = useState(0);
@@ -303,9 +323,6 @@ const Responses = () => {
   };
 
   const [sortModel, setSortModel] = useState([{ field: 'id', sort: 'asc' }]);
-  useEffect(() => {
-    console.log('sortModel', sortModel);
-  }, [sortModel]);
 
   const {
     value: isAcceptingModalOpen,
@@ -347,6 +364,8 @@ const Responses = () => {
   const handleAcceptToggle = (event) => {
     if (!event.target.checked) {
       openAcceptingModal();
+    } else {
+      setAccepting(event.target.checked)
     }
   };
 
@@ -366,6 +385,11 @@ const Responses = () => {
     showSaveBanner();
   };
 
+  const handleCopyEventLink = () => {
+    // TODO: copy event link
+    showBanner()
+  }
+
   const columns = [
     {
       field: 'id',
@@ -374,10 +398,10 @@ const Responses = () => {
       valueFormatter: (params) => `#${('000' + params.value).substr(-3)}`,
       sortable: false,
     },
-    { field: 'fullName', headerName: 'Full Name', flex: 1, sortable: false },
+    { field: 'name', headerName: 'Full Name', flex: 1, sortable: false },
     { field: 'email', headerName: 'Email', flex: 1, sortable: false },
     {
-      field: 'dateCreated',
+      field: 'date_submitted',
       type: 'dateTime',
       headerName: 'Submission Date',
       valueFormatter: (params) => {
@@ -388,7 +412,7 @@ const Responses = () => {
       sortable: false,
     },
     {
-      field: 'updatedAt',
+      field: 'last_updated',
       type: 'dateTime',
       headerName: 'Last Updated On',
       valueFormatter: (params) => {
@@ -540,7 +564,7 @@ const Responses = () => {
                 textTransform: 'none',
               }}
               variant="outlined"
-              onClick={showBanner}
+              onClick={handleCopyEventLink}
             >
               <LinkIcon />
               <p style={{ margin: 'auto 0 auto 4px' }}>Copy event link</p>
@@ -578,9 +602,6 @@ const Responses = () => {
 
       <CustomContainer>
         <Typography variant="h6" fontWeight={700}>
-          {
-            // TODO: number of responses
-          }
           Responses ({responses.length})
         </Typography>
 
@@ -752,7 +773,6 @@ const Responses = () => {
               onSelectionModelChange={setSelectedItems}
               sortModel={sortModel}
               onCellClick={(param, event) => {
-                console.log(param.field);
                 if (param.field === '__check__' || param.field === 'actions')
                   return event.stopPropagation();
                 setOpenDetails(responses[param.row.id - 1]);
@@ -781,7 +801,7 @@ const Responses = () => {
           >
             <img src={emptyState} style={{ width: '370px' }} />
             <h4>You don&apos;t have any responses yet!</h4>
-            <Button onClick={showBanner}>
+            <Button onClick={handleCopyEventLink}>
               <LinkIcon white />
               <p style={{ margin: 'auto 0 auto 4px' }}>Copy event link</p>
             </Button>
@@ -843,8 +863,8 @@ const Responses = () => {
         title="Cancel edits"
         subtitle="This will discard all the changes you’ve done so far."
         onSubmit={() => {
-          abortCancelEdit();
           endEdit();
+          abortCancelEdit();
         }}
         leftButtonProps={{
           label: 'Never mind',
@@ -866,6 +886,7 @@ const Responses = () => {
           e.preventDefault();
           confirmSave();
           hideCloseAndSave();
+          endEdit();
         }}
         leftButtonProps={{
           label: 'Never mind',
@@ -897,6 +918,7 @@ const Responses = () => {
         showCloseAndSave={showCloseAndSave}
         handleSaveDetails={handleSaveDetails}
         isSaveConfirmed={isSaveConfirmed}
+        isCancelEdit={isCancelEdit}
       />
     </Layout>
   );
