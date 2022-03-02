@@ -20,21 +20,7 @@ class UsernameSerializer(serializers.ModelSerializer):
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = (
-            "id", 
-            "name",
-            "cover_photo",
-            "start_date", 
-            "end_date", 
-            "location",
-            "desc",
-            "event_photo1",
-            "event_photo2",
-            "event_photo3",
-            "event_photo4",
-            "last_updated",
-            "status", 
-            "orgs")
+        fields = '__all__'
 
 class OrgsSerializer(serializers.HyperlinkedModelSerializer):
     events = EventsSerializer(read_only=True, many=True)
