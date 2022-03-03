@@ -44,7 +44,7 @@ const CSVHeaders = [
   { label: 'Course', key: 'course' },
   { label: 'Submission Date', key: 'date_submitted' },
   { label: 'Last Updated On', key: 'last_updated' },
-]
+];
 
 const DefaultTheme = createTheme({
   palette: {
@@ -601,12 +601,17 @@ const Responses = () => {
                     : 'primary'
                 }
               />
-                <CSVLink data={originalResponses} headers={CSVHeaders} filename={`${eventName}-respondents`} style={{
+              <CSVLink
+                data={originalResponses}
+                headers={CSVHeaders}
+                filename={`${eventName}-respondents`}
+                style={{
                   margin: 'auto 0 auto 4px',
                   color: selectedItems.length > 0 ? colors.gray[400] : colors.blue[300],
-                }} >
-                  Download all
-                </CSVLink>
+                }}
+              >
+                Download all
+              </CSVLink>
             </Button>
           </ThemeProvider>
         </Box>
@@ -731,9 +736,16 @@ const Responses = () => {
                     }}
                   >
                     <FileDownload />
-                    <CSVLink data={originalResponses.filter(response => selectedItems.includes(response.id))} headers={CSVHeaders} filename={`${eventName}-respondents`} style={{
-                      color: colors.blue[300],
-                    }}>
+                    <CSVLink
+                      data={originalResponses.filter((response) =>
+                        selectedItems.includes(response.id)
+                      )}
+                      headers={CSVHeaders}
+                      filename={`${eventName}-respondents`}
+                      style={{
+                        color: colors.blue[300],
+                      }}
+                    >
                       Download
                     </CSVLink>
                   </Box>
