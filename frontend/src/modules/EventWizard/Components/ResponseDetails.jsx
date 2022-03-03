@@ -150,7 +150,7 @@ const ResponseDetails = ({
   showCloseAndSave,
   handleSaveDetails,
   isSaveConfirmed,
-  isCancelEdit
+  isCancelEdit,
 }) => {
   const [updatedDetails, setUpdatedDetails] = useState(null);
   useEffect(() => {
@@ -213,8 +213,8 @@ const ResponseDetails = ({
   }, [isSaveConfirmed]);
 
   useEffect(() => {
-    isCancelEdit && endEditMode()
-  }, [isCancelEdit])
+    isCancelEdit && endEditMode();
+  }, [isCancelEdit]);
 
   const onSubmit = () => {
     updatedDetails.last_updated = new Date().toISOString();

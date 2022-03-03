@@ -10,7 +10,7 @@ import {
   MenuItem as MItem,
   styled,
   createTheme,
-  ThemeProvider
+  ThemeProvider,
 } from '@mui/material';
 import { KeyboardArrowDown, FileDownload as DownloadIcon } from '@mui/icons-material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
@@ -125,40 +125,44 @@ const Responses = () => {
   const { org, accessToken, userData } = useAdminUser();
   const [accepting, setAccepting] = useState(false);
   useEffect(() => {
-    fetchResponses()
-  }, [])
+    fetchResponses();
+  }, []);
   useEffect(() => {
     if (org) {
-      console.log('org', org)
-      fetchResponses()
+      console.log('org', org);
+      fetchResponses();
     }
-  }, [org])
+  }, [org]);
   const [eventLink, setEventLink] = useState('');
   const fetchResponses = async () => {
     // TODO: fetch responses with event ID
-    const res = await http.get(`/events/1`)
-    console.log('res', res.data)
+    const res = await http.get(`/events/1`);
+    console.log('res', res.data);
     if (Array.isArray(res.data)) {
-      setResponses(res.data)
-      setOriginalResponses(res.data)
-      const event = res.data[0].event
-      console.log('event', event)
-      setAccepting(event.accepting_responses ?? false)
-      setEventName(event.name)
+      setResponses(res.data);
+      setOriginalResponses(res.data);
+      const event = res.data[0].event;
+      console.log('event', event);
+      setAccepting(event.accepting_responses ?? false);
+      setEventName(event.name);
       // TODO pav base url
-      setEventLink(`https://pavilion.gdscloyola.org/organizations/${org?.short_name.toLowerCase()}/${event.id}`)
+      setEventLink(
+        `https://pavilion.gdscloyola.org/organizations/${org?.short_name.toLowerCase()}/${event.id}`
+      );
     } else {
-      const event = res.data
-      console.log('event', event)
-      setAccepting(event.accepting_responses ?? false)
-      setEventName(event.name)
-      setEventLink(`https://pavilion.gdscloyola.org/organizations/${org?.short_name.toLowerCase()}/${event.id}`)
+      const event = res.data;
+      console.log('event', event);
+      setAccepting(event.accepting_responses ?? false);
+      setEventName(event.name);
+      setEventLink(
+        `https://pavilion.gdscloyola.org/organizations/${org?.short_name.toLowerCase()}/${event.id}`
+      );
     }
-  }
+  };
   const { eventNameParam } = useParams();
   const [eventName, setEventName] = useState(eventNameParam);
   const [responses, setResponses] = useState([]);
-  const [originalResponses, setOriginalResponses] = useState([])
+  const [originalResponses, setOriginalResponses] = useState([]);
   const [page, setPage] = useState(0);
   const [selectedItems, setSelectedItems] = useState([]);
   const [search, setSearch] = useState('');
@@ -183,31 +187,36 @@ const Responses = () => {
     if (Array.isArray(entry)) {
       for (let i = 0; i < entry.length; i++) {
         const toDelete = entry[i];
-        await http.delete(`/event-student/${toDelete}`, {
-          headers: {
-            authorization: `Bearer ${accessToken}`
-          },
-        }).catch(err => {
-          alert('error deleting response')
-          console.log('error deleting response', err)
-        })
+        await http
+          .delete(`/event-student/${toDelete}`, {
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .catch((err) => {
+            alert('error deleting response');
+            console.log('error deleting response', err);
+          });
       }
-      hideDelete()
+      hideDelete();
       fetchResponses();
     } else {
       let entryId = Number.isInteger(entry) ? entry : entry.id;
-      await http.delete(`/event-student/${entryId}`, {
-        headers: {
-          authorization: `Bearer ${accessToken}`
-        },
-      }).then(() => {
-        setDeleteEntry(null);
-        hideDelete()
-        fetchResponses();
-      }).catch(err => {
-        alert('error deleting response')
-        console.log('error deleting response', err)
-      })
+      await http
+        .delete(`/event-student/${entryId}`, {
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(() => {
+          setDeleteEntry(null);
+          hideDelete();
+          fetchResponses();
+        })
+        .catch((err) => {
+          alert('error deleting response');
+          console.log('error deleting response', err);
+        });
     }
   };
 
@@ -240,9 +249,9 @@ const Responses = () => {
 
   useEffect(() => {
     if (isSaveBannerVisible) {
-      fetchResponses()
+      fetchResponses();
     }
-  }, [isSaveBannerVisible])
+  }, [isSaveBannerVisible]);
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -261,29 +270,36 @@ const Responses = () => {
     if (!event.target.checked) {
       openAcceptingModal();
     } else {
-      setAccepting(event.target.checked)
-      updateAcceptStatus(event.target.checked)
+      setAccepting(event.target.checked);
+      updateAcceptStatus(event.target.checked);
     }
   };
 
   const updateAcceptStatus = async (status) => {
     // TODO patch to event id
     const fd = new FormData();
-    fd.append('accepting_responses', status, );
-    await http.patch('/events/1/', {
-      accepting_responses: status
-    }, {
-      headers: {
-        authorization: `Bearer ${accessToken}`
-      },
-    }).then(res => {
-      fetchResponses()
-      console.log('successfully updated accepting status', res)
-    }).catch(err => {
-      alert('error')
-      console.log('error updating accepting status', err)
-    })
-  }
+    fd.append('accepting_responses', status);
+    await http
+      .patch(
+        '/events/1/',
+        {
+          accepting_responses: status,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        fetchResponses();
+        console.log('successfully updated accepting status', res);
+      })
+      .catch((err) => {
+        alert('error');
+        console.log('error updating accepting status', err);
+      });
+  };
 
   const handleEdit = (response) => {
     startEdit();
@@ -297,38 +313,48 @@ const Responses = () => {
 
   const handleSaveDetails = async (old, update) => {
     update.last_updated = new Date().toISOString();
-    await http.patch(`/event-student/${old.id}/`, update, {
-      headers: {
-        authorization: `Bearer ${accessToken}`
-      },
-    }).then(() => {
-      openDetails && setOpenDetails(update)
-      fetchResponses()
-      !openDetails && showSaveBanner();
-      endEdit()
-    }).catch(err => {
-      alert('error')
-      console.log('error updating', err)
-    })
+    await http
+      .patch(`/event-student/${old.id}/`, update, {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(() => {
+        openDetails && setOpenDetails(update);
+        fetchResponses();
+        !openDetails && showSaveBanner();
+        endEdit();
+      })
+      .catch((err) => {
+        alert('error');
+        console.log('error updating', err);
+      });
   };
 
   const handleCopyEventLink = () => {
     navigator.clipboard.writeText(eventLink);
-    showBanner()
-  }
+    showBanner();
+  };
 
   const handleDownloadAll = () => {
     // TODO: download all responses
-    alert('download all responses')
-  }
+    alert('download all responses');
+  };
 
   const handleDownloadSelected = () => {
     // TODO: download selected responses
-    alert('downloading selected responses')
-  }
+    alert('downloading selected responses');
+  };
 
   const ToggleSwitch = styled((props) => (
-    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple defaultChecked={accepting} checked={accepting} onChange={(e) => handleAcceptToggle(e)} {...props} />
+    <Switch
+      focusVisibleClassName=".Mui-focusVisible"
+      disableRipple
+      defaultChecked={accepting}
+      checked={accepting}
+      onChange={(e) => handleAcceptToggle(e)}
+      {...props}
+    />
   ))(({ theme }) => ({
     width: 42,
     height: 26,
@@ -433,7 +459,10 @@ const Responses = () => {
         <GridActionsCellItem
           key={params.id}
           label="Delete"
-          onClick={() => { setDeleteEntry(params.id); showDelete(); }}
+          onClick={() => {
+            setDeleteEntry(params.id);
+            showDelete();
+          }}
           showInMenu
           sx={{
             fontSize: '14px',
@@ -807,7 +836,7 @@ const Responses = () => {
         onSubmit={(e) => {
           e.preventDefault();
           setAccepting(false);
-          updateAcceptStatus(false)
+          updateAcceptStatus(false);
           closeAcceptingModal();
         }}
         leftButtonProps={{
@@ -822,7 +851,10 @@ const Responses = () => {
 
       <Modal
         open={isDeleteVisible}
-        onClose={() => { setDeleteEntry(null); hideDelete(); }}
+        onClose={() => {
+          setDeleteEntry(null);
+          hideDelete();
+        }}
         withTextField={false}
         warning={true}
         title="Delete response"
@@ -833,7 +865,10 @@ const Responses = () => {
         }}
         leftButtonProps={{
           label: 'Never mind',
-          onClick: () => { setDeleteEntry(null); hideDelete(); },
+          onClick: () => {
+            setDeleteEntry(null);
+            hideDelete();
+          },
         }}
         rightButtonProps={{
           label: 'Delete response',
@@ -897,9 +932,14 @@ const Responses = () => {
             : setOpenDetails(responses[responses.indexOf(openDetails) + 1])
         }
         onPrevEntry={() =>
-          responses.indexOf(openDetails) < 1 ? null : setOpenDetails(responses[responses.indexOf(openDetails) - 1])
+          responses.indexOf(openDetails) < 1
+            ? null
+            : setOpenDetails(responses[responses.indexOf(openDetails) - 1])
         }
-        onDelete={() => { setDeleteEntry(openDetails); showDelete(); }}
+        onDelete={() => {
+          setDeleteEntry(openDetails);
+          showDelete();
+        }}
         onCancelEdit={confirmCancelEdit}
         showCloseAndSave={showCloseAndSave}
         handleSaveDetails={handleSaveDetails}
