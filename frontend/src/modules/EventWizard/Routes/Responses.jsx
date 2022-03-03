@@ -227,6 +227,7 @@ const Responses = () => {
     setDeleteEntry(null);
     hideDelete();
     fetchResponses();
+    setOpenDetails(null);
   };
 
   const [sortModel, setSortModel] = useState([{ field: 'id', sort: 'asc' }]);
@@ -243,6 +244,11 @@ const Responses = () => {
     value: isCancelEdit,
     setFalse: abortCancelEdit,
     setTrue: confirmCancelEdit,
+  } = useBoolean();
+  const {
+    value: isCancelConfirmed,
+    setFalse: abortCancelConfirmed,
+    setTrue: confirmCancelConfirmed,
   } = useBoolean();
   const {
     value: isCloseAndSave,
@@ -619,7 +625,7 @@ const Responses = () => {
 
       <CustomContainer>
         <Typography variant="h6" fontWeight={700}>
-          Responses ({responses.length})
+          Responses ({originalResponses.length})
         </Typography>
 
         <Box
@@ -897,6 +903,7 @@ const Responses = () => {
         onSubmit={() => {
           endEdit();
           abortCancelEdit();
+          confirmCancelConfirmed();
         }}
         leftButtonProps={{
           label: 'Never mind',
@@ -919,6 +926,8 @@ const Responses = () => {
           confirmSave();
           hideCloseAndSave();
           endEdit();
+          showSaveBanner();
+          setOpenDetails(null);
         }}
         leftButtonProps={{
           label: 'Never mind',
@@ -955,7 +964,7 @@ const Responses = () => {
         showCloseAndSave={showCloseAndSave}
         handleSaveDetails={handleSaveDetails}
         isSaveConfirmed={isSaveConfirmed}
-        isCancelEdit={isCancelEdit}
+        isCancelConfirmed={isCancelConfirmed}
       />
     </Layout>
   );

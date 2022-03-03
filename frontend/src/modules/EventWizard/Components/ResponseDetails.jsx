@@ -150,7 +150,7 @@ const ResponseDetails = ({
   showCloseAndSave,
   handleSaveDetails,
   isSaveConfirmed,
-  isCancelEdit,
+  isCancelConfirmed,
 }) => {
   const [updatedDetails, setUpdatedDetails] = useState(null);
   useEffect(() => {
@@ -213,8 +213,8 @@ const ResponseDetails = ({
   }, [isSaveConfirmed]);
 
   useEffect(() => {
-    isCancelEdit && endEditMode();
-  }, [isCancelEdit]);
+    isCancelConfirmed && endEditMode();
+  }, [isCancelConfirmed]);
 
   const onSubmit = () => {
     updatedDetails.last_updated = new Date().toISOString();
@@ -226,6 +226,8 @@ const ResponseDetails = ({
   const handleCancelEdit = () => {
     if (JSON.stringify(open) !== JSON.stringify(updatedDetails)) {
       onCancelEdit();
+      // startEdit()
+      // startEditMode()
     } else {
       endEditMode();
       endEdit();
@@ -241,13 +243,13 @@ const ResponseDetails = ({
     }
   };
 
-  useEffect(() => {
-    if (JSON.stringify(open) !== JSON.stringify(updatedDetails)) {
-      window.addEventListener('beforeunload', closeTabWarning);
-    } else {
-      window.removeEventListener('beforeunload', closeTabWarning);
-    }
-  }, [updatedDetails]);
+  // useEffect(() => {
+  //   if (JSON.stringify(open) !== JSON.stringify(updatedDetails)) {
+  //     window.addEventListener('beforeunload', closeTabWarning);
+  //   } else {
+  //     window.removeEventListener('beforeunload', closeTabWarning);
+  //   }
+  // }, [updatedDetails]);
 
   return (
     <Drawer
@@ -454,7 +456,7 @@ const ResponseDetails = ({
             />
             <Autocomplete
               disablePortal
-              options={['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year']}
+              options={['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', '6th Year', '7th Year']}
               defaultValue={updatedDetails?.year}
               renderInput={(params) => <TextField {...params} label="Year" />}
               onChange={(e, value) => setUpdatedDetails({ ...updatedDetails, year: value })}
