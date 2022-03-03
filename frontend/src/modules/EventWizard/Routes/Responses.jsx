@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { KeyboardArrowDown, FileDownload as DownloadIcon } from '@mui/icons-material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
+import { CSVLink } from 'react-csv';
 import { colors, typography } from '$lib/theme';
 import { useBoolean } from '$lib/utils/useBoolean';
 
@@ -32,6 +33,18 @@ import DeleteIcon from '../components/DeleteIcon';
 import ResponsesTable from '../components/ResponsesTable';
 import SortIcon from '../components/SortIcon';
 import ResponseDetails from '../components/ResponseDetails';
+
+const CSVHeaders = [
+  { label: 'ID', key: 'id' },
+  { label: 'Event', key: 'event.name' },
+  { label: 'Name', key: 'name' },
+  { label: 'ID Number', key: 'id_number' },
+  { label: 'Email', key: 'email' },
+  { label: 'Year', key: 'year' },
+  { label: 'Course', key: 'course' },
+  { label: 'Submission Date', key: 'date_submitted' },
+  { label: 'Last Updated On', key: 'last_updated' },
+]
 
 const DefaultTheme = createTheme({
   palette: {
@@ -198,8 +211,6 @@ const Responses = () => {
             console.log('error deleting response', err);
           });
       }
-      hideDelete();
-      fetchResponses();
     } else {
       let entryId = Number.isInteger(entry) ? entry : entry.id;
       await http
@@ -208,16 +219,14 @@ const Responses = () => {
             authorization: `Bearer ${accessToken}`,
           },
         })
-        .then(() => {
-          setDeleteEntry(null);
-          hideDelete();
-          fetchResponses();
-        })
         .catch((err) => {
           alert('error deleting response');
           console.log('error deleting response', err);
         });
     }
+    setDeleteEntry(null);
+    hideDelete();
+    fetchResponses();
   };
 
   const [sortModel, setSortModel] = useState([{ field: 'id', sort: 'asc' }]);
@@ -334,16 +343,6 @@ const Responses = () => {
   const handleCopyEventLink = () => {
     navigator.clipboard.writeText(eventLink);
     showBanner();
-  };
-
-  const handleDownloadAll = () => {
-    // TODO: download all responses
-    alert('download all responses');
-  };
-
-  const handleDownloadSelected = () => {
-    // TODO: download selected responses
-    alert('downloading selected responses');
   };
 
   const ToggleSwitch = styled((props) => (
@@ -594,7 +593,6 @@ const Responses = () => {
               disabled={selectedItems.length > 0 && selectedItems.length <= responses.length}
               variant={selectedItems.length > 0 ? 'contained' : 'outlined'}
               color={selectedItems.length > 0 ? 'secondary' : 'primary'}
-              onClick={handleDownloadAll}
             >
               <FileDownload
                 color={
@@ -603,14 +601,12 @@ const Responses = () => {
                     : 'primary'
                 }
               />
-              <p
-                style={{
+                <CSVLink data={originalResponses} headers={CSVHeaders} filename={`${eventName}-respondents`} style={{
                   margin: 'auto 0 auto 4px',
                   color: selectedItems.length > 0 ? colors.gray[400] : colors.blue[300],
-                }}
-              >
-                Download all
-              </p>
+                }} >
+                  Download all
+                </CSVLink>
             </Button>
           </ThemeProvider>
         </Box>
@@ -733,10 +729,13 @@ const Responses = () => {
                       padding: '4px 24px',
                       cursor: 'pointer',
                     }}
-                    onClick={handleDownloadSelected}
                   >
                     <FileDownload />
-                    Download
+                    <CSVLink data={originalResponses.filter(response => selectedItems.includes(response.id))} headers={CSVHeaders} filename={`${eventName}-respondents`} style={{
+                      color: colors.blue[300],
+                    }}>
+                      Download
+                    </CSVLink>
                   </Box>
                   <Box
                     sx={{
