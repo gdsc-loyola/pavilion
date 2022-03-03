@@ -7,6 +7,9 @@ import { useBoolean } from '$lib/utils/useBoolean';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { useAdminUser } from '$lib/context/AdminContext';
+import http from '$lib/http';
+import { kebabCase } from '$lib/utils/kebabCase';
 
 import {
   Button,
@@ -51,6 +54,7 @@ const HelperText = styled('p')({
 });
 
 const Details = (props) => {
+  const { org, accessToken, userData } = useAdminUser();
   const { eventName } = useParams();
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
 
@@ -200,6 +204,26 @@ const Details = (props) => {
     typeof details.eventphoto3?.name == 'string' ? URL.createObjectURL(details.eventphoto3) : null;
   const eventphoto4 =
     typeof details.eventphoto4?.name == 'string' ? URL.createObjectURL(details.eventphoto4) : null;
+
+  const saveChanges = async () => {
+    const fd = new FormData();
+    Object.entries(orgForm).forEach(([key, value]) => {
+      if (key === 'step') {
+        return;
+      }
+      fd.append(key, value);
+    });
+    fd.append('user', userData.id);
+    fd.append('slug', kebabCase(orgForm.short_name));
+
+    await http.put(`/orgs/${org.slug}/`, fd, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    setOpen(true);
+  };
   return (
     <Layout sidebar={!pastevent}>
       <TopBar eventName={eventName} sidebar={!pastevent}>
