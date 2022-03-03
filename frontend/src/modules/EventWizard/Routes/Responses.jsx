@@ -10,7 +10,7 @@ import {
   MenuItem as MItem,
   styled,
   createTheme,
-  ThemeProvider,
+  ThemeProvider
 } from '@mui/material';
 import { KeyboardArrowDown, FileDownload as DownloadIcon } from '@mui/icons-material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
@@ -78,155 +78,6 @@ const CustomContainer = styled('div')(({ theme }) => ({
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const rows = [
-  {
-    id: 1,
-    fullName: 'Leda Clubley',
-    email: 'lclubley0@un.org',
-    dateCreated: '2022-01-06T06:04:54Z',
-    updatedAt: '2021-12-31T03:24:23Z',
-    idNum: '3',
-    year: '1st Year',
-    course: 'Bluezoom',
-  },
-  {
-    id: 2,
-    fullName: 'Jesse Stutte',
-    email: 'jstutte1@redcross.org',
-    dateCreated: '2022-02-16T18:29:57Z',
-    updatedAt: '2022-02-02T09:34:47Z',
-    idNum: '27',
-    year: '3rd Year',
-    course: 'Jamia',
-  },
-  {
-    id: 3,
-    fullName: 'Billie Finnes',
-    email: 'bfinnes2@accuweather.com',
-    dateCreated: '2022-02-22T11:48:35Z',
-    idNum: '01',
-    year: '1st Year',
-    course: 'Dynabox',
-  },
-  {
-    id: 4,
-    fullName: 'Cordula Hadland',
-    email: 'chadland3@wikimedia.org',
-    dateCreated: '2022-02-18T16:13:13Z',
-    idNum: '89555',
-    year: '1st Year',
-    course: 'Topicware',
-  },
-  {
-    id: 5,
-    fullName: 'Khalil Joannet',
-    email: 'kjoannet4@nih.gov',
-    dateCreated: '2021-12-21T04:07:47Z',
-    updatedAt: '2022-01-10T12:05:45Z',
-    idNum: '05',
-    year: '4th Year',
-    course: 'Quamba',
-  },
-  {
-    id: 6,
-    fullName: 'Emmalyn Burburough',
-    email: 'eburburough5@umich.edu',
-    dateCreated: '2022-01-05T12:32:05Z',
-    updatedAt: '2022-02-17T00:10:35Z',
-    idNum: '744',
-    year: '2nd Year',
-    course: 'Ailane',
-  },
-  {
-    id: 7,
-    fullName: 'Cristie Gerring',
-    email: 'cgerring6@elpais.com',
-    dateCreated: '2022-01-13T00:56:04Z',
-    updatedAt: '2022-01-23T05:11:42Z',
-    idNum: '6',
-    year: '2nd Year',
-    course: 'Edgeify',
-  },
-  {
-    id: 8,
-    fullName: 'Traver Schwaiger',
-    email: 'tschwaiger7@apple.com',
-    dateCreated: '2022-02-20T13:03:26Z',
-    updatedAt: '2022-02-18T17:38:42Z',
-    idNum: '06097',
-    year: '4th Year',
-    course: 'Oyonder',
-  },
-  {
-    id: 9,
-    fullName: 'Addie Skym',
-    email: 'askym8@nba.com',
-    dateCreated: '2022-02-10T04:16:15Z',
-    updatedAt: '2022-02-01T21:16:13Z',
-    idNum: '886',
-    year: '3rd Year',
-    course: 'Skinder',
-  },
-  {
-    id: 10,
-    fullName: 'Cathi Flann',
-    email: 'cflann9@de.vu',
-    dateCreated: '2022-01-09T21:46:41Z',
-    idNum: '663',
-    year: '1st Year',
-    course: 'Tagopia',
-  },
-];
-
-const ToggleSwitch = styled((props) => (
-  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-))(({ theme }) => ({
-  width: 42,
-  height: 26,
-  padding: 0,
-  '& .MuiSwitch-switchBase': {
-    padding: 0,
-    margin: 2,
-    transitionDuration: '300ms',
-    color: '#fff',
-    '&.Mui-checked': {
-      transform: 'translateX(16px)',
-      color: '#fff',
-      '& + .MuiSwitch-track': {
-        backgroundColor: colors.blue[300],
-        opacity: 1,
-        border: 0,
-      },
-      '&.Mui-disabled + .MuiSwitch-track': {
-        opacity: 0.5,
-      },
-    },
-    '&.Mui-focusVisible .MuiSwitch-thumb': {
-      color: colors.blue[300],
-      border: '6px solid #fff',
-    },
-    '&.Mui-disabled .MuiSwitch-thumb': {
-      color: theme.palette.grey[100],
-    },
-    '&.Mui-disabled + .MuiSwitch-track': {
-      opacity: 0.7,
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    boxSizing: 'border-box',
-    width: 22,
-    height: 22,
-  },
-  '& .MuiSwitch-track': {
-    borderRadius: 26 / 2,
-    backgroundColor: colors.gray[400],
-    opacity: 1,
-    transition: theme.transitions.create(['background-color'], {
-      duration: 500,
-    }),
-  },
-}));
-
 const CustomCheckbox = styled(Checkbox)({
   '&.Mui-checked': {
     color: colors.green[300],
@@ -272,54 +123,92 @@ const FileDownload = styled(DownloadIcon)({
 
 const Responses = () => {
   const { org, accessToken, userData } = useAdminUser();
+  const [accepting, setAccepting] = useState(false);
   useEffect(() => {
     fetchResponses()
   }, [])
   useEffect(() => {
     if (org) {
       console.log('org', org)
+      fetchResponses()
     }
-  }, [org, accessToken])
+  }, [org])
+  const [eventLink, setEventLink] = useState('');
   const fetchResponses = async () => {
-    // TODO: fetch responses
-    const res = await http.get(`/event-student/`)
+    // TODO: fetch responses with event ID
+    const res = await http.get(`/events/1`)
     console.log('res', res.data)
-    setResponses(res.data)
-
-    // TODO: set event details (accepting responses)
-    // TODO: event link
+    if (Array.isArray(res.data)) {
+      setResponses(res.data)
+      setOriginalResponses(res.data)
+      const event = res.data[0].event
+      console.log('event', event)
+      setAccepting(event.accepting_responses ?? false)
+      setEventName(event.name)
+      // TODO pav base url
+      setEventLink(`https://pavilion.gdscloyola.org/organizations/${org?.short_name.toLowerCase()}/${event.id}`)
+    } else {
+      const event = res.data
+      console.log('event', event)
+      setAccepting(event.accepting_responses ?? false)
+      setEventName(event.name)
+      setEventLink(`https://pavilion.gdscloyola.org/organizations/${org?.short_name.toLowerCase()}/${event.id}`)
+    }
   }
-  const { eventName } = useParams();
-  const [responses, setResponses] = useState(rows);
+  const { eventNameParam } = useParams();
+  const [eventName, setEventName] = useState(eventNameParam);
+  const [responses, setResponses] = useState([]);
+  const [originalResponses, setOriginalResponses] = useState([])
   const [page, setPage] = useState(0);
   const [selectedItems, setSelectedItems] = useState([]);
   const [search, setSearch] = useState('');
   useEffect(() => {
     if (search !== '' || search !== ' ' || search != null) {
-      const filtered = rows.filter((row) => {
+      const filtered = originalResponses.filter((row) => {
         return (
-          row.fullName.toLowerCase().includes(search.toLowerCase()) ||
+          row.name.toLowerCase().includes(search.toLowerCase()) ||
           row.email.toLowerCase().includes(search.toLowerCase()) ||
-          row.idNum.toLowerCase().includes(search.toLowerCase()) ||
           row.course.toLowerCase().includes(search.toLowerCase())
         );
       });
       setResponses(filtered);
     } else {
-      setResponses(rows);
+      setResponses(originalResponses);
     }
   }, [search]);
   const [openDetails, setOpenDetails] = useState(null);
-  const [accepting, setAccepting] = useState(true);
-  useEffect(() => {
-    if (!accepting) {
-      // TODO: update accepting status
-    }
-  }, [accepting]);
+
   const [deleteEntry, setDeleteEntry] = useState(null);
-  const onConfirmDeleteEntry = (entry) => {
-    alert(`deleting entry no. ${entry}`);
-    setDeleteEntry(null);
+  const onConfirmDeleteEntry = async (entry) => {
+    if (Array.isArray(entry)) {
+      for (let i = 0; i < entry.length; i++) {
+        const toDelete = entry[i];
+        await http.delete(`/event-student/${toDelete}`, {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          },
+        }).catch(err => {
+          alert('error deleting response')
+          console.log('error deleting response', err)
+        })
+      }
+      hideDelete()
+      fetchResponses();
+    } else {
+      let entryId = Number.isInteger(entry) ? entry : entry.id;
+      await http.delete(`/event-student/${entryId}`, {
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        },
+      }).then(() => {
+        setDeleteEntry(null);
+        hideDelete()
+        fetchResponses();
+      }).catch(err => {
+        alert('error deleting response')
+        console.log('error deleting response', err)
+      })
+    }
   };
 
   const [sortModel, setSortModel] = useState([{ field: 'id', sort: 'asc' }]);
@@ -330,6 +219,7 @@ const Responses = () => {
     setTrue: openAcceptingModal,
   } = useBoolean();
   const { value: isBannerVisible, setFalse: hideBanner, setTrue: showBanner } = useBoolean();
+  const { value: isDeleteVisible, setFalse: hideDelete, setTrue: showDelete } = useBoolean();
   const { value: isEdit, setFalse: endEdit, setTrue: startEdit } = useBoolean();
   const {
     value: isCancelEdit,
@@ -349,6 +239,12 @@ const Responses = () => {
   } = useBoolean();
 
   useEffect(() => {
+    if (isSaveBannerVisible) {
+      fetchResponses()
+    }
+  }, [isSaveBannerVisible])
+
+  useEffect(() => {
     if (isBannerVisible) {
       setTimeout(() => {
         hideBanner();
@@ -366,8 +262,28 @@ const Responses = () => {
       openAcceptingModal();
     } else {
       setAccepting(event.target.checked)
+      updateAcceptStatus(event.target.checked)
     }
   };
+
+  const updateAcceptStatus = async (status) => {
+    // TODO patch to event id
+    const fd = new FormData();
+    fd.append('accepting_responses', status, );
+    await http.patch('/events/1/', {
+      accepting_responses: status
+    }, {
+      headers: {
+        authorization: `Bearer ${accessToken}`
+      },
+    }).then(res => {
+      fetchResponses()
+      console.log('successfully updated accepting status', res)
+    }).catch(err => {
+      alert('error')
+      console.log('error updating accepting status', err)
+    })
+  }
 
   const handleEdit = (response) => {
     startEdit();
@@ -379,16 +295,86 @@ const Responses = () => {
     setOpenDetails(null);
   };
 
-  const handleSaveDetails = (old, update) => {
-    // TODO
-    alert(`${old.fullName} vs ${update.fullName}`);
-    showSaveBanner();
+  const handleSaveDetails = async (old, update) => {
+    update.last_updated = new Date().toISOString();
+    await http.patch(`/event-student/${old.id}/`, update, {
+      headers: {
+        authorization: `Bearer ${accessToken}`
+      },
+    }).then(() => {
+      openDetails && setOpenDetails(update)
+      fetchResponses()
+      !openDetails && showSaveBanner();
+      endEdit()
+    }).catch(err => {
+      alert('error')
+      console.log('error updating', err)
+    })
   };
 
   const handleCopyEventLink = () => {
-    // TODO: copy event link
+    navigator.clipboard.writeText(eventLink);
     showBanner()
   }
+
+  const handleDownloadAll = () => {
+    // TODO: download all responses
+    alert('download all responses')
+  }
+
+  const handleDownloadSelected = () => {
+    // TODO: download selected responses
+    alert('downloading selected responses')
+  }
+
+  const ToggleSwitch = styled((props) => (
+    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple defaultChecked={accepting} checked={accepting} onChange={(e) => handleAcceptToggle(e)} {...props} />
+  ))(({ theme }) => ({
+    width: 42,
+    height: 26,
+    padding: 0,
+    '& .MuiSwitch-switchBase': {
+      padding: 0,
+      margin: 2,
+      transitionDuration: '300ms',
+      color: '#fff',
+      '&.Mui-checked': {
+        transform: 'translateX(16px)',
+        color: '#fff',
+        '& + .MuiSwitch-track': {
+          backgroundColor: colors.blue[300],
+          opacity: 1,
+          border: 0,
+        },
+        '&.Mui-disabled + .MuiSwitch-track': {
+          opacity: 0.5,
+        },
+      },
+      '&.Mui-focusVisible .MuiSwitch-thumb': {
+        color: colors.blue[300],
+        border: '6px solid #fff',
+      },
+      '&.Mui-disabled .MuiSwitch-thumb': {
+        color: theme.palette.grey[100],
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.7,
+      },
+    },
+    '& .MuiSwitch-thumb': {
+      boxSizing: 'border-box',
+      width: 22,
+      height: 22,
+    },
+    '& .MuiSwitch-track': {
+      borderRadius: 26 / 2,
+      backgroundColor: colors.gray[400],
+      opacity: 1,
+      transition: theme.transitions.create(['background-color'], {
+        duration: 500,
+      }),
+    },
+  }));
 
   const columns = [
     {
@@ -431,7 +417,7 @@ const Responses = () => {
         <GridActionsCellItem
           key={params.id}
           label="Edit"
-          onClick={() => handleEdit(responses[params.row.id - 1])}
+          onClick={() => handleEdit(responses[responses.indexOf(params.row)])}
           showInMenu
           sx={{
             fontSize: '14px',
@@ -447,7 +433,7 @@ const Responses = () => {
         <GridActionsCellItem
           key={params.id}
           label="Delete"
-          onClick={() => setDeleteEntry(params.id)}
+          onClick={() => { setDeleteEntry(params.id); showDelete(); }}
           showInMenu
           sx={{
             fontSize: '14px',
@@ -508,22 +494,22 @@ const Responses = () => {
           onClose={handleClose}
         >
           <MenuItem
-            selected={sortModel[0].field === 'dateCreated'}
-            onClick={() => setSortModel([{ field: 'dateCreated', sort: sortModel[0]['sort'] }])}
+            selected={sortModel[0].field === 'date_submitted'}
+            onClick={() => setSortModel([{ field: 'date_submitted', sort: sortModel[0]['sort'] }])}
             disableRipple
           >
             Submission date
           </MenuItem>
           <MenuItem
-            selected={sortModel[0].field === 'updatedAt'}
-            onClick={() => setSortModel([{ field: 'updatedAt', sort: sortModel[0]['sort'] }])}
+            selected={sortModel[0].field === 'last_updated'}
+            onClick={() => setSortModel([{ field: 'last_updated', sort: sortModel[0]['sort'] }])}
             disableRipple
           >
             Last updated
           </MenuItem>
           <MenuItem
-            selected={sortModel[0].field === 'fullName'}
-            onClick={() => setSortModel([{ field: 'fullName', sort: sortModel[0]['sort'] }])}
+            selected={sortModel[0].field === 'name'}
+            onClick={() => setSortModel([{ field: 'name', sort: sortModel[0]['sort'] }])}
             disableRipple
           >
             Name
@@ -579,6 +565,7 @@ const Responses = () => {
               disabled={selectedItems.length > 0 && selectedItems.length <= responses.length}
               variant={selectedItems.length > 0 ? 'contained' : 'outlined'}
               color={selectedItems.length > 0 ? 'secondary' : 'primary'}
+              onClick={handleDownloadAll}
             >
               <FileDownload
                 color={
@@ -661,16 +648,12 @@ const Responses = () => {
               }}
             >
               <Typography component="p">Accepting responses</Typography>
-              <ToggleSwitch
-                defaultChecked={accepting}
-                value={accepting}
-                onChange={(e) => handleAcceptToggle(e)}
-              />
+              <ToggleSwitch />
             </Box>
           </Box>
         </Box>
 
-        {responses.length > 0 ? (
+        {originalResponses.length > 0 ? (
           <Box>
             <Box
               sx={{
@@ -694,7 +677,7 @@ const Responses = () => {
                 }}
               >
                 <CustomCheckbox
-                  checked={selectedItems.length === responses.length}
+                  checked={selectedItems.length === originalResponses.length}
                   indeterminate={
                     selectedItems.length < responses.length && selectedItems.length > 0
                   }
@@ -721,6 +704,7 @@ const Responses = () => {
                       padding: '4px 24px',
                       cursor: 'pointer',
                     }}
+                    onClick={handleDownloadSelected}
                   >
                     <FileDownload />
                     Download
@@ -733,6 +717,7 @@ const Responses = () => {
                       paddingLeft: '24px',
                       cursor: 'pointer',
                     }}
+                    onClick={showDelete}
                   >
                     <DeleteIcon />
                     Delete
@@ -775,7 +760,7 @@ const Responses = () => {
               onCellClick={(param, event) => {
                 if (param.field === '__check__' || param.field === 'actions')
                   return event.stopPropagation();
-                setOpenDetails(responses[param.row.id - 1]);
+                setOpenDetails(responses[responses.indexOf(param.row)]);
               }}
             />
           </Box>
@@ -822,6 +807,7 @@ const Responses = () => {
         onSubmit={(e) => {
           e.preventDefault();
           setAccepting(false);
+          updateAcceptStatus(false)
           closeAcceptingModal();
         }}
         leftButtonProps={{
@@ -835,19 +821,19 @@ const Responses = () => {
       />
 
       <Modal
-        open={deleteEntry}
-        onClose={() => setDeleteEntry(null)}
+        open={isDeleteVisible}
+        onClose={() => { setDeleteEntry(null); hideDelete(); }}
         withTextField={false}
         warning={true}
         title="Delete response"
         subtitle="This will delete all the information about this entry."
         onSubmit={(e) => {
           e.preventDefault();
-          onConfirmDeleteEntry(deleteEntry);
+          deleteEntry ? onConfirmDeleteEntry(deleteEntry) : onConfirmDeleteEntry(selectedItems);
         }}
         leftButtonProps={{
           label: 'Never mind',
-          onClick: () => setDeleteEntry(null),
+          onClick: () => { setDeleteEntry(null); hideDelete(); },
         }}
         rightButtonProps={{
           label: 'Delete response',
@@ -903,17 +889,17 @@ const Responses = () => {
         endEdit={endEdit}
         anchor={'right'}
         open={openDetails}
-        title={`${openDetails?.id} of ${responses.length} responses`}
+        title={`${responses.indexOf(openDetails) + 1} of ${responses.length} responses`}
         onClose={handleCloseDetails}
         onNextEntry={() =>
-          openDetails.id >= responses.length
+          responses.indexOf(openDetails) + 1 >= responses.length
             ? null
-            : setOpenDetails(responses[openDetails.id - 1 + 1])
+            : setOpenDetails(responses[responses.indexOf(openDetails) + 1])
         }
         onPrevEntry={() =>
-          openDetails.id <= 1 ? null : setOpenDetails(responses[openDetails.id - 1 - 1])
+          responses.indexOf(openDetails) < 1 ? null : setOpenDetails(responses[responses.indexOf(openDetails) - 1])
         }
-        onDelete={() => setDeleteEntry(openDetails)}
+        onDelete={() => { setDeleteEntry(openDetails); showDelete(); }}
         onCancelEdit={confirmCancelEdit}
         showCloseAndSave={showCloseAndSave}
         handleSaveDetails={handleSaveDetails}

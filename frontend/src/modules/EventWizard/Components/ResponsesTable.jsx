@@ -1,7 +1,9 @@
 import React from 'react';
-import { Checkbox, styled } from '@mui/material';
+import { Checkbox, styled, Box, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { colors } from '$lib/theme';
+import { colors, typography } from '$lib/theme';
+
+import emptyState from '$static/assets/emptyState.svg';
 
 const ResponsesTable = ({
   columns,
@@ -17,6 +19,35 @@ const ResponsesTable = ({
       color: colors.green[300],
     },
   });
+
+  const NoRows = () => {
+    return (
+      <Box
+            sx={{
+              marginTop: '2.5rem',
+              marginBottom: '0',
+              padding: '1.5rem',
+              backgroundColor: colors.blue[50],
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              gap: '2rem',
+              height: '100%',
+              flex: 1,
+              h4: {
+                fontSize: typography.fontSize.md,
+                fontWeight: typography.fontWeight.med,
+              },
+            }}
+          >
+            <img src={emptyState} style={{ width: '370px' }} />
+            <Typography variant="h4" fontWeight={700}>
+              We can’t seem to find what you’re looking for...
+            </Typography>
+          </Box>
+    )
+  }
 
   return (
     <DataGrid
@@ -74,6 +105,7 @@ const ResponsesTable = ({
       }}
       components={{
         BaseCheckbox: CustomCheckbox,
+        NoRowsOverlay: () => <NoRows />,
       }}
       sortModel={sortModel}
     />

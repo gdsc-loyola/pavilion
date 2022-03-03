@@ -196,7 +196,6 @@ const ResponseDetails = ({
   }, [open]);
 
   useEffect(() => {
-    alert(edit)
     edit ? startEditMode() : endEditMode();
   }, [edit]);
 
@@ -218,10 +217,10 @@ const ResponseDetails = ({
   }, [isCancelEdit])
 
   const onSubmit = () => {
-    // TODO: update response
-    alert('saving');
-    showSaveBanner();
+    updatedDetails.last_updated = new Date().toISOString();
+    handleSaveDetails(open, updatedDetails);
     endEditMode();
+    showSaveBanner();
   };
 
   const handleCancelEdit = () => {
