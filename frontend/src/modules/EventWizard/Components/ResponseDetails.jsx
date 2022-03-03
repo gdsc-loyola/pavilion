@@ -456,7 +456,15 @@ const ResponseDetails = ({
             />
             <Autocomplete
               disablePortal
-              options={['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', '6th Year', '7th Year']}
+              options={[
+                '1st Year',
+                '2nd Year',
+                '3rd Year',
+                '4th Year',
+                '5th Year',
+                '6th Year',
+                '7th Year',
+              ]}
               defaultValue={updatedDetails?.year}
               renderInput={(params) => <TextField {...params} label="Year" />}
               onChange={(e, value) => setUpdatedDetails({ ...updatedDetails, year: value })}
