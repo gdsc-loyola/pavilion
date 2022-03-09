@@ -11,6 +11,7 @@ export const colors = {
     600: '#2160bf',
     700: '#174ea6',
     bg10: '#A9B8FF0A',
+    main: '#1a73e8',
   },
   gray: {
     100: '#f3f4f6',
@@ -47,6 +48,9 @@ export const colors = {
     500: '#188038',
     600: '#1C783B',
     700: '#0D652D',
+  },
+  background: {
+    blue: '#F8F9FF',
   },
 };
 
@@ -85,6 +89,11 @@ export const background = {
   },
 };
 
+export const boxShadows = {
+  black1: '0px 4px 10px rgba(0, 0, 0, 0.08);',
+  blue: '0px 4px 10px rgba(73, 138, 244, 0.2);',
+};
+
 export const theme = createTheme({
   typography: {
     fontFamily: [
@@ -105,6 +114,7 @@ export const theme = createTheme({
   ...typography,
   background,
   colors,
+  boxShadows,
   breakpoints: {
     values: {
       xs: 0,
@@ -115,7 +125,9 @@ export const theme = createTheme({
     },
   },
 
-  palette: {},
+  palette: {
+    primary: colors.blue,
+  },
   components: {
     MuiTextField: {
       defaultProps: {
@@ -148,6 +160,17 @@ export const theme = createTheme({
           },
         },
       },
+      variants: [
+        {
+          props: { variant: 'blank' },
+          style: {
+            boxShadow: 'none',
+            background: 'none',
+
+            color: colors.gray['700'],
+          },
+        },
+      ],
     },
     MuiSelect: {
       defaultProps: {

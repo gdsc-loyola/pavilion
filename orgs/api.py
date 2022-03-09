@@ -1,14 +1,15 @@
 import jwt
-from orgs.models import Event, Organization
+from orgs.models import Event, Organization, StudentToEvent
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
-from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from functools import wraps
 
 # Lead Viewset
@@ -18,6 +19,22 @@ class EventsViewSet(viewsets.ModelViewSet):
         IsGetOrIsAuthenticated
     ]
     serializer_class = EventsSerializer
+
+    def retrieve(self, request, pk, *args, **kwargs):
+        current_event = Event.objects.get(pk=pk)
+        query = current_event.student.all() #.student comes from related_name in models.py
+        if query:
+            serializer = StudentToEventSerializer(query, many=True)
+            return Response(serializer.data)
+        serializer = EventsSerializer(current_event)
+        return Response(serializer.data)
+
+class StudentToEventViewSet(viewsets.ModelViewSet):
+    queryset = StudentToEvent.objects.all()
+    permission_classes = [
+        IsGetOrIsAuthenticated
+    ]
+    serializer_class = StudentToEventSerializer
 
 class OrgsViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()
@@ -32,8 +49,10 @@ class OrgsViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             try:
                 query = Organization.objects.get(user=self.request.user)
-            except:
+            except ObjectDoesNotExist:
                 return Response("Organization not found", status=404)
+            except MultipleObjectsReturned:
+                return Response("Multiple Orgs found for current user", status=512)
             serializer = OrgsSerializer(query)
             return Response(serializer.data)
 

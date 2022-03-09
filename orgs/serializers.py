@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from orgs.models import Event, Organization
+from orgs.models import Event, Organization, StudentToEvent
 from django.contrib.auth.models import User
 
 # Event serializer
@@ -20,21 +20,7 @@ class UsernameSerializer(serializers.ModelSerializer):
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = (
-            "id", 
-            "name",
-            "cover_photo",
-            "start_date", 
-            "end_date", 
-            "location",
-            "desc",
-            "event_photo1",
-            "event_photo2",
-            "event_photo3",
-            "event_photo4",
-            "last_updated",
-            "status", 
-            "orgs")
+        fields = '__all__'
 
 class OrgsSerializer(serializers.HyperlinkedModelSerializer):
     events = EventsSerializer(read_only=True, many=True)
@@ -58,3 +44,9 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
             "user",
             "events")
         lookup_field = 'slug'
+
+class StudentToEventSerializer(serializers.ModelSerializer):
+    event = EventsSerializer(read_only=True)
+    class Meta:
+        model = StudentToEvent
+        fields = '__all__'

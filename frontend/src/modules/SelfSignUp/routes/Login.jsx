@@ -4,9 +4,11 @@ import '$stylesheets/org/SelfSignUp.scss';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import http from '$lib/http';
+import { useAdminUser } from '$lib/context/AdminContext';
 
 const Login = () => {
-  const { loginWithPopup, getAccessTokenSilently } = useAuth0();
+  const { loginWithPopup } = useAuth0();
+  const { refetchAll, accessToken } = useAdminUser();
 
   const router = useHistory();
 
@@ -19,19 +21,7 @@ const Login = () => {
           fullWidth
           onClick={async () => {
             await loginWithPopup();
-            const token = await getAccessTokenSilently();
-
-            if (!token) {
-              return;
-            }
-
-            // This call to the api creates a user row in the table for newly signed up users
-            await http.get(`/orgs/`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              withCredentials: true,
-            });
+            await refetchAll();
 
             router.push('/admin');
           }}

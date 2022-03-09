@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 import Layout from '../components/Layout';
 import Modal from '../Components/Modal';
@@ -10,7 +10,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { useAdminUser } from '$lib/context/AdminContext';
 import http from '$lib/http';
 import { kebabCase } from '$lib/utils/kebabCase';
-
+import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import {
   Button,
   Box,
@@ -54,23 +54,17 @@ const HelperText = styled('p')({
 });
 
 const Details = (props) => {
+  const router = useHistory();
   const { org, accessToken, userData } = useAdminUser();
   const { eventName } = useParams();
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
 
+  const { details, setDetails } = useEventDetailsStore((state) => ({
+    details: state.details,
+    setDetails: state.setDetails,
+  }));
+
   const [warning, setWarningState] = React.useState(true);
-  const [details, setDetails] = React.useState({
-    startDate: null,
-    endDate: null,
-    location: '',
-    description: '',
-    coverphoto: null,
-    eventphoto1: null,
-    eventphoto2: null,
-    eventphoto3: null,
-    eventphoto4: null,
-    responsesSheet: '',
-  });
 
   const handleWarningState = (state) => {
     if (state == true) {
@@ -104,92 +98,62 @@ const Details = (props) => {
   };
 
   const handleCoverPhotoChange = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        coverphoto: e,
-      };
+    setDetails({
+      coverphoto: e,
     });
   };
 
   const handleEventPhoto1Change = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        eventphoto1: e,
-      };
+    setDetails({
+      eventphoto1: e,
     });
   };
 
   const handleEventPhoto2Change = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        eventphoto2: e,
-      };
+    setDetails({
+      eventphoto2: e,
     });
   };
 
   const handleEventPhoto3Change = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        eventphoto3: e,
-      };
+    setDetails({
+      eventphoto3: e,
     });
   };
 
   const handleEventPhoto4Change = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        eventphoto4: e,
-      };
+    setDetails({
+      eventphoto4: e,
     });
   };
 
   const handleStartDateChange = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        startDate: e,
-      };
+    setDetails({
+      startDate: e,
     });
   };
 
   const handleEndDateChange = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        endDate: e,
-      };
+    setDetails({
+      endDate: e,
     });
   };
 
   const handleLocationChange = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        location: e,
-      };
+    setDetails({
+      location: e,
     });
   };
 
   const handleDescriptionChange = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        description: e,
-      };
+    setDetails({
+      description: e,
     });
   };
 
   const handleResponsesSheetChange = (e) => {
-    setDetails((prevState) => {
-      return {
-        ...prevState,
-        responsesSheet: e,
-      };
+    setDetails({
+      responsesSheet: e,
     });
   };
 
@@ -205,25 +169,12 @@ const Details = (props) => {
   const eventphoto4 =
     typeof details.eventphoto4?.name == 'string' ? URL.createObjectURL(details.eventphoto4) : null;
 
-  const saveChanges = async () => {
-    const fd = new FormData();
-    Object.entries(orgForm).forEach(([key, value]) => {
-      if (key === 'step') {
-        return;
-      }
-      fd.append(key, value);
-    });
-    fd.append('user', userData.id);
-    fd.append('slug', kebabCase(orgForm.short_name));
+  const isFormEmpty = Object.values(details).some(
+    (x) => x === null || (typeof x == 'object' && !(x instanceof File))
+  );
 
-    await http.put(`/orgs/${org.slug}/`, fd, {
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    setOpen(true);
-  };
+  const res = async () => await console.log(http.get(`events/${0}/`));
+  res();
   return (
     <Layout sidebar={!pastevent}>
       <TopBar eventName={eventName} sidebar={!pastevent}>
@@ -265,7 +216,12 @@ const Details = (props) => {
           >
             Save as draft
           </Button>
-          <Button disabled={true} size="small" variant="outlined">
+          <Button
+            disabled={isFormEmpty}
+            onClick={() => router.push('preview')}
+            size="small"
+            variant="outlined"
+          >
             Preview Webpage
           </Button>
         </Box>
@@ -395,6 +351,7 @@ const Details = (props) => {
           size="normal"
           variant="outlined"
           label="Where was the event held?"
+          value={details.location}
           helperText={`${details.location.length}/100`}
           onChange={(e) => {
             handleLocationChange(e.target.value);
@@ -422,6 +379,7 @@ const Details = (props) => {
           size="normal"
           variant="outlined"
           label="Describe this event!"
+          value={details.description}
           helperText={`${details.description.length}/500`}
           onChange={(e) => {
             handleDescriptionChange(e.target.value);
@@ -712,7 +670,11 @@ const Details = (props) => {
             border: '1px solid #D1D5DB',
           }}
         >
-          <Button href="registration" size="small" sx={{ marginRight: '56px' }}>
+          <Button
+            onClick={() => router.push('registration')}
+            size="small"
+            sx={{ marginRight: '56px' }}
+          >
             Next
             <SvgIcon fontSize="small" component={KeyboardArrowRightIcon} />
           </Button>

@@ -4,6 +4,7 @@ import EventWizardPage from './EventWizardPage';
 import Responses from './Responses';
 import Details from './Details';
 import Registration from './Registration';
+import Preview from './Preview';
 export const EventWizardRoutes = () => {
   // Path always equal to /organizations
   const { path } = useRouteMatch();
@@ -12,6 +13,7 @@ export const EventWizardRoutes = () => {
     <Switch>
       <Route exact path={`${path}/:eventName`} component={EventWizardPage} />
       <Route exact path={`${path}/:eventName/details`} component={Details} />
+      <Route exact path={`${path}/:eventName/preview`} component={Preview} />
       <Route exact path={`${path}/:eventName/registration`} component={Registration} />
       <Route exact path={`${path}/:eventName/responses`} component={Responses} />
     </Switch>

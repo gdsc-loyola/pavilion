@@ -11,7 +11,7 @@ const CustomContainer = styled('div')({
   },
 });
 
-const TopBar = ({ eventName, children, sidebar }) => {
+const TopBar = ({ eventName, children, sidebar, paddingBig = true }) => {
   const [eventTitle, setEventTitle] = React.useState(eventName);
 
   const handleEventTitleChange = (e) => {
@@ -24,8 +24,8 @@ const TopBar = ({ eventName, children, sidebar }) => {
         maxWidth: '100%',
         display: 'flex',
         justifyContent: 'space-between',
-        paddingTop: '1.75rem',
-        paddingBottom: '1.75rem',
+        paddingTop: paddingBig ? '1.75rem' : '14px',
+        paddingBottom: paddingBig ? '1.75rem' : '14px',
         paddingLeft: sidebar ? '3.5rem' : '144px',
         paddingRight: sidebar ? '3.5rem' : '144px',
         borderBottom: '1px solid #D1D5DB',
@@ -50,7 +50,7 @@ const TopBar = ({ eventName, children, sidebar }) => {
           }}
           defaultValue={eventTitle}
           sx={{
-            width: eventTitle.length * 7 + 100,
+            width: eventTitle.length * 9 + 100,
             border: 'none',
           }}
         />

@@ -2,15 +2,18 @@ import React from 'react';
 import { Box, Grid, Button, Modal as MuiModal, Typography } from '@mui/material';
 import ControlledTextField from '$components/ControlledTextField';
 import { Error } from '@mui/icons-material';
+
 /**
  * @param {import('@mui/material').ModalProps & {
  * title: string,
  * subtitle: string,
  * withTextField?: boolean,
+ * withButtons?: boolean,
  * TextFieldProps?: import('$components/ControlledTextField').ControlledTextFieldProps,
  * leftButtonProps?: import('@mui/material').ButtonProps & {label: string},
  * rightButtonProps?: import('@mui/material').ButtonProps & {label: string},
  * onSubmit?: React.FormEventHandler<HTMLFormElement>,
+ * isDanger?: boolean
  * }} props
  * @returns {React.FunctionComponent}
  */
@@ -19,12 +22,20 @@ const Modal = (props) => {
     title,
     subtitle,
     withTextField = true,
+    withButtons = true,
+    isDanger = false,
     onSubmit,
     TextFieldProps,
     leftButtonProps,
     rightButtonProps,
+    children,
     ...rest
   } = props;
+
+  if (withTextField && !TextFieldProps) {
+    console.error('TextFieldProps is required when withTextField is true');
+  }
+
   return (
     <MuiModal {...rest}>
       <Box
@@ -47,7 +58,8 @@ const Modal = (props) => {
           sx={({ background }) => ({
             alignItems: 'center',
             display: 'flex',
-            background: background.blue.upDown,
+            background: isDanger ? background.red.upDown : background.blue.upDown,
+
             flexDirection: 'column',
             color: '#fff',
             p: '3rem 40px',
@@ -57,7 +69,7 @@ const Modal = (props) => {
           <p style={{ fontWeight: '500' }}>{subtitle}</p>
         </Box>
         <Box sx={{ p: '32px 40px' }}>
-          {withTextField && (
+          {withTextField && TextFieldProps && (
             <ControlledTextField
               variant="outlined"
               helperTextCb={(message) => {
@@ -88,19 +100,27 @@ const Modal = (props) => {
               {...TextFieldProps}
             />
           )}
-          <Grid container spacing={4} paddingTop={3} sx={{}}>
-            <Grid item xs={6}>
-              <Button size="medium" variant="outlined" fullWidth {...leftButtonProps}>
-                {leftButtonProps?.label}
-              </Button>
-            </Grid>
+          {withButtons && (
+            <Grid container spacing={4} paddingTop={3} sx={{}}>
+              <Grid item xs={6}>
+                <Button size="medium" variant="outlined" fullWidth {...leftButtonProps}>
+                  {leftButtonProps?.label}
+                </Button>
+              </Grid>
 
-            <Grid item xs={6}>
-              <Button size="small" fullWidth {...rightButtonProps}>
-                {rightButtonProps?.label}
-              </Button>
+              <Grid item xs={6}>
+                <Button
+                  size="small"
+                  color={isDanger ? 'error' : 'primary'}
+                  fullWidth
+                  {...rightButtonProps}
+                >
+                  {rightButtonProps?.label}
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
+          {children}
         </Box>
       </Box>
     </MuiModal>

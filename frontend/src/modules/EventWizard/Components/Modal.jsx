@@ -97,7 +97,7 @@ const Modal = (props) => {
           )}
 
           <h2>{title}</h2>
-          <p style={{ fontWeight: '500' }}>{subtitle}</p>
+          <p style={{ textAlign: 'center', fontWeight: '500' }}>{subtitle}</p>
         </Box>
         <Box sx={{ p: '32px 40px' }}>
           {withTextField && (
