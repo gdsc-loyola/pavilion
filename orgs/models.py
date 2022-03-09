@@ -71,7 +71,7 @@ class StudentToEvent(models.Model):
     id_number = models.IntegerField()
     email = models.EmailField(max_length=200, null=True)
     year = models.CharField(max_length=100, choices=year_choices)
-    course = models.CharField(max_length=32)
+    course = models.CharField(max_length=128)
     date_submitted = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
