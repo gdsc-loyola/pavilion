@@ -119,7 +119,7 @@ const EventPage = (props) => {
               width: '100%',
               maxWidth: '760px',
               marginTop: '240px',
-              marginBottom: '80px',
+              marginBottom: isRegistering ? '32px' : '80px',
             }}
           >
             <EventTitleCard
