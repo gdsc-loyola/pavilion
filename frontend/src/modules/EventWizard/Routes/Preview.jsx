@@ -4,6 +4,7 @@ import { useBoolean } from '$lib/utils/useBoolean';
 import { useParams, useHistory } from 'react-router-dom';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import EventTitleCard from '../../EventPage/components/EventTitleCard';
+import DataPrivacyModal from '../Components/DataPrivacyModal';
 import {
   Box,
   Typography,
@@ -54,6 +55,7 @@ const Preview = () => {
   };
 
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
+  const { value: isDataModalOpen, setFalse: closeDataModal, setTrue: openDataModal } = useBoolean();
 
   const { registration, setRegistration } = useRegistrationStore((state) => ({
     registration: state.registration,
@@ -267,6 +269,7 @@ const Preview = () => {
                     I agree to the
                   </Typography>
                   <Typography
+                    onClick={openDataModal}
                     inline
                     sx={{
                       fontSize: typography.fontSize.sm,
@@ -310,6 +313,19 @@ const Preview = () => {
             })}
           </Box>
         )}
+        <DataPrivacyModal open={isDataModalOpen} asClose={closeDataModal}>
+          <Button
+            size="small"
+            onClick={closeDataModal}
+            variant="outlined"
+            sx={{ marginRight: '8px' }}
+          >
+            Decline
+          </Button>
+          <Button size="small" onClick={closeDataModal} sx={{ marginLeft: '8px' }}>
+            Accept
+          </Button>
+        </DataPrivacyModal>
         <Modal
           withTextField={false}
           warning={false}
