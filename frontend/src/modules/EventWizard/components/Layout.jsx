@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 import React from 'react';
-import Sidebar from './SideBar';
+import Sidebar from './Sidebar';
 
 const Main = styled('main')({
   minHeight: '100vh',
