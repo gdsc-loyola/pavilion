@@ -7,9 +7,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import OrgsDataService from '../../services/orgs.service';
-import { styled } from '@mui/material';
+import { styled, Button } from '@mui/material';
 import { colors } from '$lib/theme';
 import AdminLayout from '$components/Admin/AdminLayout';
+import DataPrivacyModal from '../../components/DataPrivacyModal';
+
 const Settings = () => {
   const FormField = styled(TextField)({
     '& .MuiOutlinedInput-root': {
@@ -147,9 +149,14 @@ const Settings = () => {
     });
   };
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <AdminLayout>
       <div className="settings">
+        <DataPrivacyModal />
+
         <h1 className="title">Org Information</h1>
         <FormField
           label={'Organization Name*'}
