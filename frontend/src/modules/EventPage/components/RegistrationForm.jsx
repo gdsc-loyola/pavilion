@@ -88,6 +88,11 @@ const RegistrationForm = () => {
     setTrue: openDataPrivacy,
   } = useBoolean();
 
+  const onSubmit = (e) => {
+    e.preventDefault()
+    alert('submit')
+  }
+
   return (
     <Box
       component="form"
@@ -101,6 +106,7 @@ const RegistrationForm = () => {
         paddingTop: '32px',
         marginBottom: '5rem',
       }}
+      onSubmit={(e) => onSubmit(e)}
     >
       {/* ID Number */}
       <Box
@@ -360,6 +366,7 @@ const RegistrationForm = () => {
           padding: '8px 24px',
         }}
         disabled={!checkIfAllFilled()}
+        type="submit"
       >
         Submit
       </Button>
