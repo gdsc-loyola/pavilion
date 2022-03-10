@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { Box, TextField, Typography, Autocomplete, Checkbox, FormControlLabel, Button } from '@mui/material'
 import { Info } from '@mui/icons-material'
 import { typography, colors } from '$lib/theme'
+import { useBoolean } from '$lib/utils/useBoolean'
+
+import DataPrivacyModal from './DataPrivacyModal'
 
 const courses = [
   'AB Art Management',
@@ -71,6 +74,8 @@ const RegistrationForm = () => {
     const { idNumber, name, email, year, course, agreed } = registrationInput
     return idNumber && name && email && year && course && agreed
   }
+
+  const { value: isDataPrivacyOpen, setFalse: closeDataPrivacy, setTrue: openDataPrivacy } = useBoolean();
 
   return (
     <Box
@@ -320,14 +325,17 @@ const RegistrationForm = () => {
       </Box>
 
       {/* Data Privacy Policy */}
-      <FormControlLabel
-        control={<Checkbox onChange={(e) => setRegistrationInput({ ...registrationInput, agreed: e.target.checked })} />}
-        label={
-          <Typography>
-            I agree to the <a href='#' style={{ color: colors.blue[400], }}>Data Privacy Policy</a>.
-          </Typography>
-        } 
-      />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Checkbox checked={registrationInput.agreed} onChange={(e) => setRegistrationInput({ ...registrationInput, agreed: e.target.checked })} />
+        <Typography>
+          I agree to the <span onClick={openDataPrivacy} style={{ color: colors.blue[400], cursor: 'pointer' }}>Data Privacy Policy</span>.
+        </Typography>
+      </Box>
 
       <Button
         sx={{
@@ -338,6 +346,12 @@ const RegistrationForm = () => {
       >
         Submit
       </Button>
+      <DataPrivacyModal
+        open={isDataPrivacyOpen}
+        handleClose={closeDataPrivacy}
+        handleDecline={() => { closeDataPrivacy(); setRegistrationInput({ ...registrationInput, agreed: false }); }}
+        handleAccept={() => { closeDataPrivacy(); setRegistrationInput({ ...registrationInput, agreed: true }); }}
+      />
     </Box>
   )
 }
