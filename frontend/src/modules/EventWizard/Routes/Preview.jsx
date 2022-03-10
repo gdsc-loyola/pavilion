@@ -1,10 +1,10 @@
 import React from 'react';
-import Modal from '../Components/Modal';
+import Modal from '../components/Modal';
 import { useBoolean } from '$lib/utils/useBoolean';
 import { useParams, useHistory } from 'react-router-dom';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import EventTitleCard from '../../EventPage/components/EventTitleCard';
-import DataPrivacyModal from '../Components/DataPrivacyModal';
+import DataPrivacyModal from '../components/DataPrivacyModal';
 import {
   Box,
   Typography,
@@ -17,9 +17,9 @@ import {
   Checkbox,
 } from '@mui/material';
 import ScrollToTop from '$components/ScrollToTop';
-import TopBar from '../Components/TopBar';
+import TopBar from '../components/TopBar';
 import { colors, typography, theme } from '$lib/theme';
-import TextFieldWithSubtitle from '../Components/TextFieldWithSubtitle';
+import TextFieldWithSubtitle from '../components/TextFieldWithSubtitle';
 import { useRegistrationStore } from '../store/useRegistrationStore';
 import { useAdminUser } from '$lib/context/AdminContext';
 const Preview = () => {
@@ -42,7 +42,10 @@ const Preview = () => {
     }
   };
 
-  const coverphoto = URL.createObjectURL(details.coverphoto);
+  const coverphoto = React.useMemo(
+    () => URL.createObjectURL(details.coverphoto),
+    [details.coverphoto]
+  );
 
   const [registrationMode, setRegistrationMode] = React.useState(false);
 
@@ -331,7 +334,6 @@ const Preview = () => {
           warning={false}
           open={isModalOpen}
           onClose={closeModal}
-          asForm={true}
           title={publish ? 'Publish this to your Pavillion Page?' : 'Close and save as draft'}
           subtitle={
             publish

@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 import Layout from '../components/Layout';
-import Modal from '../Components/Modal';
+import Modal from '../components/Modal';
 import { useBoolean } from '$lib/utils/useBoolean';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';

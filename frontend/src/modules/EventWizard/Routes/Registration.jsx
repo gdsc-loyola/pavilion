@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 import Layout from '../components/Layout';
-import Modal from '../Components/Modal';
+import Modal from '../components/Modal';
 import { useBoolean } from '$lib/utils/useBoolean';
 import { Button, Box, Typography, TextField, SvgIcon, Link } from '@mui/material';
 import { colors, typography } from '$lib/theme';
