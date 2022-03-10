@@ -1,5 +1,5 @@
-import React from 'react'
-import { DataGrid } from '@mui/x-data-grid'
+import React from 'react';
+import { DataGrid } from '@mui/x-data-grid';
 
 const ResponsesTable = ({ columns, rows }) => {
   return (
@@ -14,7 +14,7 @@ const ResponsesTable = ({ columns, rows }) => {
         border: 'none',
       }}
     />
-  )
-}
+  );
+};
 
-export default ResponsesTable
+export default ResponsesTable;

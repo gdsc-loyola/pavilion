@@ -8,7 +8,7 @@ import OrgsDataService from '$services/orgs.service';
 import OtherEvents from '../components/OtherEvents';
 import ScrollToTop from '$components/ScrollToTop';
 import { useBoolean } from '$lib/utils/useBoolean';
-import RegistrationForm from '../components/RegistrationForm'
+import RegistrationForm from '../components/RegistrationForm';
 
 const EventPage = (props) => {
   const { id, shortName } = props.match.params;
@@ -140,8 +140,7 @@ const EventPage = (props) => {
               {eventForm.description}
             </Typography>
           </Box>
-          {
-            !isRegistering ?
+          {!isRegistering ? (
             <Box
               sx={{
                 display: 'grid',
@@ -166,9 +165,10 @@ const EventPage = (props) => {
                 );
               })}
             </Box>
-            : <RegistrationForm />
-          }
-          {otherEvents.length > 0 && (
+          ) : (
+            <RegistrationForm />
+          )}
+          {!isRegistering && otherEvents.length > 0 && (
             <OtherEvents
               events={otherEvents}
               orgLogo={orgForm.orgLogo}

@@ -141,7 +141,12 @@ const DataPrivacyModal = ({ open, handleClose, handleDecline, handleAccept }) =>
               marginTop: '35px',
             }}
           >
-            <Button onClick={handleDecline} size="small" variant="outlined" sx={{ marginRight: '8px' }}>
+            <Button
+              onClick={handleDecline}
+              size="small"
+              variant="outlined"
+              sx={{ marginRight: '8px' }}
+            >
               Decline
             </Button>
             <Button onClick={handleAccept} size="small" sx={{ marginLeft: '8px' }}>

@@ -23,7 +23,7 @@ const Sidebar = () => {
       flexDirection: 'column',
       padding: '1rem 0',
       borderRight: 'none',
-  
+
       '& .logo': {
         padding: '3rem 2rem',
       },
@@ -36,36 +36,56 @@ const Sidebar = () => {
   }));
 
   return (
-    <Container variant='persistent' anchor='left' open>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
-        <Link to="/admin/events" style={{
+    <Container variant="persistent" anchor="left" open>
+      <div
+        style={{
           display: 'flex',
-          gap: '4px',
-          color: colors.gray[400],
-          margin: 'auto',
-          alignContent: 'center',
-          alignItems: 'center'
-        }}>
+          flexDirection: 'column',
+        }}
+      >
+        <Link
+          to="/admin/events"
+          style={{
+            display: 'flex',
+            gap: '4px',
+            color: colors.gray[400],
+            margin: 'auto',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <BackArrowIcon />
           Back to events
         </Link>
 
-        <Typography variant='h6' sx={{
-          margin: '64px auto 48px auto'
-        }}>
+        <Typography
+          variant="h6"
+          sx={{
+            margin: '64px auto 48px auto',
+          }}
+        >
           Manage Event
         </Typography>
 
         <SidebarSection name="CREATE">
-          <SidebarLink active={path.includes('/details')} href={`/admin/events/${eventName}/details`} label="Event Details" />
-          <SidebarLink active={path.includes('/registration')} href={`/admin/events/${eventName}/registration`} label="Registration" />
+          <SidebarLink
+            active={path.includes('/details')}
+            href={`/admin/events/${eventName}/details`}
+            label="Event Details"
+          />
+          <SidebarLink
+            active={path.includes('/registration')}
+            href={`/admin/events/${eventName}/registration`}
+            label="Registration"
+          />
         </SidebarSection>
 
         <SidebarSection name="TRACK">
-          <SidebarLink active={path.includes('/responses')} href={`/admin/events/${eventName}/responses`} label="Responses" />
+          <SidebarLink
+            active={path.includes('/responses')}
+            href={`/admin/events/${eventName}/responses`}
+            label="Responses"
+          />
         </SidebarSection>
       </div>
     </Container>

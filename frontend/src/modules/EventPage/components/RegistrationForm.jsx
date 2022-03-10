@@ -1,10 +1,18 @@
-import React, { useState } from 'react'
-import { Box, TextField, Typography, Autocomplete, Checkbox, FormControlLabel, Button } from '@mui/material'
-import { Info } from '@mui/icons-material'
-import { typography, colors } from '$lib/theme'
-import { useBoolean } from '$lib/utils/useBoolean'
+import React, { useState } from 'react';
+import {
+  Box,
+  TextField,
+  Typography,
+  Autocomplete,
+  Checkbox,
+  FormControlLabel,
+  Button,
+} from '@mui/material';
+import { Info } from '@mui/icons-material';
+import { typography, colors } from '$lib/theme';
+import { useBoolean } from '$lib/utils/useBoolean';
 
-import DataPrivacyModal from './DataPrivacyModal'
+import DataPrivacyModal from './DataPrivacyModal';
 
 const courses = [
   'AB Art Management',
@@ -59,7 +67,6 @@ const courses = [
   'AB Sociology,',
 ];
 
-
 const RegistrationForm = () => {
   const [registrationInput, setRegistrationInput] = useState({
     idNumber: '',
@@ -68,14 +75,18 @@ const RegistrationForm = () => {
     year: '',
     course: '',
     agreed: false,
-  })
+  });
 
   const checkIfAllFilled = () => {
-    const { idNumber, name, email, year, course, agreed } = registrationInput
-    return idNumber && name && email && year && course && agreed
-  }
+    const { idNumber, name, email, year, course, agreed } = registrationInput;
+    return idNumber && name && email && year && course && agreed;
+  };
 
-  const { value: isDataPrivacyOpen, setFalse: closeDataPrivacy, setTrue: openDataPrivacy } = useBoolean();
+  const {
+    value: isDataPrivacyOpen,
+    setFalse: closeDataPrivacy,
+    setTrue: openDataPrivacy,
+  } = useBoolean();
 
   return (
     <Box
@@ -87,7 +98,8 @@ const RegistrationForm = () => {
         flexDirection: 'column',
         gap: '24px',
         borderTop: `1px solid ${colors.gray[300]}`,
-        paddingTop: '32px'
+        paddingTop: '32px',
+        marginBottom: '5rem',
       }}
     >
       {/* ID Number */}
@@ -99,20 +111,18 @@ const RegistrationForm = () => {
       >
         <TextField
           fullWidth
-          variant='outlined'
-          label='ID Number'
-          type='number'
+          variant="outlined"
+          label="ID Number"
+          type="number"
           onChange={(e) => setRegistrationInput({ ...registrationInput, idNumber: e.target.value })}
           onInput={(e) => {
-            e.target.value = Math.max(0, parseInt(e.target.value))
-              .toString()
-              .slice(0, 6)
+            e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 6);
           }}
           InputLabelProps={{
             sx: {
               fontWeight: typography.fontWeight.reg,
               color: colors.gray[400],
-            }
+            },
           }}
         />
         <Box
@@ -128,12 +138,12 @@ const RegistrationForm = () => {
               alignItems: 'center',
             }}
           >
-            <Info sx={{ width: '16px' }} color='info' />
+            <Info sx={{ width: '16px' }} color="info" />
             <Typography
               sx={{
                 fontSize: typography.fontSize.xs,
                 padding: 0,
-                margin: 0
+                margin: 0,
               }}
             >
               ex. 123456
@@ -142,7 +152,7 @@ const RegistrationForm = () => {
           <Typography
             sx={{
               color: colors.gray[400],
-              fontSize: typography.fontSize.xs
+              fontSize: typography.fontSize.xs,
             }}
           >
             {registrationInput.idNumber.length}/6
@@ -159,16 +169,16 @@ const RegistrationForm = () => {
       >
         <TextField
           fullWidth
-          variant='outlined'
-          label='Name'
-          type='text'
+          variant="outlined"
+          label="Name"
+          type="text"
           onChange={(e) => setRegistrationInput({ ...registrationInput, name: e.target.value })}
           inputProps={{ maxLength: 100 }}
           InputLabelProps={{
             sx: {
               fontWeight: typography.fontWeight.reg,
               color: colors.gray[400],
-            }
+            },
           }}
         />
         <Box
@@ -184,12 +194,12 @@ const RegistrationForm = () => {
               alignItems: 'center',
             }}
           >
-            <Info sx={{ width: '16px' }} color='info' />
+            <Info sx={{ width: '16px' }} color="info" />
             <Typography
               sx={{
                 fontSize: typography.fontSize.xs,
                 padding: 0,
-                margin: 0
+                margin: 0,
               }}
             >
               ex. Jose Rizal
@@ -198,7 +208,7 @@ const RegistrationForm = () => {
           <Typography
             sx={{
               color: colors.gray[400],
-              fontSize: typography.fontSize.xs
+              fontSize: typography.fontSize.xs,
             }}
           >
             {registrationInput.name.length}/100
@@ -215,16 +225,16 @@ const RegistrationForm = () => {
       >
         <TextField
           fullWidth
-          variant='outlined'
-          label='Email'
-          type='email'
+          variant="outlined"
+          label="Email"
+          type="email"
           onChange={(e) => setRegistrationInput({ ...registrationInput, email: e.target.value })}
           inputProps={{ maxLength: 100 }}
           InputLabelProps={{
             sx: {
               fontWeight: typography.fontWeight.reg,
               color: colors.gray[400],
-            }
+            },
           }}
         />
         <Box
@@ -240,12 +250,12 @@ const RegistrationForm = () => {
               alignItems: 'center',
             }}
           >
-            <Info sx={{ width: '16px' }} color='info' />
+            <Info sx={{ width: '16px' }} color="info" />
             <Typography
               sx={{
                 fontSize: typography.fontSize.xs,
                 padding: 0,
-                margin: 0
+                margin: 0,
               }}
             >
               ex. jose.rizal@obf.ateneo.edu
@@ -254,7 +264,7 @@ const RegistrationForm = () => {
           <Typography
             sx={{
               color: colors.gray[400],
-              fontSize: typography.fontSize.xs
+              fontSize: typography.fontSize.xs,
             }}
           >
             {registrationInput.email.length}/100
@@ -271,7 +281,7 @@ const RegistrationForm = () => {
       >
         <Autocomplete
           fullWidth
-          variant='outlined'
+          variant="outlined"
           options={[
             '1st Year',
             '2nd Year',
@@ -284,12 +294,12 @@ const RegistrationForm = () => {
           renderInput={(params) => (
             <TextField
               {...params}
-              placeholder='Year'
+              placeholder="Year"
               InputLabelProps={{
                 sx: {
                   fontWeight: typography.fontWeight.reg,
                   color: colors.gray[400],
-                }
+                },
               }}
             />
           )}
@@ -306,17 +316,17 @@ const RegistrationForm = () => {
       >
         <Autocomplete
           fullWidth
-          variant='outlined'
+          variant="outlined"
           options={courses}
           renderInput={(params) => (
             <TextField
               {...params}
-              placeholder='Course'
+              placeholder="Course"
               InputLabelProps={{
                 sx: {
                   fontWeight: typography.fontWeight.reg,
                   color: colors.gray[400],
-                }
+                },
               }}
             />
           )}
@@ -331,16 +341,23 @@ const RegistrationForm = () => {
           alignItems: 'center',
         }}
       >
-        <Checkbox checked={registrationInput.agreed} onChange={(e) => setRegistrationInput({ ...registrationInput, agreed: e.target.checked })} />
+        <Checkbox
+          checked={registrationInput.agreed}
+          onChange={(e) => setRegistrationInput({ ...registrationInput, agreed: e.target.checked })}
+        />
         <Typography>
-          I agree to the <span onClick={openDataPrivacy} style={{ color: colors.blue[400], cursor: 'pointer' }}>Data Privacy Policy</span>.
+          I agree to the{' '}
+          <span onClick={openDataPrivacy} style={{ color: colors.blue[400], cursor: 'pointer' }}>
+            Data Privacy Policy
+          </span>
+          .
         </Typography>
       </Box>
 
       <Button
         sx={{
           alignSelf: 'flex-start',
-          padding: '8px 24px'
+          padding: '8px 24px',
         }}
         disabled={!checkIfAllFilled()}
       >
@@ -349,11 +366,17 @@ const RegistrationForm = () => {
       <DataPrivacyModal
         open={isDataPrivacyOpen}
         handleClose={closeDataPrivacy}
-        handleDecline={() => { closeDataPrivacy(); setRegistrationInput({ ...registrationInput, agreed: false }); }}
-        handleAccept={() => { closeDataPrivacy(); setRegistrationInput({ ...registrationInput, agreed: true }); }}
+        handleDecline={() => {
+          closeDataPrivacy();
+          setRegistrationInput({ ...registrationInput, agreed: false });
+        }}
+        handleAccept={() => {
+          closeDataPrivacy();
+          setRegistrationInput({ ...registrationInput, agreed: true });
+        }}
       />
     </Box>
-  )
-}
+  );
+};
 
-export default RegistrationForm
+export default RegistrationForm;

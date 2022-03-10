@@ -2,7 +2,16 @@ import React from 'react';
 import { Box, Typography, Card, Avatar, Button } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 const EventTitleCard = (props) => {
-  const { eventName, startDate, endDate, orgName, logoSrc, children, isAcceptingResponses, startRegistering } = props;
+  const {
+    eventName,
+    startDate,
+    endDate,
+    orgName,
+    logoSrc,
+    children,
+    isAcceptingResponses,
+    startRegistering,
+  } = props;
 
   let formattedStartDate = new Date(startDate).toDateString();
   let formattedStartDateArray = formattedStartDate
@@ -65,17 +74,17 @@ const EventTitleCard = (props) => {
             {orgName}
           </Typography>
         </Box>
-        { isAcceptingResponses &&
+        {isAcceptingResponses && (
           <Button
             sx={{
               padding: '8px 24px',
-              marginTop: '24px'
+              marginTop: '24px',
             }}
             onClick={startRegistering}
           >
             Register
           </Button>
-        }
+        )}
         {children}
       </Box>
     </Card>
