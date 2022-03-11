@@ -159,7 +159,9 @@ const Details = (props) => {
   };
 
   const isURLHttps = (url) => {
-    if (typeof url == 'object') {
+    if (url instanceof File) {
+      return URL.createObjectURL(url);
+    } else if (url == null) {
       return null;
     } else if (url.includes('http')) {
       return url;
@@ -182,8 +184,8 @@ const Details = (props) => {
     const fetchEventDetails = async () => {
       const response = await http.get(`events/${1}/`);
       const { data } = response;
-      console.log(data);
       setDetails({
+        name: eventName,
         description: data.desc,
         coverphoto: data.cover_photo,
         eventphoto1: data.event_photo1,
@@ -199,17 +201,25 @@ const Details = (props) => {
   }, []);
 
   const pushDetails = async () => {
-    const eventDetails = {
-      desc: details.description,
-      cover_photo: details.coverphoto,
-      event_photo1: details.eventphoto1,
-      event_photo2: details.eventphoto2,
-      event_photo3: details.eventphoto3,
-      event_photo4: details.eventphoto4,
-      start_date: details.startDate,
-      end_date: details.endDate,
-    };
-    await http.put(`events/${1}/`, eventDetails, {
+    const fd = new FormData();
+    fd.append('desc', details.description);
+    fd.append('cover_photo', details.coverphoto);
+    fd.append('event_photo1', details.eventphoto1);
+    fd.append('event_photo2', details.eventphoto2);
+    fd.append('event_photo3', details.eventphoto3);
+    fd.append('event_photo4', details.eventphoto4);
+    fd.append('location', details.location);
+    fd.append('name', details.name);
+    fd.append('start_date', details.startDate);
+    fd.append('end_date', details.endDate);
+    var utc = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+    fd.append('last_updated', utc);
+    fd.append('status', 'Draft');
+    fd.append('accepting_responses', details.acceptingResponses);
+    fd.append('is_past_event', details.is_past_event);
+    fd.append('old_respondents', details.responsesSheet);
+    fd.append('form_description', details.formDescription);
+    await http.put(`events/${1}/`, fd, {
       headers: {
         authorization: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
@@ -394,7 +404,7 @@ const Details = (props) => {
           variant="outlined"
           label="Where was the event held?"
           value={details.location}
-          helperText={`${details.location.length}/100`}
+          helperText={`${details.location ? details.location.length : '0'}/100`}
           onChange={(e) => {
             handleLocationChange(e.target.value);
           }}
@@ -422,7 +432,7 @@ const Details = (props) => {
           variant="outlined"
           label="Describe this event!"
           value={details.description}
-          helperText={`${details.description.length}/500`}
+          helperText={`${details.description ? details.description.length : '0'}/500`}
           onChange={(e) => {
             handleDescriptionChange(e.target.value);
           }}
@@ -493,7 +503,7 @@ const Details = (props) => {
                   textAlign: 'right',
                 }}
               >
-                {`${details.responsesSheet.length}/500`}
+                {`${details.responsesSheet ? details.responsesSheet.length : '0'}/500`}
               </Typography>
             </FormHelperText>
           </>
@@ -712,7 +722,7 @@ const Details = (props) => {
             border: '1px solid #D1D5DB',
           }}
         >
-          <Button onClick={() => pushDetails()} size="small" sx={{ marginRight: '56px' }}>
+          <Button onClick={pushDetails} size="small" sx={{ marginRight: '56px' }}>
             Next
             <SvgIcon fontSize="small" component={KeyboardArrowRightIcon} />
           </Button>

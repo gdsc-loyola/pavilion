@@ -15,6 +15,10 @@ import { mountStoreDevtool } from 'simple-zustand-devtools';
  * @property {File} eventphoto3
  * @property {File} eventphoto4
  * @property {string} responsesSheet
+ * @property {string} formDescription
+ * @property {string} status
+ * @property {Boolean} acceptingRepsonses
+ * @property {Boolean} is_past_event
  */
 
 export const useEventDetailsStore = create(
@@ -32,6 +36,10 @@ export const useEventDetailsStore = create(
         eventphoto3: null,
         eventphoto4: null,
         responsesSheet: '',
+        formDescription: '',
+        status: '',
+        acceptingResponses: false,
+        is_past_event: false,
       },
       /**
        *

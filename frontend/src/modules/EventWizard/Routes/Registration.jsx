@@ -7,15 +7,22 @@ import { useBoolean } from '$lib/utils/useBoolean';
 import { Button, Box, Typography, TextField, SvgIcon, Link } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import { useEventDetailsStore } from '../store/useEventDetailsStore';
 const Registration = (props) => {
   const { eventName } = useParams();
-  const eventHasResponses = true;
+  const eventHasResponses = details.acceptingResponses;
   const [warning, setWarningState] = React.useState(true);
   const [formDescription, setFormDescription] = React.useState('');
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
+
+  const { details, setDetails } = useEventDetailsStore();
+
   const handleFormDescriptionChange = (e) => {
-    setFormDescription(e);
+    setDetails({
+      formDescription: e,
+    });
   };
+
   const handleWarningState = (state) => {
     if (state == true) {
       setWarningState(true);

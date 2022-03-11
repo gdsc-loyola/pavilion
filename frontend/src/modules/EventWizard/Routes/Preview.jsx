@@ -26,11 +26,22 @@ const Preview = () => {
   const { eventName } = useParams();
   const { details, setDetails } = useEventDetailsStore();
   const router = useHistory();
+  const isURLHttps = (url) => {
+    if (url instanceof File) {
+      return URL.createObjectURL(url);
+    } else if (url == null) {
+      return null;
+    } else if (url.includes('http')) {
+      return url;
+    } else {
+      return URL.createObjectURL(url);
+    }
+  };
   const eventPhotos = [
-    URL.createObjectURL(details.eventphoto1),
-    URL.createObjectURL(details.eventphoto2),
-    URL.createObjectURL(details.eventphoto3),
-    URL.createObjectURL(details.eventphoto4),
+    isURLHttps(details.eventphoto1),
+    isURLHttps(details.eventphoto2),
+    isURLHttps(details.eventphoto3),
+    isURLHttps(details.eventphoto4),
   ];
   const [publish, setPublishState] = React.useState(true);
 
@@ -42,10 +53,7 @@ const Preview = () => {
     }
   };
 
-  const coverphoto = React.useMemo(
-    () => URL.createObjectURL(details.coverphoto),
-    [details.coverphoto]
-  );
+  const coverphoto = React.useMemo(() => isURLHttps(details.coverphoto), [details.coverphoto]);
 
   const [registrationMode, setRegistrationMode] = React.useState(false);
 
@@ -177,8 +185,8 @@ const Preview = () => {
             eventName={registrationMode ? eventName + ' Registration Form' : eventName}
             startDate={details.startDate}
             endDate={details.endDate}
-            logoSrc={org.logo}
-            orgName={org.name}
+            logoSrc={null}
+            orgName={null}
           >
             {registrationMode ? null : (
               <Button
