@@ -21,6 +21,7 @@ import {
   SvgIcon,
   FormHelperText,
   Link,
+  accordionDetailsClasses,
 } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -157,24 +158,65 @@ const Details = (props) => {
     });
   };
 
+  const isURLHttps = (url) => {
+    if (typeof url == 'object') {
+      return null;
+    } else if (url.includes('http')) {
+      return url;
+    } else {
+      return URL.createObjectURL(url);
+    }
+  };
   const pastevent = false;
-  const coverphoto =
-    typeof details.coverphoto?.name == 'string' ? URL.createObjectURL(details.coverphoto) : null;
-  const eventphoto1 =
-    typeof details.eventphoto1?.name == 'string' ? URL.createObjectURL(details.eventphoto1) : null;
-  const eventphoto2 =
-    typeof details.eventphoto2?.name == 'string' ? URL.createObjectURL(details.eventphoto2) : null;
-  const eventphoto3 =
-    typeof details.eventphoto3?.name == 'string' ? URL.createObjectURL(details.eventphoto3) : null;
-  const eventphoto4 =
-    typeof details.eventphoto4?.name == 'string' ? URL.createObjectURL(details.eventphoto4) : null;
+  const coverphoto = isURLHttps(details.coverphoto);
+  const eventphoto1 = isURLHttps(details.eventphoto1);
+  const eventphoto2 = isURLHttps(details.eventphoto2);
+  const eventphoto3 = isURLHttps(details.eventphoto3);
+  const eventphoto4 = isURLHttps(details.eventphoto4);
 
   const isFormEmpty = Object.values(details).some(
     (x) => x === null || (typeof x == 'object' && !(x instanceof File))
   );
 
-  const res = async () => await console.log(http.get(`events/${0}/`));
-  res();
+  React.useEffect(() => {
+    const fetchEventDetails = async () => {
+      const response = await http.get(`events/${1}/`);
+      const { data } = response;
+      console.log(data);
+      setDetails({
+        description: data.desc,
+        coverphoto: data.cover_photo,
+        eventphoto1: data.event_photo1,
+        eventphoto2: data.event_photo2,
+        eventphoto3: data.event_photo3,
+        eventphoto4: data.event_photo4,
+        startDate: data.start_date,
+        endDate: data.end_date,
+        ...data,
+      });
+    };
+    fetchEventDetails();
+  }, []);
+
+  const pushDetails = async () => {
+    const eventDetails = {
+      desc: details.description,
+      cover_photo: details.coverphoto,
+      event_photo1: details.eventphoto1,
+      event_photo2: details.eventphoto2,
+      event_photo3: details.eventphoto3,
+      event_photo4: details.eventphoto4,
+      start_date: details.startDate,
+      end_date: details.endDate,
+    };
+    await http.put(`events/${1}/`, eventDetails, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    router.push('registration');
+  };
   return (
     <Layout sidebar={!pastevent}>
       <TopBar eventName={eventName} sidebar={!pastevent}>
@@ -670,11 +712,7 @@ const Details = (props) => {
             border: '1px solid #D1D5DB',
           }}
         >
-          <Button
-            onClick={() => router.push('registration')}
-            size="small"
-            sx={{ marginRight: '56px' }}
-          >
+          <Button onClick={() => pushDetails()} size="small" sx={{ marginRight: '56px' }}>
             Next
             <SvgIcon fontSize="small" component={KeyboardArrowRightIcon} />
           </Button>
