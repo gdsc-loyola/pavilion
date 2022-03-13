@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  TextField,
-  Typography,
-  Autocomplete,
-  Checkbox,
-  FormControlLabel,
-  Button,
-} from '@mui/material';
+import { Box, TextField, Typography, Autocomplete, Checkbox, Button } from '@mui/material';
 import { Info } from '@mui/icons-material';
 import { typography, colors } from '$lib/theme';
 import { useBoolean } from '$lib/utils/useBoolean';
 
 import DataPrivacyModal from './DataPrivacyModal';
+import Modal from './Modal';
 
 const courses = [
   'AB Art Management',
@@ -88,10 +81,17 @@ const RegistrationForm = () => {
     setTrue: openDataPrivacy,
   } = useBoolean();
 
+  const {
+    value: isConfirmationOpen,
+    setFalse: closeConfirmation,
+    setTrue: openConfirmation,
+  } = useBoolean();
+
   const onSubmit = (e) => {
-    e.preventDefault()
-    alert('submit')
-  }
+    e.preventDefault();
+    alert('submit');
+    closeConfirmation();
+  };
 
   return (
     <Box
@@ -106,7 +106,10 @@ const RegistrationForm = () => {
         paddingTop: '32px',
         marginBottom: '5rem',
       }}
-      onSubmit={(e) => onSubmit(e)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        openConfirmation();
+      }}
     >
       {/* ID Number */}
       <Box
@@ -380,6 +383,21 @@ const RegistrationForm = () => {
         handleAccept={() => {
           closeDataPrivacy();
           setRegistrationInput({ ...registrationInput, agreed: true });
+        }}
+      />
+
+      <Modal
+        open={isConfirmationOpen}
+        onClose={closeConfirmation}
+        title="Submit Response"
+        subtitle="You can no longer edit your response after submitting. In case of issues, please contact the respective organization."
+        leftButtonProps={{
+          label: 'Never mind',
+          onClick: closeConfirmation,
+        }}
+        rightButtonProps={{
+          label: 'Submit',
+          onClick: (e) => onSubmit(e),
         }}
       />
     </Box>
