@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Layout from '$components/Layout';
 import EventTitleCard from '../components/EventTitleCard';
 import { Box, Typography } from '@mui/material';
@@ -9,6 +9,7 @@ import OtherEvents from '../components/OtherEvents';
 import ScrollToTop from '$components/ScrollToTop';
 import { useBoolean } from '$lib/utils/useBoolean';
 import RegistrationForm from '../components/RegistrationForm';
+import Banner from '../components/Banner';
 
 const EventPage = (props) => {
   const { id, shortName } = props.match.params;
@@ -70,15 +71,36 @@ const EventPage = (props) => {
     });
   }, [id, shortName]);
 
+  const formRef = useRef();
+
   const {
     value: isRegistering,
     setFalse: endRegistering,
     setTrue: startRegistering,
   } = useBoolean();
 
+  useEffect(() => {
+    if (isRegistering) scrollToForm();
+  }, [isRegistering]);
+
+  const scrollToForm = () => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      behavior: 'smooth',
+      top: 0,
+    });
+  };
+
+  const { value: isBannerOpen, setFalse: closeBanner, setTrue: openBanner } = useBoolean();
+
   return (
     <>
-      <ScrollToTop />
+      <ScrollToTop smooth />
       <Layout>
         <div
           style={{
@@ -114,6 +136,7 @@ const EventPage = (props) => {
             alignItems: 'center',
           }}
         >
+          <Banner show={isBannerOpen} label="Your response has been submitted!" />
           <Box
             sx={{
               width: '100%',
@@ -166,7 +189,14 @@ const EventPage = (props) => {
               })}
             </Box>
           ) : (
-            <RegistrationForm />
+            <div ref={formRef} style={{ width: '100%' }}>
+              <RegistrationForm
+                openBanner={openBanner}
+                closeBanner={closeBanner}
+                endRegistering={endRegistering}
+                scrollToTop={scrollToTop}
+              />
+            </div>
           )}
           {!isRegistering && otherEvents.length > 0 && (
             <OtherEvents

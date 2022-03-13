@@ -60,7 +60,7 @@ const courses = [
   'AB Sociology,',
 ];
 
-const RegistrationForm = () => {
+const RegistrationForm = ({ openBanner, closeBanner, endRegistering, scrollToTop }) => {
   const [registrationInput, setRegistrationInput] = useState({
     idNumber: '',
     name: '',
@@ -91,6 +91,12 @@ const RegistrationForm = () => {
     e.preventDefault();
     alert('submit');
     closeConfirmation();
+    endRegistering();
+    scrollToTop();
+    openBanner();
+    setTimeout(() => {
+      closeBanner();
+    }, 3500);
   };
 
   return (
@@ -105,6 +111,8 @@ const RegistrationForm = () => {
         borderTop: `1px solid ${colors.gray[300]}`,
         paddingTop: '32px',
         marginBottom: '5rem',
+        marginLeft: 'auto',
+        marginRight: 'auto',
       }}
       onSubmit={(e) => {
         e.preventDefault();
