@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Typography, styled } from '@mui/material';
-
+import { Box, Typography, styled, TextField } from '@mui/material';
+import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import EditIcon from './EditIcon';
 
 const CustomContainer = styled('div')({
@@ -11,14 +11,27 @@ const CustomContainer = styled('div')({
   },
 });
 
-const TopBar = ({ eventName, children }) => {
+const TopBar = ({ eventName, children, sidebar, paddingBig = true }) => {
+  const { details, setDetails } = useEventDetailsStore();
+  const handleEventTitleChange = (e) => {
+    setEventTitle(e);
+  };
+
+  const handleNameChange = (e) => {
+    setDetails({
+      name: e,
+    });
+  };
   return (
     <CustomContainer
       sx={{
         maxWidth: '100%',
         display: 'flex',
         justifyContent: 'space-between',
-        padding: '1.75rem 3.5rem',
+        paddingTop: paddingBig ? '1.75rem' : '14px',
+        paddingBottom: paddingBig ? '1.75rem' : '14px',
+        paddingLeft: sidebar ? '3.5rem' : '144px',
+        paddingRight: sidebar ? '3.5rem' : '144px',
         borderBottom: '1px solid #D1D5DB',
         alignItems: 'center',
       }}
@@ -30,10 +43,21 @@ const TopBar = ({ eventName, children }) => {
           alignItems: 'center',
         }}
       >
-        <Typography variant="p" fontWeight={500}>
-          {eventName}
-        </Typography>
-        <EditIcon />
+        <TextField
+          variant="standard"
+          InputProps={{
+            disableUnderline: true,
+            endAdornment: <EditIcon />,
+          }}
+          onChange={(e) => {
+            handleNameChange(e.target.value);
+          }}
+          defaultValue={details.name}
+          sx={{
+            width: details.name ? details.name.length * 9 + 100 : '0px',
+            border: 'none',
+          }}
+        />
       </Box>
 
       {children}

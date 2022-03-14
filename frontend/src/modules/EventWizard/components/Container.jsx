@@ -1,8 +1,9 @@
 import React from 'react';
 import { styled } from '@material-ui/core';
+import { theme } from '$lib/theme';
 
 const Container = ({ children }) => {
-  const Container = styled('div')(({ theme }) => ({
+  const Container = styled('div')({
     display: 'flex',
     flexDirection: 'column',
     padding: '1rem 3rem',
@@ -20,7 +21,7 @@ const Container = ({ children }) => {
       fontWeight: theme.fontWeight.bold,
     },
     position: 'relative',
-  }));
+  });
 
   return <Container>{children}</Container>;
 };

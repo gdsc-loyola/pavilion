@@ -4,7 +4,6 @@ import Sidebar from './Sidebar';
 
 const Main = styled('main')({
   minHeight: '100vh',
-  marginLeft: '200px',
   display: 'flex',
   flexDirection: 'column',
 });
@@ -17,8 +16,8 @@ const Main = styled('main')({
 const Layout = (props) => {
   return (
     <>
-      <Main>{props.children}</Main>
-      <Sidebar />
+      <Main sx={{ marginLeft: props.sidebar ? '200px' : '0px' }}>{props.children}</Main>
+      {props.sidebar ? <Sidebar /> : null}
     </>
   );
 };
