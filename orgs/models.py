@@ -55,28 +55,35 @@ class Organization(models.Model):
     def __str__(self):
         return "{}({}), {}. {}".format(self.name, self.short_name, self.org_body, self.user)
 
-class StudentToEvent(models.Model):
+class Student(models.Model):
     year_choices = [
-        ('1st Year', '1st Year'),
-        ('2nd Year', '2nd Year'),
-        ('3rd Year', '3rd Year'),
-        ('4th Year', '4th Year'),
-        ('5th Year', '5th Year'),
-        ('6th Year', '6th Year'),
-        ('7th Year', '7th Year'),
-    ]
-
-    event = models.ForeignKey(Event, related_name='student', on_delete=models.CASCADE)
+            ('1st Year', '1st Year'),
+            ('2nd Year', '2nd Year'),
+            ('3rd Year', '3rd Year'),
+            ('4th Year', '4th Year'),
+            ('5th Year', '5th Year'),
+            ('6th Year', '6th Year'),
+            ('7th Year', '7th Year'),
+        ]
+    
     name = models.CharField(max_length=1024)
     id_number = models.IntegerField()
     email = models.EmailField(max_length=200, null=True)
     year = models.CharField(max_length=100, choices=year_choices)
-    course = models.CharField(max_length=32)
+    course = models.CharField(max_length=128)
+
+    def __str__(self):
+        return "{}".format(self.id_number)
+    
+class StudentToEvent(models.Model):
+    
+    event = models.ForeignKey(Event, related_name='student', on_delete=models.CASCADE, default=None, blank=True, null=True)
+    student = models.ManyToManyField(Student, related_name='event', default=None, blank=True)
     date_submitted = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}-{}".format(self.event, self.name)
+        return "{}".format(self.event)
 """
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **kwargs):

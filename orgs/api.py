@@ -12,6 +12,10 @@ from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from functools import wraps
 
+import os
+from mixpanel import Mixpanel
+
+mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 # Lead Viewset
 class EventsViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -73,6 +77,11 @@ class OrgsViewSet(viewsets.ModelViewSet):
         if not serializer.is_valid():
             return Response("Serializer not valid.", status=401)
         serializer.save()
+        print(serializer.data['name'])
+        mp.track(serializer.data['name'], "Updated org information", {
+            'old_data': OrgsSerializer(instance).data,
+            'new_data': serializer.data
+        })
         return Response(serializer.data, status=200)
 
     def create(self, request):
