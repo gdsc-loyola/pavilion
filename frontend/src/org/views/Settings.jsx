@@ -7,26 +7,31 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import OrgsDataService from '../../services/orgs.service';
-import { styled } from '@mui/material';
+import { styled, Button, Alert, Box } from '@mui/material';
 import { colors } from '$lib/theme';
 import AdminLayout from '$components/Admin/AdminLayout';
+import { useAdminUser } from '$lib/context/AdminContext';
+import http from '$lib/http';
+import { kebabCase } from '$lib/utils/kebabCase';
+
+const FormField = styled(TextField)({
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: colors.gray[400],
+    },
+  },
+});
+
+const StyledControl = styled(FormControl)({
+  '& .MuiInputBase-root': {
+    '& fieldset': {
+      borderColor: colors.gray[400],
+    },
+  },
+});
+
 const Settings = () => {
-  const FormField = styled(TextField)({
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: colors.gray[400],
-      },
-    },
-  });
-
-  const StyledControl = styled(FormControl)({
-    '& .MuiInputBase-root': {
-      '& fieldset': {
-        borderColor: colors.gray[400],
-      },
-    },
-  });
-
+  const [open, setOpen] = React.useState(true);
   const [orgLogoFile, setOrgLogoFile] = React.useState({ file: '../../static/assets/image.png' });
   const [logoUploaded, setLogoUploaded] = React.useState(false);
   const [orgForm, setOrgForm] = React.useState({
@@ -34,7 +39,6 @@ const Settings = () => {
     short_name: '',
     desc: '',
     org_body: '',
-    logo: '',
     facebook: '',
     instagram: '',
     twitter: '',
@@ -42,20 +46,20 @@ const Settings = () => {
     website: '',
   });
 
+  const { org, accessToken, userData } = useAdminUser();
+
   useEffect(() => {
-    OrgsDataService.get(1).then((res) => {
-      setOrgForm({
-        name: res.data.name,
-        short_name: res.data.short_name,
-        desc: res.data.desc,
-        org_body: res.data.org_body,
-        logo: res.data.logo,
-        facebook: res.data.facebook,
-        instagram: res.data.instagram,
-        twitter: res.data.twitter,
-        linkedin: res.data.linkedin,
-        website: res.data.website,
-      });
+    setOrgLogoFile({ file: org.logo });
+    setOrgForm({
+      name: org.name,
+      short_name: org.short_name,
+      desc: org.desc,
+      org_body: org.org_body,
+      facebook: org.facebook,
+      instagram: org.instagram,
+      twitter: org.twitter,
+      linkedin: org.linkedin,
+      website: org.website,
     });
   }, []);
 
@@ -147,6 +151,25 @@ const Settings = () => {
     });
   };
 
+  const saveChanges = async () => {
+    const fd = new FormData();
+    Object.entries(orgForm).forEach(([key, value]) => {
+      if (key === 'step') {
+        return;
+      }
+      fd.append(key, value);
+    });
+    fd.append('user', userData.id);
+    fd.append('slug', kebabCase(orgForm.short_name));
+
+    await http.put(`/orgs/${org.slug}/`, fd, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    setOpen(true);
+  };
   return (
     <AdminLayout>
       <div className="settings">
@@ -211,6 +234,7 @@ const Settings = () => {
             <img
               src={`${logoUploaded ? orgLogoFile.file : '../../static/assets/image.png'}`}
               alt=""
+              width="100"
             />
           </div>
         </label>
@@ -261,11 +285,25 @@ const Settings = () => {
           margin="dense"
           variant={'outlined'}
           value={orgForm.website}
-          style={{ width: '464px', marginBottom: '64px' }}
+          style={{ width: '464px', marginBottom: '44px' }}
           onChange={(e) => {
             handleWebsiteChange(e.target.value);
           }}
         />
+        <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '64px' }}>
+          <Button size="small" sx={{ marginRight: '80px' }} onClick={saveChanges}>
+            Save Changes
+          </Button>
+          {open ? (
+            <Alert
+              onClose={() => {
+                setOpen(false);
+              }}
+            >
+              Changes saved!
+            </Alert>
+          ) : null}
+        </Box>
       </div>
     </AdminLayout>
   );
