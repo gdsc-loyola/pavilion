@@ -69,6 +69,14 @@ class StudentToEventViewSet(viewsets.ModelViewSet):
         serializer = StudentToEventSerializer(query)
         return Response(serializer.data)
 
+    def update(self, request, *args, **kwargs):
+        event = Event.objects.get(id = request.data["event"])
+        students = [Student.objects.get(id_number = x) for x in request.data["students"]]
+        query = StudentToEvent.objects.get(event=event)
+        query.student.set(students)
+        serializer = StudentToEventSerializer(query)
+        return Response(serializer.data)
+
 class OrgsViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()
     permission_classes = [  
