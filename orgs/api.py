@@ -1,10 +1,10 @@
 import jwt
-from orgs.models import Event, Organization, StudentToEvent
+from orgs.models import Event, Organization, StudentToEvent, Student
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
-from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -32,6 +32,12 @@ class EventsViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         serializer = EventsSerializer(current_event)
         return Response(serializer.data)
+
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    permission_classes = [IsGetOrIsAuthenticated]
+    serializer_class = StudentSerializer
+    lookup_field = 'id_number'
 
 class StudentToEventViewSet(viewsets.ModelViewSet):
     queryset = StudentToEvent.objects.all()

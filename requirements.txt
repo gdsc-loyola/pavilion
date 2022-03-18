@@ -33,3 +33,4 @@ whitenoise==5.3.0
 wrapt==1.12.1
 django-cloudinary-storage
 Pillow
+mixpanel

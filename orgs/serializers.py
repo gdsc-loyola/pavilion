@@ -1,3 +1,4 @@
+from dataclasses import fields
 from rest_framework import serializers
 from orgs.models import Event, Organization, StudentToEvent, Student
 from django.contrib.auth.models import User
@@ -47,9 +48,10 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
-
     class Meta:
         model = Student
+        fields = '__all__'
+        lookup_field = 'id_number'
 class StudentToEventSerializer(serializers.ModelSerializer):
     event = EventsSerializer(read_only=True)
     student = StudentSerializer(read_only=True, many=True)
