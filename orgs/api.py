@@ -1,3 +1,4 @@
+from coreapi import Object
 import jwt
 from orgs.models import Event, Organization, StudentToEvent, Student
 from rest_framework import viewsets, permissions
@@ -10,6 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.db.utils import IntegrityError
 from functools import wraps
 
 import os
@@ -45,6 +47,27 @@ class StudentToEventViewSet(viewsets.ModelViewSet):
         IsGetOrIsAuthenticated
     ]
     serializer_class = StudentToEventSerializer
+
+    def create(self, request):
+        try:
+            event = Event.objects.get(id = request.data["event"])
+            students = [Student.objects.get(id_number = x) for x in request.data["students"]]
+            query, created = StudentToEvent.objects.get_or_create(
+                event = event,
+            )
+            if not created:
+                raise IntegrityError
+            query.student.set(students)
+
+        except IntegrityError:
+            return Response(f'Event already exists, use patch or put instead on event with id={request.data["event"]}', status=400)
+        except ObjectDoesNotExist:
+            return Response('One of the passed in IDs can\'t be found', status=404)
+        except MultipleObjectsReturned:
+            return Response("Multiple objects found where multiple is not allowed", status=500)
+        
+        serializer = StudentToEventSerializer(query)
+        return Response(serializer.data)
 
 class OrgsViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()

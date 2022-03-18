@@ -47,7 +47,7 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
         lookup_field = 'slug'
 
 
-class StudentSerializer(serializers.HyperlinkedModelSerializer):
+class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
