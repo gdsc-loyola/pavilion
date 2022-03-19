@@ -31,9 +31,6 @@ const StyledControl = styled(FormControl)({
 });
 
 const Settings = () => {
-  const [open, setOpen] = React.useState(true);
-  const [orgLogoFile, setOrgLogoFile] = React.useState({ file: '../../static/assets/image.png' });
-  const [logoUploaded, setLogoUploaded] = React.useState(false);
   const [orgForm, setOrgForm] = React.useState({
     name: '',
     short_name: '',
@@ -42,6 +39,7 @@ const Settings = () => {
     facebook: '',
     instagram: '',
     twitter: '',
+    logo: '',
     linkedin: '',
     website: '',
   });
@@ -49,7 +47,6 @@ const Settings = () => {
   const { org, accessToken, userData } = useAdminUser();
 
   useEffect(() => {
-    setOrgLogoFile({ file: org.logo });
     setOrgForm({
       name: org.name,
       short_name: org.short_name,
@@ -57,17 +54,33 @@ const Settings = () => {
       org_body: org.org_body,
       facebook: org.facebook,
       instagram: org.instagram,
+      logo: org.logo,
       twitter: org.twitter,
       linkedin: org.linkedin,
       website: org.website,
     });
   }, []);
 
+  const isURLHttps = (url) => {
+    if (url instanceof File) {
+      return URL.createObjectURL(url);
+    } else if (url == null) {
+      return null;
+    } else if (url.includes('https')) {
+      return url;
+    } else {
+      return null;
+    }
+  };
+
+  const orgLogo = isURLHttps(orgForm.logo);
   const uploadChange = (evt) => {
-    setOrgLogoFile({
-      file: URL.createObjectURL(evt.target.files[0]),
+    setOrgForm((prevState) => {
+      return {
+        ...prevState,
+        logo: evt.target.files[0],
+      };
     });
-    setLogoUploaded(true);
   };
 
   const handleOrgNameChange = (e) => {
@@ -81,6 +94,7 @@ const Settings = () => {
 
   const handleOrgShortHandChange = (e) => {
     setOrgForm((prevState) => {
+      console.log(orgForm);
       return {
         ...prevState,
         short_name: e,
@@ -168,7 +182,6 @@ const Settings = () => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    setOpen(true);
   };
   return (
     <AdminLayout>
@@ -232,7 +245,7 @@ const Settings = () => {
         <label htmlFor="org_logo_input">
           <div className="org_logo_upload">
             <img
-              src={`${logoUploaded ? orgLogoFile.file : '../../static/assets/image.png'}`}
+              src={`${orgLogo ? orgLogo : '../../static/assets/image.png'}`}
               alt=""
               width="100"
             />
@@ -294,15 +307,6 @@ const Settings = () => {
           <Button size="small" sx={{ marginRight: '80px' }} onClick={saveChanges}>
             Save Changes
           </Button>
-          {open ? (
-            <Alert
-              onClose={() => {
-                setOpen(false);
-              }}
-            >
-              Changes saved!
-            </Alert>
-          ) : null}
         </Box>
       </div>
     </AdminLayout>
