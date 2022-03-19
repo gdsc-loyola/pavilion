@@ -57,7 +57,8 @@ class StudentToEventViewSet(viewsets.ModelViewSet):
             )
             if not created:
                 raise IntegrityError
-            query.student.set(students)
+            if students:
+                query.student.set(students)
 
         except IntegrityError:
             return Response(f'Event already exists, use patch or put instead on event with id={request.data["event"]}', status=400)
@@ -73,7 +74,12 @@ class StudentToEventViewSet(viewsets.ModelViewSet):
         event = Event.objects.get(id = request.data["event"])
         students = [Student.objects.get(id_number = x) for x in request.data["students"]]
         query = StudentToEvent.objects.get(event=event)
-        query.student.set(students)
+
+        if students: 
+            query.student.set(students)
+        else: 
+            query.student.clear()
+
         serializer = StudentToEventSerializer(query)
         return Response(serializer.data)
 
