@@ -2,6 +2,29 @@ from django.db import models
 from django.contrib.auth.models import User, BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
 
+class Organization(models.Model):
+    org_body_choices = [
+        ("COA", "COA"),
+        ("LIONS", "LIONS"),
+        ("Sanggu", "Sanggu")
+    ]
+
+    name = models.CharField(max_length=100)
+    short_name = models.CharField(max_length=100)
+    slug = models.CharField(max_length=15) 
+    desc = models.CharField(max_length=500)
+    org_body = models.CharField(max_length=100, choices=org_body_choices)
+    logo = models.ImageField(upload_to='logos/', blank=True)
+    facebook = models.CharField(max_length=100, null=True, blank=True)
+    instagram = models.CharField(max_length=100, null=True, blank=True)
+    twitter = models.CharField(max_length=100, null=True, blank=True)
+    linkedin = models.CharField(max_length=100, null=True, blank=True)
+    website = models.CharField(max_length=100, null=True, blank=True)
+    user =  models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    
+    def __str__(self):
+        return "{}({}), {}. {}".format(self.name, self.short_name, self.org_body, self.user)
+
 class Event(models.Model):
     status_choices = [
         ("Draft","Draft"),
@@ -23,37 +46,14 @@ class Event(models.Model):
     status = models.CharField(max_length=50, choices=status_choices)
     accepting_responses = models.BooleanField(default=False)
     is_past_event = models.BooleanField(default=False)
+    org = models.ForeignKey(Organization, on_delete=models.SET_NULL, related_name="events", null=True)
 
     # Not required attributes when is_past_event = True
     old_respondents = models.CharField(max_length=500, blank=True)
     form_description = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
-        return "{}, from {} to {}, {}. Modified on {}".format(self.name, self.start_date, self.end_date, self.status, self.last_updated)
-
-class Organization(models.Model):
-    org_body_choices = [
-        ("COA", "COA"),
-        ("LIONS", "LIONS"),
-        ("Sanggu", "Sanggu")
-    ]
-
-    name = models.CharField(max_length=100)
-    short_name = models.CharField(max_length=100)
-    slug = models.CharField(max_length=15) 
-    desc = models.CharField(max_length=500)
-    org_body = models.CharField(max_length=100, choices=org_body_choices)
-    logo = models.ImageField(upload_to='logos/', blank=True)
-    facebook = models.CharField(max_length=100, null=True, blank=True)
-    instagram = models.CharField(max_length=100, null=True, blank=True)
-    twitter = models.CharField(max_length=100, null=True, blank=True)
-    linkedin = models.CharField(max_length=100, null=True, blank=True)
-    website = models.CharField(max_length=100, null=True, blank=True)
-    user =  models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    events = models.ManyToManyField(Event, related_name='orgs', blank=True)
-    
-    def __str__(self):
-        return "{}({}), {}. {}".format(self.name, self.short_name, self.org_body, self.user)
+        return "{}, from {} to {}, {}. Modified on {} by {}".format(self.name, self.start_date, self.end_date, self.status, self.last_updated, self.org.short_name)
 
 class Student(models.Model):
     year_choices = [
@@ -67,7 +67,7 @@ class Student(models.Model):
         ]
     
     name = models.CharField(max_length=1024)
-    id_number = models.IntegerField()
+    id_number = models.IntegerField(unique=True)
     email = models.EmailField(max_length=200, null=True)
     year = models.CharField(max_length=100, choices=year_choices)
     course = models.CharField(max_length=128)
