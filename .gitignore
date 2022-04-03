@@ -15,7 +15,7 @@ media
 .Python
 build/
 develop-eggs/
-dist/
+frontend/dist/*
 downloads/
 eggs/
 .eggs/
@@ -52,3 +52,5 @@ venv.bak/
 pavenv/
 # Notes
 notes/
+
+!frontend/dist/manifest.json

@@ -95,7 +95,7 @@ const Footer = () => {
               Organizations
             </Typography>
           </Link>
-          <Link style={linkStyles} to="/admin">
+          <Link style={linkStyles} to="/admin/login">
             <Typography
               paddingBottom="24px"
               fontSize={fontSize.sm}

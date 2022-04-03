@@ -7,63 +7,80 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import OrgsDataService from '../../services/orgs.service';
-import { styled } from '@mui/material';
+import { styled, Button, Alert, Box } from '@mui/material';
 import { colors } from '$lib/theme';
 import AdminLayout from '$components/Admin/AdminLayout';
+import { useAdminUser } from '$lib/context/AdminContext';
+import http from '$lib/http';
+import { kebabCase } from '$lib/utils/kebabCase';
+
+const FormField = styled(TextField)({
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: colors.gray[400],
+    },
+  },
+});
+
+const StyledControl = styled(FormControl)({
+  '& .MuiInputBase-root': {
+    '& fieldset': {
+      borderColor: colors.gray[400],
+    },
+  },
+});
+
 const Settings = () => {
-  const FormField = styled(TextField)({
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: colors.gray[400],
-      },
-    },
-  });
-
-  const StyledControl = styled(FormControl)({
-    '& .MuiInputBase-root': {
-      '& fieldset': {
-        borderColor: colors.gray[400],
-      },
-    },
-  });
-
-  const [orgLogoFile, setOrgLogoFile] = React.useState({ file: '../../static/assets/image.png' });
-  const [logoUploaded, setLogoUploaded] = React.useState(false);
   const [orgForm, setOrgForm] = React.useState({
     name: '',
     short_name: '',
     desc: '',
     org_body: '',
-    logo: '',
     facebook: '',
     instagram: '',
     twitter: '',
+    logo: '',
     linkedin: '',
     website: '',
   });
 
+  const { org, accessToken, userData } = useAdminUser();
+
   useEffect(() => {
-    OrgsDataService.get(1).then((res) => {
-      setOrgForm({
-        name: res.data.name,
-        short_name: res.data.short_name,
-        desc: res.data.desc,
-        org_body: res.data.org_body,
-        logo: res.data.logo,
-        facebook: res.data.facebook,
-        instagram: res.data.instagram,
-        twitter: res.data.twitter,
-        linkedin: res.data.linkedin,
-        website: res.data.website,
-      });
+    setOrgForm({
+      name: org.name,
+      short_name: org.short_name,
+      desc: org.desc,
+      org_body: org.org_body,
+      facebook: org.facebook,
+      instagram: org.instagram,
+      logo: org.logo,
+      twitter: org.twitter,
+      linkedin: org.linkedin,
+      website: org.website,
     });
   }, []);
 
+  const isURLHttps = (url) => {
+    if (url instanceof File) {
+      return URL.createObjectURL(url);
+    } else if (url == null) {
+      return null;
+    } else if (url.includes('https')) {
+      return url;
+    } else {
+      return null;
+    }
+  };
+
+  const orgLogo = isURLHttps(orgForm.logo);
   const uploadChange = (evt) => {
-    setOrgLogoFile({
-      file: URL.createObjectURL(evt.target.files[0]),
+    setOrgForm((prevState) => {
+      return {
+        ...prevState,
+        logo: evt.target.files[0],
+      };
     });
-    setLogoUploaded(true);
   };
 
   const handleOrgNameChange = (e) => {
@@ -77,6 +94,7 @@ const Settings = () => {
 
   const handleOrgShortHandChange = (e) => {
     setOrgForm((prevState) => {
+      console.log(orgForm);
       return {
         ...prevState,
         short_name: e,
@@ -147,6 +165,24 @@ const Settings = () => {
     });
   };
 
+  const saveChanges = async () => {
+    const fd = new FormData();
+    Object.entries(orgForm).forEach(([key, value]) => {
+      if (key === 'step') {
+        return;
+      }
+      fd.append(key, value);
+    });
+    fd.append('user', userData.id);
+    fd.append('slug', kebabCase(orgForm.short_name));
+
+    await http.put(`/orgs/${org.slug}/`, fd, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  };
   return (
     <AdminLayout>
       <div className="settings">
@@ -209,8 +245,9 @@ const Settings = () => {
         <label htmlFor="org_logo_input">
           <div className="org_logo_upload">
             <img
-              src={`${logoUploaded ? orgLogoFile.file : '../../static/assets/image.png'}`}
+              src={`${orgLogo ? orgLogo : '../../static/assets/image.png'}`}
               alt=""
+              width="100"
             />
           </div>
         </label>
@@ -261,11 +298,16 @@ const Settings = () => {
           margin="dense"
           variant={'outlined'}
           value={orgForm.website}
-          style={{ width: '464px', marginBottom: '64px' }}
+          style={{ width: '464px', marginBottom: '44px' }}
           onChange={(e) => {
             handleWebsiteChange(e.target.value);
           }}
         />
+        <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '64px' }}>
+          <Button size="small" sx={{ marginRight: '80px' }} onClick={saveChanges}>
+            Save Changes
+          </Button>
+        </Box>
       </div>
     </AdminLayout>
   );
