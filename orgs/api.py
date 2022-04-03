@@ -1,10 +1,10 @@
 import jwt
-from orgs.models import Event, Organization, StudentToEvent
+from orgs.models import Event, Organization, StudentToEvent, Student
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
-from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -12,6 +12,10 @@ from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from functools import wraps
 
+import os
+from mixpanel import Mixpanel
+
+mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 # Lead Viewset
 class EventsViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -28,6 +32,12 @@ class EventsViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         serializer = EventsSerializer(current_event)
         return Response(serializer.data)
+
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    permission_classes = [IsGetOrIsAuthenticated]
+    serializer_class = StudentSerializer
+    lookup_field = 'id_number'
 
 class StudentToEventViewSet(viewsets.ModelViewSet):
     queryset = StudentToEvent.objects.all()
@@ -61,19 +71,24 @@ class OrgsViewSet(viewsets.ModelViewSet):
         serializer = [OrgsSerializer(query).data for query in queryset]
         return Response(serializer)
 
-#    def update(self, id, *args, **kwargs):
-#        instance = Organization.objects.get( id = id )
-#
-#        if not instance:
-#            # return Response(status=status.HTTP_404_NOT_FOUND)
-#            return Response("Instance not found.", status=404)
-#        print(self.request.data)
-#        serializer = self.get_serializer(instance, data=self.request.data, partial=True)
+    def update(self, id, *args, **kwargs):
+        instance = Organization.objects.get( id = id )
 
-#        if not serializer.is_valid():
-#            return Response("Serializer not valid.", status=401)
-#        serializer.save()
-#        return Response(serializer.data, status=200)
+        if not instance:
+            # return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response("Instance not found.", status=404)
+        print(self.request.data)
+        serializer = self.get_serializer(instance, data=self.request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response("Serializer not valid.", status=401)
+        serializer.save()
+        print(serializer.data['name'])
+        mp.track(serializer.data['name'], "Updated org information", {
+            'old_data': OrgsSerializer(instance).data,
+            'new_data': serializer.data
+        })
+        return Response(serializer.data, status=200)
 
     def create(self, request):
         """
