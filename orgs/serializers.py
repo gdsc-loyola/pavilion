@@ -23,7 +23,7 @@ class OrgDetailInEventSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='orgs-detail', lookup_field='slug')
     class Meta:
         model = Organization
-        fields = [ 'url', 'name', 'short_name' ]
+        fields = [ 'url', 'name', 'short_name', 'slug' ]
         lookup_field = 'slug'
 
 class EventsSerializer(serializers.ModelSerializer):
