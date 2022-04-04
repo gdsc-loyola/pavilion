@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, styled, TextField } from '@mui/material';
+import { Box, styled, TextField } from '@mui/material';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import EditIcon from './EditIcon';
 
@@ -11,11 +11,8 @@ const CustomContainer = styled('div')({
   },
 });
 
-const TopBar = ({ eventName, children, sidebar, paddingBig = true }) => {
+const TopBar = ({ children, sidebar, paddingBig = true }) => {
   const { details, setDetails } = useEventDetailsStore();
-  const handleEventTitleChange = (e) => {
-    setEventTitle(e);
-  };
 
   const handleNameChange = (e) => {
     setDetails({
@@ -52,7 +49,7 @@ const TopBar = ({ eventName, children, sidebar, paddingBig = true }) => {
           onChange={(e) => {
             handleNameChange(e.target.value);
           }}
-          defaultValue={details.name}
+          value={details.name || ''}
           sx={{
             width: details.name ? details.name.length * 9 + 100 : '0px',
             border: 'none',

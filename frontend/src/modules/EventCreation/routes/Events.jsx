@@ -174,6 +174,33 @@ const Events = () => {
             alignItems="center"
             flexDirection="column"
             display="flex"
+            onClick={async () => {
+              // Prevent from creating multiple events;
+              if (isCreatingRef.current) return;
+
+              isCreatingRef.current = true;
+
+              const res = await http.post(
+                '/events/',
+                {
+                  name: 'Untitled Event',
+                  start_date: new Date().toISOString().split('T')[0],
+                  end_date: new Date().toISOString().split('T')[0],
+                  location: '',
+                  desc: '',
+                  status: 'Completed',
+                  is_past_event: true,
+                },
+                {
+                  headers: {
+                    authorization: `Bearer ${accessToken}`,
+                  },
+                }
+              );
+              isCreatingRef.current = false;
+
+              router.push(`/admin/events/${res.data.id}/details`);
+            }}
           >
             <Box
               sx={{

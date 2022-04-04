@@ -24,11 +24,11 @@ import { mountStoreDevtool } from 'simple-zustand-devtools';
 export const useEventDetailsStore = create((set) => ({
   details: {
     id: null,
-    name: null,
+    name: '',
     startDate: null,
     endDate: null,
-    location: null,
-    description: null,
+    location: '',
+    description: '',
     coverphoto: null,
     eventphoto1: null,
     eventphoto2: null,
