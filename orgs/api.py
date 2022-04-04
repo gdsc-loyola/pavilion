@@ -116,7 +116,7 @@ class OrgsViewSet(viewsets.ModelViewSet):
 
         #getAll
         queryset = Organization.objects.all()
-        serializer = [OrgsSerializer(query).data for query in queryset]
+        serializer = [OrgsSerializer(query, context={'request': self.request}).data for query in queryset]
         return Response(serializer)
 
     def update(self, id, *args, **kwargs):
