@@ -1,9 +1,9 @@
 import create from 'zustand';
-import { persist } from 'zustand/middleware';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 
 /**
  * @typedef EventDetails
+ * @property {number}  id
  * @property {string} name
  * @property {string} startDate
  * @property {string} endDate
@@ -21,15 +21,47 @@ import { mountStoreDevtool } from 'simple-zustand-devtools';
  * @property {Boolean} is_past_event
  */
 
-export const useEventDetailsStore = create(
-  persist(
-    (set) => ({
+export const useEventDetailsStore = create((set) => ({
+  details: {
+    id: null,
+    name: null,
+    startDate: null,
+    endDate: null,
+    location: null,
+    description: null,
+    coverphoto: null,
+    eventphoto1: null,
+    eventphoto2: null,
+    eventphoto3: null,
+    eventphoto4: null,
+    responsesSheet: '',
+    formDescription: '',
+    status: '',
+    acceptingResponses: false,
+    is_past_event: false,
+  },
+  /**
+   *
+   * @param {Partial<eventDetails>} eventDetails
+   * @returns
+   */
+  setDetails: (details) =>
+    set((state) => ({
       details: {
+        ...state.details,
+        ...details,
+      },
+    })),
+
+  clear: () => {
+    set(() => ({
+      details: {
+        id: null,
         name: null,
         startDate: null,
         endDate: null,
-        location: null,
-        description: null,
+        location: '',
+        description: '',
         coverphoto: null,
         eventphoto1: null,
         eventphoto2: null,
@@ -41,30 +73,9 @@ export const useEventDetailsStore = create(
         acceptingResponses: false,
         is_past_event: false,
       },
-      /**
-       *
-       * @param {Partial<eventDetails>} eventDetails
-       * @returns
-       */
-      setDetails: (details) =>
-        set((state) => ({
-          details: {
-            ...state.details,
-            ...details,
-          },
-        })),
-    }),
-    {
-      name: 'details',
-      partialize: (state) => ({
-        ...state,
-        details: {
-          ...state.details,
-        },
-      }),
-    }
-  )
-);
+    }));
+  },
+}));
 
 if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('Details', useEventDetailsStore);
