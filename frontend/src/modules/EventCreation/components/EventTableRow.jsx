@@ -6,6 +6,7 @@ import React, { useRef, useState } from 'react';
 import { colors } from '$lib/theme';
 import Modal from './Modal';
 import { useBoolean } from '$lib/utils/useBoolean';
+import { useHistory } from 'react-router-dom';
 
 const StyledTableRow = styled(MUITableRow)(({ theme }) => ({
   '&:nth-of-type(2n)': {
@@ -48,6 +49,7 @@ const EventTableRow = ({ row, selected, onSelected, onDelete }) => {
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
   const iconRef = useRef();
   const open = Boolean(anchorEl);
+  const router = useHistory();
 
   const handleClick = () => {
     setAnchorEl(iconRef.current);
@@ -108,7 +110,12 @@ const EventTableRow = ({ row, selected, onSelected, onDelete }) => {
                   },
                 })}
               >
-                <Button variant="blank">Edit</Button>
+                <Button
+                  variant="blank"
+                  onClick={() => router.push(`/admin/events/${row.id}/details`)}
+                >
+                  Edit
+                </Button>
 
                 <Button
                   variant="blank"
