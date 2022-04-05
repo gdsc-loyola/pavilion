@@ -40,8 +40,14 @@ jobs:
         working-directory: ./frontend
 
     steps:
-      - name: Setup | Checkout
+      - name: Setup | Checkout [default]
+        if: github.event_name != 'pull_request'
+
+      - name: Setup | Checkout [PR]
         uses: actions/checkout@v2
+        if: github.event_name == 'pull_request'
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - uses: actions/cache@v2
         with:
