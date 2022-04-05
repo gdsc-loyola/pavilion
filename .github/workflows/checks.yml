@@ -41,6 +41,7 @@ jobs:
 
     steps:
       - name: Setup | Checkout [default]
+        uses: actions/checkout@v2
         if: github.event_name != 'pull_request'
 
       - name: Setup | Checkout [PR]
