@@ -50,6 +50,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Commit Build Files
+        uses: EndBug/add-and-commit@v9
+        if: github.ref == 'refs/heads/develop' || github.event.pull_request.base.ref == 'develop'
+        with:
+          message: 'update build files'
+
   format:
     runs-on: ubuntu-latest
     timeout-minutes: 10
