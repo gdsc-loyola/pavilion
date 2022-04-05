@@ -4,6 +4,10 @@ on:
   push:
     paths:
       - 'frontend/**'
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   lint:
