@@ -28,6 +28,7 @@ class Organization(models.Model):
 class Event(models.Model):
     status_choices = [
         ("Draft","Draft"),
+        ("Published","Published"),
         ("Ongoing","Ongoing"),
         ("Completed","Completed"),
     ]

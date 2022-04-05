@@ -2,7 +2,6 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Admin } from './org/components/Router';
 import Dashboard from './org/views/Dashboard';
-import Events from './org/views/Events';
 import Settings from './org/views/Settings';
 import { OrgInfo, OrgLogo, OrgLinks, Login } from '$modules/SelfSignUp/routes';
 import { ThemeProvider } from '@mui/material/styles';

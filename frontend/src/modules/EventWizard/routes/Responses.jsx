@@ -134,8 +134,71 @@ const FileDownload = styled(DownloadIcon)({
   },
 });
 
+const ToggleSwitchPropBlackList = ['handleAcceptToggle', 'accepting'];
+const ToggleSwitch = styled(
+  (props) => (
+    <Switch
+      focusVisibleClassName=".Mui-focusVisible"
+      disableRipple
+      defaultChecked={props.accepting}
+      checked={props.accepting}
+      onChange={(e) => props.handleAcceptToggle(e)}
+      {...props}
+    />
+  ),
+  {
+    shouldForwardProp: (prop) => !ToggleSwitchPropBlackList.includes(prop),
+  }
+)(({ theme }) => ({
+  width: 42,
+  height: 26,
+  padding: 0,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    color: '#fff',
+    '&.Mui-checked': {
+      transform: 'translateX(16px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: colors.blue[300],
+        opacity: 1,
+        border: 0,
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.5,
+      },
+    },
+    '&.Mui-focusVisible .MuiSwitch-thumb': {
+      color: colors.blue[300],
+      border: '6px solid #fff',
+    },
+    '&.Mui-disabled .MuiSwitch-thumb': {
+      color: theme.palette.grey[100],
+    },
+    '&.Mui-disabled + .MuiSwitch-track': {
+      opacity: 0.7,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 22,
+    height: 22,
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 26 / 2,
+    backgroundColor: colors.gray[400],
+    opacity: 1,
+    transition: theme.transitions.create(['background-color'], {
+      duration: 500,
+    }),
+  },
+}));
+
 const Responses = () => {
-  const { org, accessToken, userData } = useAdminUser();
+  const { id: eventId } = useParams();
+  const { org, accessToken, isLoading } = useAdminUser();
   const [accepting, setAccepting] = useState(false);
   useEffect(() => {
     fetchResponses();
@@ -147,10 +210,10 @@ const Responses = () => {
     }
   }, [org]);
   const [eventLink, setEventLink] = useState('');
+
   const fetchResponses = async () => {
     // TODO: fetch responses with event ID
-    const res = await http.get(`/events/1`);
-    console.log('res', res.data);
+    const res = await http.get(`/events/${eventId}`);
     if (Array.isArray(res.data)) {
       setResponses(res.data);
       setOriginalResponses(res.data);
@@ -160,7 +223,9 @@ const Responses = () => {
       setEventName(event.name);
       // TODO pav base url
       setEventLink(
-        `https://pavilion.gdscloyola.org/organizations/${org?.short_name.toLowerCase()}/${event.id}`
+        `https://pavilion.gdscloyola.org/organizations/${org?.short_name?.toLowerCase()}/${
+          event.id
+        }`
       );
     } else {
       const event = res.data;
@@ -168,7 +233,9 @@ const Responses = () => {
       setAccepting(event.accepting_responses ?? false);
       setEventName(event.name);
       setEventLink(
-        `https://pavilion.gdscloyola.org/organizations/${org?.short_name.toLowerCase()}/${event.id}`
+        `https://pavilion.gdscloyola.org/organizations/${org?.short_name?.toLowerCase()}/${
+          event.id
+        }`
       );
     }
   };
@@ -351,62 +418,6 @@ const Responses = () => {
     showBanner();
   };
 
-  const ToggleSwitch = styled((props) => (
-    <Switch
-      focusVisibleClassName=".Mui-focusVisible"
-      disableRipple
-      defaultChecked={accepting}
-      checked={accepting}
-      onChange={(e) => handleAcceptToggle(e)}
-      {...props}
-    />
-  ))(({ theme }) => ({
-    width: 42,
-    height: 26,
-    padding: 0,
-    '& .MuiSwitch-switchBase': {
-      padding: 0,
-      margin: 2,
-      transitionDuration: '300ms',
-      color: '#fff',
-      '&.Mui-checked': {
-        transform: 'translateX(16px)',
-        color: '#fff',
-        '& + .MuiSwitch-track': {
-          backgroundColor: colors.blue[300],
-          opacity: 1,
-          border: 0,
-        },
-        '&.Mui-disabled + .MuiSwitch-track': {
-          opacity: 0.5,
-        },
-      },
-      '&.Mui-focusVisible .MuiSwitch-thumb': {
-        color: colors.blue[300],
-        border: '6px solid #fff',
-      },
-      '&.Mui-disabled .MuiSwitch-thumb': {
-        color: theme.palette.grey[100],
-      },
-      '&.Mui-disabled + .MuiSwitch-track': {
-        opacity: 0.7,
-      },
-    },
-    '& .MuiSwitch-thumb': {
-      boxSizing: 'border-box',
-      width: 22,
-      height: 22,
-    },
-    '& .MuiSwitch-track': {
-      borderRadius: 26 / 2,
-      backgroundColor: colors.gray[400],
-      opacity: 1,
-      transition: theme.transitions.create(['background-color'], {
-        duration: 500,
-      }),
-    },
-  }));
-
   const columns = [
     {
       field: 'id',
@@ -568,7 +579,7 @@ const Responses = () => {
   };
 
   return (
-    <Layout>
+    <Layout sidebar>
       <TopBar eventName={eventName}>
         <Box
           sx={{
@@ -584,6 +595,7 @@ const Responses = () => {
                 textTransform: 'none',
               }}
               variant="outlined"
+              disabled={isLoading}
               onClick={handleCopyEventLink}
             >
               <LinkIcon />
@@ -684,7 +696,7 @@ const Responses = () => {
               }}
             >
               <Typography component="p">Accepting responses</Typography>
-              <ToggleSwitch />
+              <ToggleSwitch accepting={accepting} handleAcceptToggle={handleAcceptToggle} />
             </Box>
           </Box>
         </Box>
@@ -832,7 +844,7 @@ const Responses = () => {
           >
             <img src={emptyState} style={{ width: '370px' }} />
             <h4>You don&apos;t have any responses yet!</h4>
-            <Button onClick={handleCopyEventLink}>
+            <Button onClick={handleCopyEventLink} disabled={isLoading}>
               <LinkIcon white />
               <p style={{ margin: 'auto 0 auto 4px' }}>Copy event link</p>
             </Button>

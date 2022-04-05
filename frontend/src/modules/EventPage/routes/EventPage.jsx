@@ -61,7 +61,11 @@ const EventPage = (props) => {
           orgShortName: res.data.short_name,
         });
 
-        setOtherEvents(res.data.events.filter((e) => e.id !== eventRes.data.id));
+        setOtherEvents(
+          res.data.events.filter(
+            (e) => e.id !== eventRes.data.id && e.status !== 'Draft' && e.status !== 'Completed'
+          )
+        );
       });
     });
   }, [id, shortName]);
