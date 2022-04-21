@@ -119,8 +119,9 @@ class OrgsViewSet(viewsets.ModelViewSet):
         serializer = [OrgsSerializer(query, context={'request': self.request}).data for query in queryset]
         return Response(serializer)
 
-    def update(self, id, *args, **kwargs):
-        instance = Organization.objects.get( id = id )
+    def update(self, request, *args, **kwargs):
+        print(request.data['id'])
+        instance = Organization.objects.get( id = request.data['id'] )
 
         if not instance:
             # return Response(status=status.HTTP_404_NOT_FOUND)
