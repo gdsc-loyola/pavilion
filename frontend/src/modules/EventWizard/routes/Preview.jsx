@@ -202,7 +202,7 @@ const Preview = () => {
             logoSrc={org.logo}
             orgName={org.name}
           >
-            {registrationMode ? null : (
+            {registrationMode || details.is_past_event ? null : (
               <Button
                 size="small"
                 onClick={() => {

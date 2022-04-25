@@ -174,6 +174,7 @@ const Settings = () => {
       fd.append(key, value);
     });
     fd.append('user', userData.id);
+    fd.append('id', org.id);
     fd.append('slug', kebabCase(orgForm.short_name));
 
     await http.put(`/orgs/${org.slug}/`, fd, {
