@@ -219,7 +219,7 @@ const Registration = () => {
         </Box>
       </Box>
 
-      <Box
+      {/* <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
@@ -232,7 +232,7 @@ const Registration = () => {
           <SvgIcon fontSize="small" component={KeyboardArrowLeftIcon} />
           Previous
         </Button>
-      </Box>
+      </Box> */}
     </Layout>
   );
 };

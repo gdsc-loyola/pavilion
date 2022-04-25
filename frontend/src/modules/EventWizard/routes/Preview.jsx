@@ -33,7 +33,7 @@ const Preview = () => {
   const router = useHistory();
 
   const { publishEvent } = usePublish({
-    pathAfterUpdate: `/organizations/${details.org?.slug}/${details.id}`,
+    pathAfterUpdate: `/admin/events`,
   });
   const { saveAsDraft } = useSaveAsDraft('/admin/events');
 
@@ -202,7 +202,7 @@ const Preview = () => {
             logoSrc={org.logo}
             orgName={org.name}
           >
-            {registrationMode ? null : (
+            {registrationMode || details.is_past_event ? null : (
               <Button
                 size="small"
                 onClick={() => {

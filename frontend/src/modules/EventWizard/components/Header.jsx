@@ -6,7 +6,9 @@ import Modal from '../components/Modal';
 import { colors, typography } from '$lib/theme';
 import { useHistory, useParams } from 'react-router-dom';
 import TopBar from './TopBar';
+import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import { useSaveAsDraft } from '../utils/useSaveAsDraft';
+import { hasDetailsExceptEventPhotos } from '../utils/hasProperties';
 
 /**
  *
@@ -23,6 +25,7 @@ const Header = (props) => {
 
   const [warning, setWarningState] = React.useState(true);
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
+  const { details } = useEventDetailsStore();
 
   const { saveAsDraft } = useSaveAsDraft({
     pathAfterUpdate: '/admin/events/',
@@ -30,6 +33,10 @@ const Header = (props) => {
 
   const { deleteEvent } = useDeleteEvent(eventId);
 
+  const canPreview = hasDetailsExceptEventPhotos(
+    details,
+    details.is_past_event ? ['formDescription'] : []
+  );
   return (
     <>
       <TopBar sidebar={!pastevent}>
@@ -78,6 +85,7 @@ const Header = (props) => {
               fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.med,
             }}
+            disabled={!canPreview}
             onClick={() => router.push('preview')}
             size="small"
             variant="outlined"

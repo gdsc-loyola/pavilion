@@ -635,7 +635,7 @@ const Details = (props) => {
           </Stack>
         </Box>
       </Box>
-      {details.is_past_event ? null : (
+      {/* {details.is_past_event ? null : (
         <Box
           sx={{
             display: 'flex',
@@ -651,7 +651,7 @@ const Details = (props) => {
             <SvgIcon fontSize="small" component={KeyboardArrowRightIcon} />
           </Button>
         </Box>
-      )}
+      )} */}
     </Layout>
   );
 };
