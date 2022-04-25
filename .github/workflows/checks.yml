@@ -4,6 +4,10 @@ on:
   push:
     paths:
       - 'frontend/**'
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   lint:
@@ -36,8 +40,15 @@ jobs:
         working-directory: ./frontend
 
     steps:
-      - name: Setup | Checkout
+      - name: Setup | Checkout [default]
         uses: actions/checkout@v2
+        if: github.event_name != 'pull_request'
+
+      - name: Setup | Checkout [PR]
+        uses: actions/checkout@v2
+        if: github.event_name == 'pull_request'
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - uses: actions/cache@v2
         with:
@@ -49,6 +60,12 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Commit Build Files
+        uses: EndBug/add-and-commit@v9
+        if: github.ref == 'refs/heads/develop' || github.event.pull_request.base.ref == 'develop'
+        with:
+          message: 'update build files'
 
   format:
     runs-on: ubuntu-latest

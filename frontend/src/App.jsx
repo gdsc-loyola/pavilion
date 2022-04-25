@@ -2,7 +2,6 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Admin } from './org/components/Router';
 import Dashboard from './org/views/Dashboard';
-import Events from './org/views/Events';
 import Settings from './org/views/Settings';
 import { OrgInfo, OrgLogo, OrgLinks, Login } from '$modules/SelfSignUp/routes';
 import { ThemeProvider } from '@mui/material/styles';
@@ -14,6 +13,7 @@ import { Landing } from '$modules/StudentLanding/routes';
 import { OrgCatalogue } from '$modules/OrgCatalogue/routes';
 import { EventCreationRoutes } from '$modules/EventCreation';
 import { DashboardRoutes } from '$modules/Dashboard';
+import { EventWizardRoutes } from '$modules/EventWizard';
 
 const App = () => {
   return (
@@ -42,10 +42,19 @@ const App = () => {
         <Admin exact path="/admin/events/" component={EventCreationRoutes} />
         <Admin exact path="/admin/settings/" component={Settings} />
 
+        <Route
+          path="/admin/events"
+          component={() => (
+            <>
+              <EventWizardRoutes />
+            </>
+          )}
+        />
+
         {/* SSU routes */}
-        <Route exact path="/org-info/" component={OrgInfo} />
-        <Route exact path="/org-logo/" component={OrgLogo} />
-        <Route exact path="/org-links/" component={OrgLinks} />
+        <Admin exact path="/org-info/" component={OrgInfo} />
+        <Admin exact path="/org-logo/" component={OrgLogo} />
+        <Admin exact path="/org-links/" component={OrgLinks} />
       </Switch>
     </ThemeProvider>
   );

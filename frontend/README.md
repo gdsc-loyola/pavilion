@@ -6,13 +6,17 @@ You can run both the Django server and vite with one command.
 npm run dev:all
 ```
 
-The Django server should be live at http://localhost:8000
+The app should be live at http://localhost:8000
 
-The vite server should be live at http://localhost:3000
+> Note: In previous versions we would use http://localhost:3000 for development. **Make sure to use http://localhost:8000**. port 3000 will still be live, but that will only be used under the hood. **If you don't use port 8000 all the api calls won't work.**
 
-We're using vite for our development bundler since it supports HMR (Hot Module Reloading) and it is generally faster than webpack, thus a faster feedback loop.
+## Building for production
 
-When building for production though, run `npm run build` to update the `main.js` file.
+```bash
+npm run build
+```
+
+Simple!
 
 ## Formatting
 

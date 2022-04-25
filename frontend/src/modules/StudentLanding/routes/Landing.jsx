@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import { useHistory } from 'react-router';
 import { Grid, Box, Typography, createTheme, useMediaQuery, Button } from '@mui/material';
 
@@ -44,7 +45,11 @@ const Landing = () => {
     orgsService.getEvents().then((response) => {
       setFeaturedEvents(
         // Limit to 6 events
-        shuffleByDay(response.data.filter((event) => event.status === 'Published')).slice(0, 6)
+        shuffleByDay(
+          response.data.filter(
+            (event) => event.status === 'Published' || event.status === 'Ongoing'
+          )
+        ).slice(0, 6)
       );
     });
     orgsService.getAll().then((response) => {

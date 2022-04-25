@@ -3,6 +3,8 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { useState } from 'react';
 import orgLogo from '$static/assets/gdsc_logo.svg';
 import React from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useAdminUser } from '$lib/context/AdminContext';
 
 const Container = styled('div')(({ theme }) => ({
   borderBottom: `1px solid ${theme.colors.gray[300]}`,
@@ -30,6 +32,8 @@ const Avatar = A;
 
 const TopBar = () => {
   const [anchorEl, setAnchorEl] = useState();
+  const { logout } = useAuth0();
+  const { org } = useAdminUser();
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -39,7 +43,7 @@ const TopBar = () => {
   };
 
   const logOut = () => {
-    history.push('/login');
+    logout({ returnTo: window.location.origin });
   };
 
   const open = Boolean(anchorEl);
@@ -64,7 +68,7 @@ we support mobile screens */}
           >
             <Avatar
               alt="Remy Sharp"
-              src={orgLogo}
+              src={org.logo || orgLogo}
               sx={{ border: '1px solid #D1D5DB', height: '52px', width: '52px' }}
             />
           </AvatarContainer>

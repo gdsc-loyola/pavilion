@@ -62,11 +62,10 @@ const EventPage = (props) => {
           orgShortName: res.data.short_name,
         });
 
-        // Get first 3 events that are published and not this current event
         setOtherEvents(
-          shuffleByDay(
-            res.data.events.filter((e) => e.id !== eventRes.data.id && e.status === 'Published')
-          ).slice(0, 3)
+          res.data.events.filter(
+            (e) => e.id !== eventRes.data.id && e.status !== 'Draft' && e.status !== 'Completed'
+          )
         );
       });
     });

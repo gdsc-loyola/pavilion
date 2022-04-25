@@ -1,56 +1,51 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect, useLocation } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useAdminUser } from '$lib/context/AdminContext';
 
+const adminPathRegex = /^\/admin(\/|$)/;
+const orgFormPathRegex = /^\/org-\w+(\/|$)/;
+
+const checkPathKind = (path) => {
+  if (adminPathRegex.test(path)) {
+    return 'admin';
+  }
+
+  if (orgFormPathRegex.test(path)) {
+    return 'orgForm';
+  }
+  return '';
+};
 export const Admin = ({ component: Component, ...rest }) => {
+  const { isAuthenticated } = useAuth0();
+  const location = useLocation();
+
+  const pathKind = checkPathKind(location.pathname);
+
+  const admin = useAdminUser();
+
   return (
     <>
       <Route
         {...rest}
         render={(props) => {
-          // if (auth.isAuthenticate()) {
-          return <Component {...props} />;
-          // } else {
-          //     return <Redirect to="/admin/login/" />
-          // }
+          if (admin.isLoading) {
+            return null;
+          }
+          if (isAuthenticated) {
+            if (!admin.hasOrg && pathKind === 'admin') {
+              return <Redirect to="/org-info/" />;
+            }
+
+            if (admin.hasOrg && pathKind === 'orgForm') {
+              return <Redirect to="/admin/" />;
+            }
+
+            return <Component {...props} />;
+          }
+          return <Redirect to="/admin/login" />;
         }}
       />
     </>
   );
 };
-
-// export const CreateOrg = ({ component: Component, ...rest }) => {
-//   return (
-//     <>
-//       <Route
-//         {...rest}
-//         render={(props) => {
-//           if (signUpState.getState() === 1) {
-//             return (
-//               <>
-//                 <Component {...props} />
-//                 <Redirect to="/org-info/" />
-//               </>
-//             );
-//           } else if (signUpState.getState() === 2) {
-//             return (
-//               <>
-//                 <Component {...props} />
-//                 <Redirect to="/org-logo/" />
-//               </>
-//             );
-//           } else if (signUpState.getState() === 3) {
-//             return (
-//               <>
-//                 <Component {...props} />
-//                 <Redirect to="/org-links/" />
-//               </>
-//             );
-//           } else {
-//             signUpState.setState(1);
-//             <Redirect to="/org-info/" />;
-//           }
-//         }}
-//       />
-//     </>
-//   );
-// };
