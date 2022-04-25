@@ -1,0 +1,24 @@
+{
+  "index.html": {
+    "file": "assets/index.db1a5c4d.js",
+    "src": "index.html",
+    "isEntry": true,
+    "imports": [
+      "_vendor.7d723be1.js"
+    ],
+    "css": [
+      "assets/index.192523e9.css"
+    ],
+    "assets": [
+      "assets/pav_logo.78537690.svg",
+      "assets/dashboard_empty.77c5f37b.svg",
+      "assets/gdsc_logo.9fd742b9.svg",
+      "assets/pav_footer_logo.28407ca9.svg",
+      "assets/student-landing-hero.92372882.png",
+      "assets/emptyState.6d3fd855.svg"
+    ]
+  },
+  "_vendor.7d723be1.js": {
+    "file": "assets/vendor.7d723be1.js"
+  }
+}

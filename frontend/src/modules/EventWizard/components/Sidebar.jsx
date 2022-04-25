@@ -9,7 +9,7 @@ import SidebarLink from './SidebarLink';
 
 const Sidebar = () => {
   const path = window.location.pathname;
-  const { eventName } = useParams();
+  const { id: eventId } = useParams();
 
   const Container = styled(Drawer)(({ theme }) => ({
     backgroundColor: theme.colors.blue[50],
@@ -70,12 +70,12 @@ const Sidebar = () => {
         <SidebarSection name="CREATE">
           <SidebarLink
             active={path.includes('/details')}
-            href={`/admin/events/${eventName}/details`}
+            href={`/admin/events/${eventId}/details`}
             label="Event Details"
           />
           <SidebarLink
             active={path.includes('/registration')}
-            href={`/admin/events/${eventName}/registration`}
+            href={`/admin/events/${eventId}/registration`}
             label="Registration"
           />
         </SidebarSection>
@@ -83,7 +83,7 @@ const Sidebar = () => {
         <SidebarSection name="TRACK">
           <SidebarLink
             active={path.includes('/responses')}
-            href={`/admin/events/${eventName}/responses`}
+            href={`/admin/events/${eventId}/responses`}
             label="Responses"
           />
         </SidebarSection>

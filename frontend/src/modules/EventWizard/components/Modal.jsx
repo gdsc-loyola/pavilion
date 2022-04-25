@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Grid, Button, Modal as MuiModal, Typography } from '@mui/material';
 import ControlledTextField from '$components/ControlledTextField';
 import { Error } from '@mui/icons-material';
+import { colors } from '$lib/theme';
 /**
  * @param {import('@mui/material').ModalProps & {
  * title: string,
@@ -139,7 +140,17 @@ const Modal = (props) => {
             </Grid>
 
             <Grid item xs={6}>
-              <Button size="small" fullWidth {...rightButtonProps}>
+              <Button
+                size="small"
+                fullWidth
+                {...rightButtonProps}
+                sx={{
+                  background: warning ? colors.red[300] : colors.blue[300],
+                  ':hover': {
+                    backgroundColor: warning ? colors.red[300] : colors.blue[300],
+                  },
+                }}
+              >
                 {rightButtonProps?.label}
               </Button>
             </Grid>

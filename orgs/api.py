@@ -1,10 +1,10 @@
 import jwt
-from orgs.models import Event, Organization, StudentToEvent
+from orgs.models import Event, Organization, StudentToEvent, Student
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
-from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -12,6 +12,10 @@ from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from functools import wraps
 
+import os
+from mixpanel import Mixpanel
+
+mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 # Lead Viewset
 class EventsViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -26,8 +30,62 @@ class EventsViewSet(viewsets.ModelViewSet):
         if query:
             serializer = StudentToEventSerializer(query, many=True)
             return Response(serializer.data)
-        serializer = EventsSerializer(current_event)
+        serializer = EventsSerializer(current_event, context={'request': request})
         return Response(serializer.data)
+
+    def create(self, request):
+        if self.request.user.is_authenticated:
+            
+            user = request.user
+            
+
+             # required attributes
+            name = request.data['name']
+            cover_photo = request.data['cover_photo'] if 'cover_photo' in request.data else ''
+            org = Organization.objects.get(user=self.request.user);
+            desc = request.data['desc']
+            location = request.data['location']
+            event_photo1 = request.data['event_photo1'] if 'event_photo1' in request.data else ''
+            event_photo2 = request.data['event_photo2'] if 'event_photo2' in request.data else ''
+            event_photo3 = request.data['event_photo3'] if 'event_photo3' in request.data else ''
+            event_photo4 = request.data['event_photo4'] if 'event_photo4' in request.data else ''
+            start_date = request.data['start_date'] 
+            end_date = request.data['end_date']
+            status = request.data['status']
+            accepting_responses = request.data['accepting_responses'] if 'accepting_responses' in request.data else False
+            is_past_event = request.data['is_past_event'] if 'is_past_event' in request.data else False
+
+            new_event = Event.objects.create(
+                name=name,
+                cover_photo=cover_photo,
+                org=org,
+                desc=desc,
+                location=location,
+                event_photo1=event_photo1,
+                event_photo2=event_photo2,
+                event_photo3=event_photo3,
+                event_photo4=event_photo4,
+                status=status,
+                accepting_responses=accepting_responses,
+                is_past_event=is_past_event,
+                start_date=start_date,
+                end_date=end_date
+            )
+            new_event.save();
+
+            serializer = EventsSerializer(new_event, context={'request': request})
+            return Response(serializer.data)
+
+        else:
+            return Response("Must be authenticated", status=401)
+
+
+
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    permission_classes = [IsGetOrIsAuthenticated]
+    serializer_class = StudentSerializer
+    lookup_field = 'id_number'
 
 class StudentToEventViewSet(viewsets.ModelViewSet):
     queryset = StudentToEvent.objects.all()
@@ -53,12 +111,12 @@ class OrgsViewSet(viewsets.ModelViewSet):
                 return Response("Organization not found", status=404)
             except MultipleObjectsReturned:
                 return Response("Multiple Orgs found for current user", status=512)
-            serializer = OrgsSerializer(query)
+            serializer = OrgsSerializer(query, context={'request': self.request})
             return Response(serializer.data)
 
         #getAll
         queryset = Organization.objects.all()
-        serializer = [OrgsSerializer(query).data for query in queryset]
+        serializer = [OrgsSerializer(query, context={'request': self.request}).data for query in queryset]
         return Response(serializer)
 
     def update(self, id, *args, **kwargs):
@@ -73,6 +131,11 @@ class OrgsViewSet(viewsets.ModelViewSet):
         if not serializer.is_valid():
             return Response("Serializer not valid.", status=401)
         serializer.save()
+        print(serializer.data['name'])
+        mp.track(serializer.data['name'], "Updated org information", {
+            'old_data': OrgsSerializer(instance).data,
+            'new_data': serializer.data
+        })
         return Response(serializer.data, status=200)
 
     def create(self, request):
@@ -113,7 +176,7 @@ class OrgsViewSet(viewsets.ModelViewSet):
         )
         new_org.save()
 
-        serializer = OrgsSerializer(new_org)
+        serializer = OrgsSerializer(new_org, context={'request': request})
         return Response(serializer.data)
 
 class UserViewSet(viewsets.ModelViewSet):

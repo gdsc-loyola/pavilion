@@ -1,6 +1,6 @@
 import AdminLayout from '$components/Admin/AdminLayout';
 import { styled, Grid, Button, Box, Tabs, Tab } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Searchbar from '$components/Searchbar';
 import emptyState from '$static/assets/emptyState.svg';
 import { useBoolean } from '$lib/utils/useBoolean';
@@ -8,6 +8,8 @@ import Modal from '../components/Modal';
 import EventsTable from '../components/EventsTable';
 import { useEventsStore } from '../stores/useEventsStore';
 import { useAdminUser } from '$lib/context/AdminContext';
+import http from '$lib/http';
+import { useHistory } from 'react-router-dom';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -22,68 +24,25 @@ const Container = styled('div')(({ theme }) => ({
     fontWeight: theme.fontWeight.bold,
   },
 }));
-const sampleRows = [
-  {
-    id: '1',
-    name: 'Tech Everywhere 2020',
-    status: 'Draft',
-    start_date: '2020-12-02',
-    last_updated: '2020-12-02',
-  },
-  {
-    id: '2',
-    name: 'Hackathon',
-    status: 'Draft',
-    start_date: '2020-12-02',
-    last_updated: '2021-08-02',
-  },
-  {
-    id: '3',
-    name: 'IM Summit',
-    status: 'Published',
-    start_date: '2022-01-01',
-    last_updated: '2022-01-02',
-  },
-  {
-    id: '4',
-    name: 'Tambayan Session',
-    status: 'Ongoing',
-    start_date: '2021-01-01',
-    end_date: '2020-01-01',
-    last_updated: '2022-01-02',
-  },
-  {
-    id: '5',
-    name: 'Blue Hacks',
-    status: 'Draft',
-    start_date: '2021-01-01',
-    end_date: '2020-01-01',
-    last_updated: '2022-01-08',
-  },
-  {
-    id: '6',
-    name: 'A cool event that you should definitely attend',
-    status: 'Draft',
-    start_date: '2020-01-01',
-    end_date: '2020-01-01',
-    last_updated: '2022-02-01',
-  },
-];
 
 const Events = () => {
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
   const { events, filteredEvents, setFilteredEvents, setEvents, setSelectedEvents } =
     useEventsStore();
+  const router = useHistory();
+
+  // We're using a ref here since we don't want to rerender when changing the value
+  const isCreatingRef = useRef(false);
   const [tabValue, setTabValue] = useState('Published');
   const [searchVal, setSearchVal] = useState('');
 
-  const { org } = useAdminUser();
+  const { org, accessToken } = useAdminUser();
 
   useEffect(() => {
-    setEvents(sampleRows);
-    setFilteredEvents(sampleRows);
-    // setEvents(org.events);
-    // setFilteredEvents(org.events);
+    // setEvents(sampleRows);
+    // setFilteredEvents(sampleRows);
+    setEvents(org.events);
+    setFilteredEvents(org.events);
   }, [org.events, setEvents, setFilteredEvents]);
 
   const requestSearch = useCallback(
@@ -215,6 +174,33 @@ const Events = () => {
             alignItems="center"
             flexDirection="column"
             display="flex"
+            onClick={async () => {
+              // Prevent from creating multiple events;
+              if (isCreatingRef.current) return;
+
+              isCreatingRef.current = true;
+
+              const res = await http.post(
+                '/events/',
+                {
+                  name: 'Untitled Event',
+                  start_date: new Date().toISOString().split('T')[0],
+                  end_date: new Date().toISOString().split('T')[0],
+                  location: '',
+                  desc: '',
+                  status: 'Completed',
+                  is_past_event: true,
+                },
+                {
+                  headers: {
+                    authorization: `Bearer ${accessToken}`,
+                  },
+                }
+              );
+              isCreatingRef.current = false;
+
+              router.push(`/admin/events/${res.data.id}/details`);
+            }}
           >
             <Box
               sx={{
@@ -235,6 +221,32 @@ const Events = () => {
             alignItems="center"
             flexDirection="column"
             display="flex"
+            onClick={async () => {
+              // Prevent from creating multiple events;
+              if (isCreatingRef.current) return;
+
+              isCreatingRef.current = true;
+
+              const res = await http.post(
+                '/events/',
+                {
+                  name: 'Untitled Event',
+                  start_date: new Date().toISOString().split('T')[0],
+                  end_date: new Date().toISOString().split('T')[0],
+                  location: '',
+                  desc: '',
+                  status: 'Draft',
+                },
+                {
+                  headers: {
+                    authorization: `Bearer ${accessToken}`,
+                  },
+                }
+              );
+              isCreatingRef.current = false;
+
+              router.push(`/admin/events/${res.data.id}/details`);
+            }}
           >
             <Box
               sx={{

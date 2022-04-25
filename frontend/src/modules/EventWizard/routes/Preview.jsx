@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '../components/Modal';
 import { useBoolean } from '$lib/utils/useBoolean';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import EventTitleCard from '../../EventPage/components/EventTitleCard';
 import DataPrivacyModal from '../components/DataPrivacyModal';
@@ -22,16 +22,39 @@ import { colors, typography, theme } from '$lib/theme';
 import TextFieldWithSubtitle from '../components/TextFieldWithSubtitle';
 import { useRegistrationStore } from '../store/useRegistrationStore';
 import { useAdminUser } from '$lib/context/AdminContext';
+import { usePublish } from '../utils/usePublish';
+import { useSaveAsDraft } from '../utils/useSaveAsDraft';
+import { useEvent } from '../utils/useEvent';
+
 const Preview = () => {
-  const { eventName } = useParams();
-  const { details, setDetails } = useEventDetailsStore();
+  const { id: eventId } = useParams();
+  const { details } = useEventDetailsStore();
+
   const router = useHistory();
+
+  const { publishEvent } = usePublish({
+    pathAfterUpdate: `/organizations/${details.org?.slug}/${details.id}`,
+  });
+  const { saveAsDraft } = useSaveAsDraft('/admin/events');
+
+  const isURLHttps = (url) => {
+    if (url instanceof File) {
+      return URL.createObjectURL(url);
+    } else if (url == null) {
+      return null;
+    } else if (url.includes('http')) {
+      return url;
+    } else {
+      return URL.createObjectURL(url);
+    }
+  };
   const eventPhotos = [
-    URL.createObjectURL(details.eventphoto1),
-    URL.createObjectURL(details.eventphoto2),
-    URL.createObjectURL(details.eventphoto3),
-    URL.createObjectURL(details.eventphoto4),
+    isURLHttps(details.eventphoto1),
+    isURLHttps(details.eventphoto2),
+    isURLHttps(details.eventphoto3),
+    isURLHttps(details.eventphoto4),
   ];
+
   const [publish, setPublishState] = React.useState(true);
 
   const handlePublishState = (state) => {
@@ -42,10 +65,9 @@ const Preview = () => {
     }
   };
 
-  const coverphoto = React.useMemo(
-    () => URL.createObjectURL(details.coverphoto),
-    [details.coverphoto]
-  );
+  useEvent(eventId);
+
+  const coverphoto = React.useMemo(() => isURLHttps(details.coverphoto), [details.coverphoto]);
 
   const [registrationMode, setRegistrationMode] = React.useState(false);
 
@@ -79,12 +101,12 @@ const Preview = () => {
     });
   };
 
-  const { org, accessToken, userData } = useAdminUser();
+  const { org } = useAdminUser();
 
   return (
     <>
       <ScrollToTop />
-      <TopBar paddingBig={false} eventName={eventName} sidebar={false}>
+      <TopBar paddingBig={false} eventName={details.name} sidebar={false}>
         <Box
           sx={{
             display: 'flex',
@@ -174,7 +196,7 @@ const Preview = () => {
           }}
         >
           <EventTitleCard
-            eventName={registrationMode ? eventName + ' Registration Form' : eventName}
+            eventName={registrationMode ? details.name + ' Registration Form' : details.name}
             startDate={details.startDate}
             endDate={details.endDate}
             logoSrc={org.logo}
@@ -350,7 +372,13 @@ const Preview = () => {
           }}
           rightButtonProps={{
             label: publish ? 'Publish to Pavillion' : 'Save as draft',
-            onClick: closeModal,
+            onClick: () => {
+              if (publish) {
+                publishEvent();
+              } else {
+                saveAsDraft();
+              }
+            },
             sx: {
               fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.med,

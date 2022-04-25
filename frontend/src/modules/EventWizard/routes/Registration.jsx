@@ -1,80 +1,34 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import TopBar from '../components/TopBar';
 import Layout from '../components/Layout';
-import Modal from '../components/Modal';
-import { useBoolean } from '$lib/utils/useBoolean';
-import { Button, Box, Typography, TextField, SvgIcon, Link } from '@mui/material';
+import { Button, Box, Typography, TextField, SvgIcon } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-const Registration = (props) => {
-  const { eventName } = useParams();
-  const eventHasResponses = true;
-  const [warning, setWarningState] = React.useState(true);
-  const [formDescription, setFormDescription] = React.useState('');
-  const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
+import { useEventDetailsStore } from '../store/useEventDetailsStore';
+import Header from '../components/Header';
+import { useParams } from 'react-router-dom';
+import { useEvent } from '../utils/useEvent';
+const Registration = () => {
+  const { id: eventId } = useParams();
+  const { details, setDetails } = useEventDetailsStore();
+
+  const eventHasResponses = details.acceptingResponses;
+
+  useEvent(eventId);
+
   const handleFormDescriptionChange = (e) => {
-    setFormDescription(e);
+    setDetails({
+      formDescription: e,
+    });
   };
-  const handleWarningState = (state) => {
-    if (state == true) {
-      setWarningState(true);
-    } else {
-      setWarningState(false);
-    }
-  };
+
   return (
     <Layout sidebar={true}>
-      <TopBar eventName={eventName} sidebar={true}>
-        <Box
-          sx={{
-            display: 'flex',
-            gap: '16px',
-          }}
-        >
-          <Button
-            size="small"
-            style={{
-              borderColor: colors.red[300],
-              color: colors.red[300],
-              fontSize: typography.fontSize.sm,
-              fontWeight: typography.fontWeight.med,
-            }}
-            variant="outlined"
-            onClick={() => {
-              handleWarningState(true);
-              openModal();
-            }}
-          >
-            Discard
-          </Button>
-          <Button
-            size="small"
-            style={{
-              borderColor: colors.blue[300],
-              color: colors.blue[300],
-              fontSize: typography.fontSize.sm,
-              fontWeight: typography.fontWeight.med,
-            }}
-            variant="outlined"
-            onClick={() => {
-              handleWarningState(false);
-              openModal();
-            }}
-          >
-            Save as draft
-          </Button>
-          <Button disabled={true} size="small" variant="outlined">
-            Preview Webpage
-          </Button>
-        </Box>
-      </TopBar>
+      <Header pathAfterUpdate="preview" />
 
       <Box
         sx={{
           marginLeft: '56px',
           marginTop: '40px',
-          width: '100%',
           marginRight: '56px',
         }}
       >
@@ -120,7 +74,7 @@ const Registration = (props) => {
             marginBottom: '24px',
           }}
         >
-          {eventName}
+          {details.name} Registration Form
         </Typography>
         <TextField
           margin="normal"
@@ -130,7 +84,7 @@ const Registration = (props) => {
           size="normal"
           variant="outlined"
           label="Form Description"
-          helperText={`${formDescription.length}/500`}
+          helperText={`${details.formDescription.length}/500`}
           onChange={(e) => {
             handleFormDescriptionChange(e.target.value);
           }}
@@ -142,6 +96,7 @@ const Registration = (props) => {
               marginLeft: '0px',
             },
           }}
+          value={details.formDescription}
           inputProps={{ maxLength: 500 }}
           InputLabelProps={{
             sx: {
@@ -278,45 +233,6 @@ const Registration = (props) => {
           Previous
         </Button>
       </Box>
-
-      <Modal
-        withTextField={false}
-        warning={warning}
-        open={isModalOpen}
-        onClose={closeModal}
-        asForm={true}
-        title={warning ? 'Discard Event' : 'Close and save as draft'}
-        subtitle={
-          warning
-            ? 'This will delete all the information you’ve added so far.'
-            : 'You can go back to editing this event anytime.'
-        }
-        leftButtonProps={{
-          label: 'Never Mind',
-          onClick: closeModal,
-          sx: {
-            fontSize: typography.fontSize.sm,
-            fontWeight: typography.fontWeight.med,
-          },
-        }}
-        rightButtonProps={{
-          label: warning ? 'Discard Event' : 'Save as draft',
-          onClick: closeModal,
-          sx: {
-            fontSize: typography.fontSize.sm,
-            fontWeight: typography.fontWeight.med,
-            color: '#FFF',
-            background: warning
-              ? colors.red[300]
-              : 'linear-gradient(90deg, #498af4 0%, #1a73e8 100%)',
-            ':hover': {
-              background: warning
-                ? colors.red[300]
-                : 'linear-gradient(90deg, #498af4 0%, #1a73e8 100%)',
-            },
-          },
-        }}
-      />
     </Layout>
   );
 };

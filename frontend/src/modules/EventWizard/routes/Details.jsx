@@ -1,15 +1,11 @@
 import React from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import TopBar from '../components/TopBar';
+import { useHistory } from 'react-router-dom';
 import Layout from '../components/Layout';
-import Modal from '../components/Modal';
-import { useBoolean } from '$lib/utils/useBoolean';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { useAdminUser } from '$lib/context/AdminContext';
 import http from '$lib/http';
-import { kebabCase } from '$lib/utils/kebabCase';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import {
   Button,
@@ -20,10 +16,13 @@ import {
   TextField,
   SvgIcon,
   FormHelperText,
-  Link,
 } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { safeFormDataAppend } from '$lib/utils/safeFormDataAppend';
+import { isFile } from '../utils/isFile';
+import Header from '../components/Header';
+import { useEvent } from '../utils/useEvent';
 
 const Label = styled('label')({
   display: 'flex',
@@ -54,25 +53,13 @@ const HelperText = styled('p')({
 });
 
 const Details = (props) => {
+  const { id: eventId } = props.match.params;
+
   const router = useHistory();
-  const { org, accessToken, userData } = useAdminUser();
-  const { eventName } = useParams();
-  const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
+  const { accessToken } = useAdminUser();
 
-  const { details, setDetails } = useEventDetailsStore((state) => ({
-    details: state.details,
-    setDetails: state.setDetails,
-  }));
+  const { details, setDetails } = useEventDetailsStore();
 
-  const [warning, setWarningState] = React.useState(true);
-
-  const handleWarningState = (state) => {
-    if (state == true) {
-      setWarningState(true);
-    } else {
-      setWarningState(false);
-    }
-  };
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -157,77 +144,66 @@ const Details = (props) => {
     });
   };
 
-  const pastevent = false;
-  const coverphoto =
-    typeof details.coverphoto?.name == 'string' ? URL.createObjectURL(details.coverphoto) : null;
-  const eventphoto1 =
-    typeof details.eventphoto1?.name == 'string' ? URL.createObjectURL(details.eventphoto1) : null;
-  const eventphoto2 =
-    typeof details.eventphoto2?.name == 'string' ? URL.createObjectURL(details.eventphoto2) : null;
-  const eventphoto3 =
-    typeof details.eventphoto3?.name == 'string' ? URL.createObjectURL(details.eventphoto3) : null;
-  const eventphoto4 =
-    typeof details.eventphoto4?.name == 'string' ? URL.createObjectURL(details.eventphoto4) : null;
+  const isURLHttps = (url) => {
+    if (!url) return null;
 
-  const isFormEmpty = Object.values(details).some(
-    (x) => x === null || (typeof x == 'object' && !(x instanceof File))
-  );
+    if (url instanceof File) {
+      return URL.createObjectURL(url);
+    } else if (url === null) {
+      return null;
+    } else if (url.includes('http')) {
+      return url;
+    } else {
+      return URL.createObjectURL(url);
+    }
+  };
+  const coverphoto = isURLHttps(details.coverphoto);
+  const eventphoto1 = isURLHttps(details.eventphoto1);
+  const eventphoto2 = isURLHttps(details.eventphoto2);
+  const eventphoto3 = isURLHttps(details.eventphoto3);
+  const eventphoto4 = isURLHttps(details.eventphoto4);
 
-  const res = async () => await console.log(http.get(`events/${0}/`));
-  res();
+  useEvent(eventId);
+
+  const pushDetails = async () => {
+    const fd = new FormData();
+    fd.append('desc', details.description);
+    safeFormDataAppend(fd, 'cover_photo', details.coverphoto, isFile);
+    safeFormDataAppend(fd, 'event_photo1', details.eventphoto1, isFile);
+    safeFormDataAppend(fd, 'event_photo2', details.eventphoto2, isFile);
+    safeFormDataAppend(fd, 'event_photo3', details.eventphoto3, isFile);
+    safeFormDataAppend(fd, 'event_photo4', details.eventphoto4, isFile);
+
+    fd.append('location', details.location);
+    fd.append('name', details.name);
+    fd.append('start_date', details.startDate);
+    fd.append('end_date', details.endDate);
+    var utc = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+    fd.append('last_updated', utc);
+    fd.append('status', 'Draft');
+    fd.append('accepting_responses', details.acceptingResponses);
+    fd.append('is_past_event', details.is_past_event);
+    fd.append('old_respondents', details.responsesSheet);
+    fd.append('form_description', details.formDescription);
+    await http.put(`events/${eventId}/`, fd, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    router.push('registration');
+  };
   return (
-    <Layout sidebar={!pastevent}>
-      <TopBar eventName={eventName} sidebar={!pastevent}>
-        <Box
-          sx={{
-            display: 'flex',
-            gap: '16px',
-          }}
-        >
-          <Button
-            size="small"
-            style={{
-              borderColor: colors.red[300],
-              color: colors.red[300],
-              fontSize: typography.fontSize.sm,
-              fontWeight: typography.fontWeight.med,
-            }}
-            variant="outlined"
-            onClick={() => {
-              handleWarningState(true);
-              openModal();
-            }}
-          >
-            Discard
-          </Button>
-          <Button
-            size="small"
-            style={{
-              borderColor: colors.blue[300],
-              color: colors.blue[300],
-              fontSize: typography.fontSize.sm,
-              fontWeight: typography.fontWeight.med,
-            }}
-            variant="outlined"
-            onClick={() => {
-              handleWarningState(false);
-              openModal();
-            }}
-          >
-            Save as draft
-          </Button>
-          <Button
-            disabled={isFormEmpty}
-            onClick={() => router.push('preview')}
-            size="small"
-            variant="outlined"
-          >
-            Preview Webpage
-          </Button>
-        </Box>
-      </TopBar>
+    <Layout sidebar={!details.is_past_event}>
+      <Header pastevent={details.is_past_event} />
 
-      <Box sx={{ marginLeft: pastevent ? '144px' : '56px', marginTop: '40px', width: '552px' }}>
+      <Box
+        sx={{
+          marginLeft: details.is_past_event ? '144px' : '56px',
+          marginTop: '40px',
+          width: '552px',
+        }}
+      >
         <Typography
           sx={{
             color: colors.gray[700],
@@ -352,7 +328,7 @@ const Details = (props) => {
           variant="outlined"
           label="Where was the event held?"
           value={details.location}
-          helperText={`${details.location.length}/100`}
+          helperText={`${details.location ? details.location.length : '0'}/100`}
           onChange={(e) => {
             handleLocationChange(e.target.value);
           }}
@@ -380,7 +356,7 @@ const Details = (props) => {
           variant="outlined"
           label="Describe this event!"
           value={details.description}
-          helperText={`${details.description.length}/500`}
+          helperText={`${details.description ? details.description.length : '0'}/500`}
           onChange={(e) => {
             handleDescriptionChange(e.target.value);
           }}
@@ -399,7 +375,7 @@ const Details = (props) => {
             },
           }}
         />
-        {pastevent ? (
+        {details.is_past_event ? (
           <>
             <TextField
               fullWidth
@@ -451,7 +427,7 @@ const Details = (props) => {
                   textAlign: 'right',
                 }}
               >
-                {`${details.responsesSheet.length}/500`}
+                {`${details.responsesSheet ? details.responsesSheet.length : '0'}/500`}
               </Typography>
             </FormHelperText>
           </>
@@ -459,7 +435,7 @@ const Details = (props) => {
       </Box>
       <Box
         sx={{
-          marginLeft: pastevent ? '144px' : '56px',
+          marginLeft: details.is_past_event ? '144px' : '56px',
           marginRight: '56px',
           marginTop: '104px',
           display: 'flex',
@@ -577,7 +553,7 @@ const Details = (props) => {
             display: 'flex',
             flexDirection: 'row',
             gap: '24px',
-            marginBottom: pastevent ? '135px' : '105px',
+            marginBottom: details.is_past_event ? '135px' : '105px',
             flexWrap: 'wrap',
           }}
         >
@@ -659,7 +635,7 @@ const Details = (props) => {
           </Stack>
         </Box>
       </Box>
-      {pastevent ? null : (
+      {details.is_past_event ? null : (
         <Box
           sx={{
             display: 'flex',
@@ -670,54 +646,12 @@ const Details = (props) => {
             border: '1px solid #D1D5DB',
           }}
         >
-          <Button
-            onClick={() => router.push('registration')}
-            size="small"
-            sx={{ marginRight: '56px' }}
-          >
+          <Button onClick={pushDetails} size="small" sx={{ marginRight: '56px' }}>
             Next
             <SvgIcon fontSize="small" component={KeyboardArrowRightIcon} />
           </Button>
         </Box>
       )}
-      <Modal
-        withTextField={false}
-        warning={warning}
-        open={isModalOpen}
-        onClose={closeModal}
-        asForm={true}
-        title={warning ? 'Discard Event' : 'Close and save as draft'}
-        subtitle={
-          warning
-            ? 'This will delete all the information you’ve added so far.'
-            : 'You can go back to editing this event anytime.'
-        }
-        leftButtonProps={{
-          label: 'Never Mind',
-          onClick: closeModal,
-          sx: {
-            fontSize: typography.fontSize.sm,
-            fontWeight: typography.fontWeight.med,
-          },
-        }}
-        rightButtonProps={{
-          label: warning ? 'Discard Event' : 'Save as draft',
-          onClick: closeModal,
-          sx: {
-            fontSize: typography.fontSize.sm,
-            fontWeight: typography.fontWeight.med,
-            color: '#FFF',
-            background: warning
-              ? colors.red[300]
-              : 'linear-gradient(90deg, #498af4 0%, #1a73e8 100%)',
-            ':hover': {
-              background: warning
-                ? colors.red[300]
-                : 'linear-gradient(90deg, #498af4 0%, #1a73e8 100%)',
-            },
-          },
-        }}
-      />
     </Layout>
   );
 };
