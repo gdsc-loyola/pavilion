@@ -120,8 +120,8 @@ class OrgsViewSet(viewsets.ModelViewSet):
         return Response(serializer)
 
     def update(self, request, *args, **kwargs):
-        print(request.data['id'])
-        instance = Organization.objects.get( id = request.data['id'] )
+        # print(request.data)
+        instance = Organization.objects.get( slug = request.data['slug'] )
 
         if not instance:
             # return Response(status=status.HTTP_404_NOT_FOUND)
@@ -130,11 +130,11 @@ class OrgsViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=self.request.data, partial=True)
 
         if not serializer.is_valid():
-            return Response("Serializer not valid.", status=401)
+            return Response(serializer.errors, status=401)
         serializer.save()
-        print(serializer.data['name'])
+        # print(serializer.data['name'])
         mp.track(serializer.data['name'], "Updated org information", {
-            'old_data': OrgsSerializer(instance).data,
+            'old_data': OrgsSerializer(instance, context={'request': request}).data,
             'new_data': serializer.data
         })
         return Response(serializer.data, status=200)
