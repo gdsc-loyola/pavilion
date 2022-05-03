@@ -66,7 +66,7 @@ const Settings = () => {
       return URL.createObjectURL(url);
     } else if (url == null) {
       return null;
-    } else if (url.includes('https')) {
+    } else if (url.includes('https') || url.includes('http')) {
       return url;
     } else {
       return null;
@@ -171,6 +171,9 @@ const Settings = () => {
       if (key === 'step') {
         return;
       }
+      if (key === 'logo' && isURLHttps(value)) {
+        return;
+      }
       fd.append(key, value);
     });
     fd.append('user', userData.id);
@@ -187,8 +190,6 @@ const Settings = () => {
   return (
     <AdminLayout>
       <div className="settings">
-        <DataPrivacyModal />
-
         <h1 className="title">Org Information</h1>
         <FormField
           label={'Organization Name*'}
