@@ -1,5 +1,4 @@
 import create from 'zustand';
-import { persist } from 'zustand/middleware';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 
 /**
@@ -11,40 +10,27 @@ import { mountStoreDevtool } from 'simple-zustand-devtools';
  * @property {string} course
  */
 
-export const useRegistrationStore = create(
-  persist(
-    (set) => ({
+export const useRegistrationStore = create((set) => ({
+  registration: {
+    idnumber: '',
+    name: '',
+    email: '',
+    yearlevel: null,
+    course: null,
+  },
+  /**
+   *
+   * @param {Partial<registration>} registration
+   * @returns
+   */
+  setRegistration: (registration) =>
+    set((state) => ({
       registration: {
-        idnumber: '',
-        name: '',
-        email: '',
-        yearlevel: null,
-        course: null,
+        ...state.registration,
+        ...registration,
       },
-      /**
-       *
-       * @param {Partial<registration>} registration
-       * @returns
-       */
-      setRegistration: (registration) =>
-        set((state) => ({
-          registration: {
-            ...state.registration,
-            ...registration,
-          },
-        })),
-    }),
-    {
-      name: 'registration',
-      partialize: (state) => ({
-        ...state,
-        registration: {
-          ...state.details,
-        },
-      }),
-    }
-  )
-);
+    })),
+}));
 
 if (process.env.NODE_ENV === 'development') {
   mountStoreDevtool('registration', useRegistrationStore);
