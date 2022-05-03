@@ -39,7 +39,7 @@ const Header = (props) => {
   );
   return (
     <>
-      <TopBar sidebar={!pastevent}>
+      <TopBar sidebar>
         <Box
           sx={{
             display: 'flex',

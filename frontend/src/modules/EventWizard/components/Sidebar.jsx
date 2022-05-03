@@ -6,10 +6,12 @@ import { colors } from '$lib/theme';
 import BackArrowIcon from './BackArrowIcon';
 import SidebarSection from './SidebarSection';
 import SidebarLink from './SidebarLink';
+import { useEventDetailsStore } from '../store/useEventDetailsStore';
 
 const Sidebar = () => {
   const path = window.location.pathname;
   const { id: eventId } = useParams();
+  const { details } = useEventDetailsStore();
 
   const Container = styled(Drawer)(({ theme }) => ({
     backgroundColor: theme.colors.blue[50],
@@ -52,6 +54,7 @@ const Sidebar = () => {
             margin: 'auto',
             alignContent: 'center',
             alignItems: 'center',
+            marginTop: '1.4rem',
           }}
         >
           <BackArrowIcon />
@@ -61,7 +64,7 @@ const Sidebar = () => {
         <Typography
           variant="h6"
           sx={{
-            margin: '64px auto 48px auto',
+            margin: '80px auto 48px auto',
           }}
         >
           Manage Event
@@ -73,20 +76,24 @@ const Sidebar = () => {
             href={`/admin/events/${eventId}/details`}
             label="Event Details"
           />
-          <SidebarLink
-            active={path.includes('/registration')}
-            href={`/admin/events/${eventId}/registration`}
-            label="Registration"
-          />
+          {!details.is_past_event && (
+            <SidebarLink
+              active={path.includes('/registration')}
+              href={`/admin/events/${eventId}/registration`}
+              label="Registration"
+            />
+          )}
         </SidebarSection>
 
-        <SidebarSection name="TRACK">
-          <SidebarLink
-            active={path.includes('/responses')}
-            href={`/admin/events/${eventId}/responses`}
-            label="Responses"
-          />
-        </SidebarSection>
+        {!details.is_past_event && (
+          <SidebarSection name="TRACK">
+            <SidebarLink
+              active={path.includes('/responses')}
+              href={`/admin/events/${eventId}/responses`}
+              label="Responses"
+            />
+          </SidebarSection>
+        )}
       </div>
     </Container>
   );

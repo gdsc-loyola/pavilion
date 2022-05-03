@@ -4,6 +4,7 @@ import { useBoolean } from '$lib/utils/useBoolean';
 import { useHistory, useParams } from 'react-router-dom';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import EventTitleCard from '../../EventPage/components/EventTitleCard';
+
 import DataPrivacyModal from '../components/DataPrivacyModal';
 import {
   Box,
@@ -16,6 +17,7 @@ import {
   Divider,
   Checkbox,
 } from '@mui/material';
+
 import ScrollToTop from '$components/ScrollToTop';
 import TopBar from '../components/TopBar';
 import { colors, typography, theme } from '$lib/theme';
@@ -113,6 +115,21 @@ const Preview = () => {
             gap: '16px',
           }}
         >
+          <Button
+            size="small"
+            style={{
+              borderColor: colors.blue[300],
+              color: colors.blue[300],
+              fontSize: typography.fontSize.sm,
+              fontWeight: typography.fontWeight.med,
+            }}
+            variant="outlined"
+            onClick={() => {
+              router.push('/admin/events');
+            }}
+          >
+            Back to Events
+          </Button>
           <Button
             size="small"
             style={{

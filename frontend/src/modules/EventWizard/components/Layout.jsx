@@ -16,8 +16,8 @@ const Main = styled('main')({
 const Layout = (props) => {
   return (
     <>
-      <Main sx={{ marginLeft: props.sidebar ? '200px' : '0px' }}>{props.children}</Main>
-      {props.sidebar ? <Sidebar /> : null}
+      <Main sx={{ marginLeft: '200px' }}>{props.children}</Main>
+      <Sidebar />
     </>
   );
 };
