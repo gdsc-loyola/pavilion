@@ -47,7 +47,19 @@ const Landing = () => {
         // Limit to 6 events
         shuffleByDay(
           response.data.filter(
-            (event) => event.status === 'Published' || event.status === 'Ongoing'
+            (event) => {
+              if(event.status === 'Published' || event.status === 'Ongoing') {
+                const now = new Date().getTime();
+                const end = new Date(event.end_date).getTime()
+                const hasEnded = end < now;
+                if(hasEnded) {
+                  return false
+                }
+                return true;
+
+              }
+              return false
+            } 
           )
         ).slice(0, 6)
       );
