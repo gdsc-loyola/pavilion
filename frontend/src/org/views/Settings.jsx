@@ -187,6 +187,8 @@ const Settings = () => {
   return (
     <AdminLayout>
       <div className="settings">
+        <DataPrivacyModal />
+
         <h1 className="title">Org Information</h1>
         <FormField
           label={'Organization Name*'}
