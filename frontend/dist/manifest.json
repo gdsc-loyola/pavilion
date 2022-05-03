@@ -1,11 +1,8 @@
 {
   "index.html": {
-    "file": "assets/index.db1a5c4d.js",
+    "file": "assets/index.8ed1f316.js",
     "src": "index.html",
     "isEntry": true,
-    "imports": [
-      "_vendor.7d723be1.js"
-    ],
     "css": [
       "assets/index.192523e9.css"
     ],
@@ -17,8 +14,5 @@
       "assets/student-landing-hero.92372882.png",
       "assets/emptyState.6d3fd855.svg"
     ]
-  },
-  "_vendor.7d723be1.js": {
-    "file": "assets/vendor.7d723be1.js"
   }
 }
