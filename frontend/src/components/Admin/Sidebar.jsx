@@ -2,6 +2,8 @@ import React from 'react';
 import logo from '$static/assets/pav_logo.svg';
 import { Drawer, styled } from '@mui/material';
 import SidebarLink from './SidebarLink';
+import Mixpanel from '$lib/mixpanel';
+import { useAdminUser } from '$lib/context/AdminContext';
 
 const Container = styled(Drawer)(({ theme }) => ({
   backgroundColor: theme.colors.blue[300],
@@ -27,14 +29,33 @@ const Container = styled(Drawer)(({ theme }) => ({
 }));
 
 const Sidebar = () => {
+  const { org } = useAdminUser();
   return (
     <>
       <Container variant="persistent" anchor="left" open>
         <img src={logo} alt="Logo" className="logo" />
         <div className="sidebar-links">
-          <SidebarLink href="/admin" label="Dashboard" />
-          <SidebarLink href="/admin/events" label="Events" />
-          <SidebarLink href="/admin/settings" label="Settings" />
+          <SidebarLink
+            onClick={Mixpanel.track(`${org.name} viewed Dashboard`, {
+              viewedOn: new Date().toISOString().split('T')[0],
+            })}
+            href="/admin"
+            label="Dashboard"
+          />
+          <SidebarLink
+            onClick={Mixpanel.track(`${org.name} viewed Events`, {
+              viewedOn: new Date().toISOString().split('T')[0],
+            })}
+            href="/admin/events"
+            label="Events"
+          />
+          <SidebarLink
+            onClick={Mixpanel.track(`${org.name} viewed Settings`, {
+              viewedOn: new Date().toISOString().split('T')[0],
+            })}
+            href="/admin/settings"
+            label="Settings"
+          />
         </div>
       </Container>
     </>

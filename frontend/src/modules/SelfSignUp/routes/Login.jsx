@@ -5,10 +5,10 @@ import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import http from '$lib/http';
 import { useAdminUser } from '$lib/context/AdminContext';
-
+import Mixpanel from '$lib/mixpanel';
 const Login = () => {
   const { loginWithPopup } = useAuth0();
-  const { refetchAll, accessToken } = useAdminUser();
+  const { org, refetchAll, accessToken } = useAdminUser();
 
   const router = useHistory();
 
@@ -22,7 +22,13 @@ const Login = () => {
           onClick={async () => {
             await loginWithPopup();
             await refetchAll();
-
+            Mixpanel.track(`${org.name} logged in`, {
+              type: 'Organization',
+              orgName: org.name,
+              orgBody: org.org_body,
+              orgID: org.id,
+              loggedInDate: new Date().toISOString().split('T')[0],
+            });
             router.push('/admin');
           }}
         >

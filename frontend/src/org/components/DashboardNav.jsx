@@ -24,6 +24,7 @@ const NavDashboard = () => {
       );
     }
   };
+
   return (
     <nav className="side-nav">
       <img src={logo} alt="Logo" className="logo" />

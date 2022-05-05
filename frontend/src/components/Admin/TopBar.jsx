@@ -5,7 +5,7 @@ import orgLogo from '$static/assets/gdsc_logo.svg';
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useAdminUser } from '$lib/context/AdminContext';
-
+import Mixpanel from '$lib/mixpanel';
 const Container = styled('div')(({ theme }) => ({
   borderBottom: `1px solid ${theme.colors.gray[300]}`,
   height: '80px',
@@ -89,6 +89,9 @@ we support mobile screens */}
           >
             <MenuItem
               onClick={() => {
+                Mixpanel.track(`${org.user} logged out`, {
+                  loggedOutDate: new Date().toISOString().split('T')[0],
+                });
                 handleClose();
                 logOut();
               }}

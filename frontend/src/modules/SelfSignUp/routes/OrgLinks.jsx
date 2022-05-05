@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAdminUser } from '$lib/context/AdminContext';
 import { kebabCase } from '$lib/utils/kebabCase';
 import http from '$lib/http';
+import Mixpanel from '$lib/mixpanel';
 
 const Label = styled(InputLabel)(({ theme }) => ({
   fontWeight: 600,
@@ -104,6 +105,14 @@ const OrgLinks = (props) => {
     if (res.status === 200) {
       setOrg(res.data);
       router.push('/admin');
+      Mixpanel.people.set({
+        type: 'Organization',
+        orgName: orgForm.name,
+        orgBody: orgForm.org_body,
+        orgID: userData.id,
+        createEventClicked: 0,
+        orgCreatedDate: new Date().toISOString().split('T')[0],
+      });
     }
   };
 

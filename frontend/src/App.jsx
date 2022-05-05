@@ -6,7 +6,6 @@ import Settings from './org/views/Settings';
 import { OrgInfo, OrgLogo, OrgLinks, Login } from '$modules/SelfSignUp/routes';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '$lib/theme';
-
 import { OrgPageRoutes } from '$modules/OrgPage/routes/index';
 import { EventPagesRoutes } from '$modules/EventPage/routes/index';
 import { Landing } from '$modules/StudentLanding/routes';
@@ -16,6 +15,7 @@ import { DashboardRoutes } from '$modules/Dashboard';
 import { EventWizardRoutes } from '$modules/EventWizard';
 
 const App = () => {
+  
   return (
     <ThemeProvider theme={theme}>
       <Switch>

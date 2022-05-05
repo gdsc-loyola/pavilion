@@ -101,7 +101,7 @@ const Preview = () => {
     });
   };
 
-  const { org } = useAdminUser();
+  const { org, accessToken, userData } = useAdminUser();
 
   return (
     <>

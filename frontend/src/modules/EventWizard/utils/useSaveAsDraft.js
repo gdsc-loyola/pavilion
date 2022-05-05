@@ -12,6 +12,7 @@ import { isFile } from './isFile';
  * pathAfterUpdate?: string
  * }} params
  */
+
 export const useSaveAsDraft = (params = {}) => {
   const { accessToken, refetchOrg } = useAdminUser();
   const { pathAfterUpdate = '' } = params;
@@ -40,6 +41,7 @@ export const useSaveAsDraft = (params = {}) => {
     fd.append('is_past_event', details.is_past_event);
     fd.append('old_respondents', details.responsesSheet);
     fd.append('form_description', details.formDescription);
+
     await http.put(`events/${details.id}/`, fd, {
       headers: {
         authorization: `Bearer ${accessToken}`,

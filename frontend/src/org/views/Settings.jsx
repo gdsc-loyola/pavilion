@@ -13,6 +13,7 @@ import AdminLayout from '$components/Admin/AdminLayout';
 import { useAdminUser } from '$lib/context/AdminContext';
 import http from '$lib/http';
 import { kebabCase } from '$lib/utils/kebabCase';
+import Mixpanel from '$lib/mixpanel';
 
 const FormField = styled(TextField)({
   '& .MuiOutlinedInput-root': {
@@ -166,6 +167,7 @@ const Settings = () => {
   };
 
   const saveChanges = async () => {
+    await Mixpanel.track(`${org.name} edited Settings`);
     const fd = new FormData();
     Object.entries(orgForm).forEach(([key, value]) => {
       if (key === 'step') {

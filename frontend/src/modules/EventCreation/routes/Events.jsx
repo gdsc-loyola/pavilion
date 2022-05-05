@@ -10,6 +10,7 @@ import { useEventsStore } from '../stores/useEventsStore';
 import { useAdminUser } from '$lib/context/AdminContext';
 import http from '$lib/http';
 import { useHistory } from 'react-router-dom';
+import Mixpanel from '$lib/mixpanel';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -96,7 +97,10 @@ const Events = () => {
           </Grid>
           <Grid item container xs={4} sm={7} md={6} lg={7} xl={9} justifyItems="flex-end">
             <Button
-              onClick={openModal}
+              onClick={() => {
+                Mixpanel.people.increment('createEventClicked');
+                openModal();
+              }}
               size="small"
               sx={{
                 height: '100%',
@@ -198,6 +202,15 @@ const Events = () => {
                 }
               );
               isCreatingRef.current = false;
+              Mixpanel.track(`${org.name} created an event`, {
+                name: 'Untitled Event',
+                eventStartDate: new Date().toISOString().split('T')[0],
+                eventEndDate: new Date().toISOString().split('T')[0],
+                location: '',
+                desc: '',
+                status: 'Draft',
+                eventCreatedDate: new Date().toISOString().split('T')[0],
+              });
 
               router.push(`/admin/events/${res.data.id}/details`);
             }}
@@ -244,7 +257,7 @@ const Events = () => {
                 }
               );
               isCreatingRef.current = false;
-
+              Mixpanel.track(`${org.name} created a past event`);
               router.push(`/admin/events/${res.data.id}/details`);
             }}
           >

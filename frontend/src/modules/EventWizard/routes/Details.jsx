@@ -176,6 +176,7 @@ const Details = (props) => {
 
     fd.append('location', details.location);
     fd.append('name', details.name);
+    fd.append('detail', details.name);
     fd.append('start_date', details.startDate);
     fd.append('end_date', details.endDate);
     var utc = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
