@@ -23,8 +23,7 @@ const TextFieldWithSubtitle = ({ subtitleText, label, maxLength, changeFunction 
     });
   };
 
-  var changeFunction;
-  var value;
+  let value = '';
   if (label == 'ID Number') {
     changeFunction = (e) => handleIDNumberChange(e);
     value = registration.idnumber;

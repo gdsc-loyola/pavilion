@@ -51,8 +51,8 @@ const TopBar = ({ children, sidebar, paddingBig = true }) => {
           }}
           value={details.name || ''}
           sx={{
-            width: details.name ? details.name.length * 9 + 100 : '0px',
-            border: 'none',
+            width: details.name ? details.name.length * 9 + 100 : '150px',
+            borderBottom: details.name ? 'none' : '1px solid #D1D5DB',
           }}
         />
       </Box>

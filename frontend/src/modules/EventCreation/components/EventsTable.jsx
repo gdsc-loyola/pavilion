@@ -112,7 +112,7 @@ const EventsTable = ({ data }) => {
   const sortedData = data.sort(defaultComparator);
   const rows = sortedData.map(createRow);
   const { setSelectedEvents, selectedEvents, setEvents, events } = useEventsStore();
-  const { accessToken } = useAdminUser();
+  const { accessToken, refetchOrg } = useAdminUser();
   const [orderBy, setOrderBy] = useState('');
   const [order, setOrder] = useState('asc');
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
@@ -135,6 +135,7 @@ const EventsTable = ({ data }) => {
       },
     });
 
+    refetchOrg();
     return res;
   };
 
@@ -150,6 +151,8 @@ const EventsTable = ({ data }) => {
         },
       });
     });
+
+    refetchOrg();
   };
 
   const handleRequestSort = (_event, property) => {

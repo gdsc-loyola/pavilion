@@ -52,7 +52,9 @@ const Events = () => {
       const filteredData = events.filter((event) => {
         if (
           tabVal === 'Published' &&
-          (event.status === 'Ongoing' || event.status === 'Published')
+          (event.status === 'Ongoing' ||
+            event.status === 'Published' ||
+            event.status === 'Completed')
         ) {
           if (event.name.toLowerCase().includes(val.toLowerCase())) {
             return true;
@@ -125,7 +127,10 @@ const Events = () => {
               <Tab
                 value="Published"
                 label={`Published (${
-                  events.filter((e) => e.status === 'Published' || e.status === 'Ongoing').length
+                  events.filter(
+                    (e) =>
+                      e.status === 'Published' || e.status === 'Ongoing' || e.status === 'Completed'
+                  ).length
                 })`}
               />
             </Tabs>

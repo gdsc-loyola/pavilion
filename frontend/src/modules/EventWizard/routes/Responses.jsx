@@ -134,7 +134,7 @@ const FileDownload = styled(DownloadIcon)({
   },
 });
 
-const ToggleSwitchPropBlackList = ['handleAcceptToggle', 'accepting'];
+const ToggleSwitchPropBlackList = [];
 const ToggleSwitch = styled(
   (props) => (
     <Switch
@@ -142,7 +142,7 @@ const ToggleSwitch = styled(
       disableRipple
       defaultChecked={props.accepting}
       checked={props.accepting}
-      onChange={(e) => props.handleAcceptToggle(e)}
+      onChange={props.handleAcceptToggle}
       {...props}
     />
   ),
@@ -205,20 +205,17 @@ const Responses = () => {
   }, []);
   useEffect(() => {
     if (org) {
-      console.log('org', org);
       fetchResponses();
     }
   }, [org]);
   const [eventLink, setEventLink] = useState('');
 
   const fetchResponses = async () => {
-    // TODO: fetch responses with event ID
     const res = await http.get(`/events/${eventId}`);
     if (Array.isArray(res.data)) {
       setResponses(res.data);
       setOriginalResponses(res.data);
       const event = res.data[0].event;
-      console.log('event', event);
       setAccepting(event.accepting_responses ?? false);
       setEventName(event.name);
       // TODO pav base url
@@ -229,7 +226,6 @@ const Responses = () => {
       );
     } else {
       const event = res.data;
-      console.log('event', event);
       setAccepting(event.accepting_responses ?? false);
       setEventName(event.name);
       setEventLink(
@@ -358,12 +354,11 @@ const Responses = () => {
   };
 
   const updateAcceptStatus = async (status) => {
-    // TODO patch to event id
     const fd = new FormData();
     fd.append('accepting_responses', status);
     await http
       .patch(
-        '/events/1/',
+        `/events/${eventId}/`,
         {
           accepting_responses: status,
         },
@@ -580,7 +575,7 @@ const Responses = () => {
 
   return (
     <Layout sidebar>
-      <TopBar eventName={eventName}>
+      <TopBar eventName={eventName} sidebar>
         <Box
           sx={{
             display: 'flex',

@@ -126,15 +126,13 @@ class OrgsViewSet(viewsets.ModelViewSet):
         if not instance:
             # return Response(status=status.HTTP_404_NOT_FOUND)
             return Response("Instance not found.", status=404)
-        print(self.request.data)
-        serializer = self.get_serializer(instance, data=self.request.data, partial=True)
+        serializer = self.get_serializer(instance, data=self.request.data, partial=True, context={'request': request})
 
         if not serializer.is_valid():
             return Response("Serializer not valid.", status=401)
         serializer.save()
-        print(serializer.data['name'])
         mp.track(serializer.data['name'], "Updated org information", {
-            'old_data': OrgsSerializer(instance).data,
+            'old_data': OrgsSerializer(instance, context={'request': request}).data,
             'new_data': serializer.data
         })
         return Response(serializer.data, status=200)

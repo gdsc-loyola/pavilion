@@ -194,12 +194,12 @@ const Details = (props) => {
     router.push('registration');
   };
   return (
-    <Layout sidebar={!details.is_past_event}>
+    <Layout>
       <Header pastevent={details.is_past_event} />
 
       <Box
         sx={{
-          marginLeft: details.is_past_event ? '144px' : '56px',
+          marginLeft: '56px',
           marginTop: '40px',
           width: '552px',
         }}
@@ -435,7 +435,7 @@ const Details = (props) => {
       </Box>
       <Box
         sx={{
-          marginLeft: details.is_past_event ? '144px' : '56px',
+          marginLeft: '56px',
           marginRight: '56px',
           marginTop: '104px',
           display: 'flex',
@@ -635,7 +635,7 @@ const Details = (props) => {
           </Stack>
         </Box>
       </Box>
-      {details.is_past_event ? null : (
+      {/* {details.is_past_event ? null : (
         <Box
           sx={{
             display: 'flex',
@@ -651,7 +651,7 @@ const Details = (props) => {
             <SvgIcon fontSize="small" component={KeyboardArrowRightIcon} />
           </Button>
         </Box>
-      )}
+      )} */}
     </Layout>
   );
 };

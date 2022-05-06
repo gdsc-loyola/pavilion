@@ -7,6 +7,7 @@ import EventsDataService from '$services/events.service';
 import OrgsDataService from '$services/orgs.service';
 import OtherEvents from '../components/OtherEvents';
 import ScrollToTop from '$components/ScrollToTop';
+import { shuffleByDay } from '$lib/utils/shuffleByDay';
 import { useBoolean } from '$lib/utils/useBoolean';
 import RegistrationForm from '../components/RegistrationForm';
 import Banner from '../components/Banner';
@@ -106,19 +107,22 @@ const EventPage = (props) => {
     <>
       <ScrollToTop smooth />
       <Layout>
-        <div
-          style={{
+        <Box
+          sx={{
             height: '360px',
             width: '100%',
             position: 'absolute',
-            marginTop: ' 70px',
+            marginTop: '70px',
             maxWidth: '100vw',
             zIndex: '-1',
             backgroundImage: `url(${eventForm.coverPhoto})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            [theme.breakpoints.between('xs', 'sm')]: {
+              marginTop: '59px',
+            },
           }}
-        ></div>
+        ></Box>
         <Box
           sx={{
             paddingTop: '80px',
@@ -206,6 +210,7 @@ const EventPage = (props) => {
             <OtherEvents
               events={otherEvents}
               orgLogo={orgForm.orgLogo}
+              orgName={orgForm.orgName}
               orgShortName={orgForm.orgShortName}
             />
           )}

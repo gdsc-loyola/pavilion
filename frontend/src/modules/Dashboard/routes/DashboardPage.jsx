@@ -3,6 +3,8 @@ import AdminLayout from '$components/Admin/AdminLayout';
 import { Button, Container as C, styled } from '@mui/material';
 
 import dashboardEmpty from '$static/assets/dashboard_empty.svg';
+import { useHistory } from 'react-router-dom';
+import { useAdminUser } from '$lib/context/AdminContext';
 
 const Container = styled(C)(({ theme }) => ({
   display: 'grid',
@@ -33,6 +35,8 @@ const Container = styled(C)(({ theme }) => ({
 }));
 
 const DashboardPage = () => {
+  const { org } = useAdminUser();
+  const router = useHistory();
   return (
     <AdminLayout>
       <Container>
@@ -44,9 +48,16 @@ const DashboardPage = () => {
             now, try adding a past event to your organization&apos;s web page!
           </p>
           <div className="btn-container">
-            <Button variant="contained">Create an event</Button>
+            <Button variant="contained" onClick={() => router.push('/admin/events')}>
+              Create an event
+            </Button>
 
-            <Button variant="outlined">View my webpage</Button>
+            <Button
+              variant="outlined"
+              onClick={() => router.push(`/organizations/${org.short_name}`)}
+            >
+              View my webpage
+            </Button>
           </div>
         </div>
       </Container>

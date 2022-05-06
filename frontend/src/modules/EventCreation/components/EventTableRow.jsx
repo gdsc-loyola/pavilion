@@ -28,16 +28,38 @@ const StyledTableRow = styled(MUITableRow)(({ theme }) => ({
     background: theme.colors.gray[200],
     color: theme.colors.gray[500],
   },
-  '.status--published': {
-    background: theme.colors.green[100],
-    color: theme.colors.green[400],
+  '.status--upcoming': {
+    background: theme.colors.yellow[200],
+    color: theme.colors.yellow[500],
   },
 
   '.status--ongoing': {
     background: theme.colors.yellow[200],
     color: theme.colors.yellow[500],
   },
+  '.status--completed': {
+    background: theme.colors.green[200],
+    color: theme.colors.green[500],
+  },
 }));
+
+const getStatus = (startDate, endDate) => {
+  const now = new Date().getTime();
+  const end = new Date(endDate).getTime();
+  const start = new Date(startDate).getTime();
+
+  if (start > now) {
+    return 'Upcoming';
+  }
+
+  if (start <= now && end >= now) {
+    return 'Ongoing';
+  }
+
+  if (end < now) {
+    return 'Completed';
+  }
+};
 
 /**
  * @type {(props: {
@@ -63,6 +85,7 @@ const EventTableRow = ({ row, selected, onSelected, onDelete }) => {
     await onDelete(row.id);
   };
 
+  const status = getStatus(row.start_date, row.end_date);
   return (
     <StyledTableRow className={selected ? 'selected' : ''}>
       <TableCell align="left">
@@ -77,7 +100,7 @@ const EventTableRow = ({ row, selected, onSelected, onDelete }) => {
       <TableCell align="left">{row.dates}</TableCell>
       <TableCell align="left">{row.last_updated}</TableCell>
       <TableCell align="left">
-        <span className={`status status--${row.status.toLowerCase()}`}>{row.status}</span>
+        <span className={`status status--${status.toLowerCase()}`}>{status}</span>
       </TableCell>
       <TableCell padding="checkbox">
         <ClickAwayListener onClickAway={handleClose}>
