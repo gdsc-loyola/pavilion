@@ -43,11 +43,14 @@ const StyledTableRow = styled(MUITableRow)(({ theme }) => ({
   },
 }));
 
-const getStatus = (startDate, endDate) => {
+const getStatus = (startDate, endDate, status) => {
   const now = new Date().getTime();
   const end = new Date(endDate).getTime();
   const start = new Date(startDate).getTime();
 
+  if (status === 'Draft') {
+    return 'Draft';
+  }
   if (start > now) {
     return 'Upcoming';
   }
@@ -85,7 +88,7 @@ const EventTableRow = ({ row, selected, onSelected, onDelete }) => {
     await onDelete(row.id);
   };
 
-  const status = getStatus(row.start_date, row.end_date);
+  const status = getStatus(row.start_date, row.end_date, row.status);
   return (
     <StyledTableRow className={selected ? 'selected' : ''}>
       <TableCell align="left">
