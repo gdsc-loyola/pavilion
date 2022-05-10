@@ -59,6 +59,7 @@ const Details = (props) => {
   const { accessToken } = useAdminUser();
 
   const { details, setDetails } = useEventDetailsStore();
+  console.log(details);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -383,6 +384,7 @@ const Details = (props) => {
               size="normal"
               variant="outlined"
               label="Link to responses"
+              value={details.responsesSheet}
               onChange={(e) => {
                 handleResponsesSheetChange(e.target.value);
               }}

@@ -37,7 +37,7 @@ const Preview = () => {
   const { publishEvent } = usePublish({
     pathAfterUpdate: `/admin/events`,
   });
-  const { saveAsDraft } = useSaveAsDraft('/admin/events');
+  const { saveAsDraft } = useSaveAsDraft({ pathAfterUpdate: '/admin/events' });
 
   const isURLHttps = (url) => {
     if (url instanceof File) {

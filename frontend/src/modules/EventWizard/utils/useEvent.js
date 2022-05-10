@@ -25,6 +25,8 @@ export const useEvent = (id) => {
         eventphoto4: data.event_photo4,
         startDate: data.start_date,
         endDate: data.end_date,
+        responsesSheet: data.old_respondents,
+        formDescription: data.form_description,
         ...data,
         __hasFetched: true,
       });
