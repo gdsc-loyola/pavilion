@@ -59,7 +59,6 @@ const Details = (props) => {
   const { accessToken } = useAdminUser();
 
   const { details, setDetails } = useEventDetailsStore();
-  console.log(details);
 
   const handleDragOver = (e) => {
     e.preventDefault();
