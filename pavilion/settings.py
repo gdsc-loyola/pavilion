@@ -47,8 +47,9 @@ INTERNAL_IPS = (
 ALLOWED_HOSTS = [
     'dev.gpavilion.org',
     'gpavilion-dev.herokuapp.com',
-    'gpavilion-staging.herokuapp.com'
+    'gpavilion-staging.herokuapp.com',
     'staging.gpavilion.org', 
+    'gpavilion.org',
     '127.0.0.1', 
     'localhost'
 ]

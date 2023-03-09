@@ -2,7 +2,8 @@
 
 
 <h2>Changelogs</h2>
-Give a brief description of your task here (ex: Coded Navigation Bar, Fixed Home text font size, etc.)
+
+**Give a brief description of your task here (ex: Coded Navigation Bar, Fixed Home text font size, etc.)**
 <!-- Put subtasks here (These are examples you can replace) -->
 <h4>Subtasks</h4>
 
@@ -34,3 +35,12 @@ Give a brief description of your task here (ex: Coded Navigation Bar, Fixed Home
 - [ ] Bug 1
 - [ ] Bug 2
 - [ ] Bug 3
+
+
+<h2>Affects</h2>
+<!-- Include branches that are affected by your changes -->
+<!-- To connect a branch/pull request to this pull request, type in "#<pull request number>" -->
+
+- [ ] #1
+- [ ] Branch 2
+- [ ] Branch 3
