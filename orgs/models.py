@@ -2,12 +2,37 @@ from django.db import models
 from django.contrib.auth.models import User, BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
 
+'''
+This will be used for the creation of Organization Accounts
+This is separate from the Organization Object
+'''
+class OrganizationAccount(models.Model):
+    user = models.CharField(max_length=100, null=False)
+    password = models.CharField(max_length=100, null=False)
+
+    def returnUser(self):
+        return self.user
+
+    def returnPassword(self):
+        return self.password
+
+    def __str__(self):
+        return "Username:{}, Password:{}".format(self.user,self.password)
+    
+
+'''
+This object represents the Organization's data and information
+This object commonly interacts with the Frontend through its fields
+'''
 class Organization(models.Model):
     org_body_choices = [
         ("COA", "COA"),
         ("LIONS", "LIONS"),
         ("Sanggu", "Sanggu")
     ]
+
+    #Since Org accounts already existed, we just set default = None for Database
+    account = models.ForeignKey(OrganizationAccount, on_delete=models.CASCADE, default=None)
 
     name = models.CharField(max_length=100)
     short_name = models.CharField(max_length=100)
@@ -24,6 +49,8 @@ class Organization(models.Model):
     
     def __str__(self):
         return "{}({}), {}. {}".format(self.name, self.short_name, self.org_body, self.user)
+
+
 
 class Event(models.Model):
     status_choices = [

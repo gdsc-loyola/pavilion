@@ -15,6 +15,13 @@ from functools import wraps
 import os
 from mixpanel import Mixpanel
 
+# This View is for the Logged in Org
+# Displays Information in the Org Account
+class OrganizationAccountViewSet(viewsets.ModelViewSet):
+    pass
+
+
+
 mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 # Lead Viewset
 class EventsViewSet(viewsets.ModelViewSet):
