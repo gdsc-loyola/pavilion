@@ -144,3 +144,11 @@
 1. OrgDetailInEventSerializer
 2. OrgsSerializer
 3. StudentSerializer
+
+## `urls.py`
+
+- Uses routers and `ViewSets` to automatically configure paths.
+
+## `utils.py`
+
+- Refer to https://auth0.com/docs/quickstart/backend/django/01-authorization for details.
