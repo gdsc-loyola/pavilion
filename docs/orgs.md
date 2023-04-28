@@ -42,3 +42,33 @@
 9. is_past_event
 10. start_date
 11. end_date
+
+### StudentViewSet
+
+- A simple ViewSet for viewing and editing students.
+
+### StudentToEventViewSet
+
+- A simple ViewSet for viewing and editing students assigned to or belonging to an event.
+
+### OrgsViewSet
+
+- A simple ViewSet for viewing and editing the different organizations.
+- Offers CRUD actions.
+- Uses a "slug" lookup field to query organizations. Uses `OrgsSerializer` to create new org.
+
+### UserViewSet
+
+- Retrieves user based on username or lists all users in the database.
+
+### RegisterViewSet
+
+- Creates new users based off parameters given.
+- Unknown: password field in `def create()`? Not sure
+
+### `def get_token_auth_header()` & `def requires_scope()`
+
+- Enforce scope-based authorization for accessing protected resources
+  using JSON Web Tokens (JWTs) and the Auth0 authentication service.
+
+##
