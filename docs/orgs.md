@@ -71,4 +71,76 @@
 - Enforce scope-based authorization for accessing protected resources
   using JSON Web Tokens (JWTs) and the Auth0 authentication service.
 
-##
+## `models.py`
+
+### Organization
+
+1. name
+2. short_name
+3. slug
+4. desc
+5. org_body (COA, LIONS, Sanggu)
+6. logo
+7. social media links
+8. user (presumably organization user)
+
+### Event
+
+1. name
+2. cover_photo
+3. short_name
+4. start_date
+5. end_date
+6. location
+7. description
+8. event photos
+9. last_updated
+10. status
+11. accepting_responses
+12. is_past_event
+13. org (org that created event)
+
+### Student
+
+1. name
+2. id_number
+3. email
+4. year
+5. course
+
+### StudentToEvent
+
+1. event
+2. student
+3. date_submitted
+4. last_updated
+
+## `permissions.py`
+
+- All permissions inherit BasePermission. Refer to Django REST doc for details.
+
+### Permissions
+
+1. IsGetOrIsAuthenticated
+2. IsPostOrIsAuthenticated
+3. IsPostAndIsNotAuthenticated
+4. IsGet
+
+## `serializers.py`
+
+- Similar to Django's native `Form`s.
+- ModelSerializer: offers automatic fields, create(), update(), and automatic validators
+- HyperlinkedModelSerializer: uses hyperlinks to depict relationships, url instead of pk
+
+### ModelSerializers
+
+1. UserSerializer
+2. UsernameSerializer
+3. EventsSerializer
+4. StudentToEventSerializer
+
+### HyperlinkedModelSerializers
+
+1. OrgDetailInEventSerializer
+2. OrgsSerializer
+3. StudentSerializer
