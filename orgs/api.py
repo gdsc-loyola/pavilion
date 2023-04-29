@@ -1,10 +1,11 @@
 import jwt
-from orgs.models import Event, Organization, StudentToEvent, Student
+from orgs.models import Event, Organization, StudentToEvent, Student, OrganizationAccount
 from rest_framework import viewsets, permissions
-from rest_framework.response import Response
+from rest_framework.response import Response 
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
-from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer, OrganizationAccountSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -18,9 +19,28 @@ from mixpanel import Mixpanel
 # This View is for the Logged in Org
 # Displays Information in the Org Account
 class OrganizationAccountViewSet(viewsets.ModelViewSet):
-    pass
+    query = Organization.objects.all()
+    permission_classes = [
+        IsGetOrIsAuthenticated
+    ]
+    serializer_class = OrganizationAccountSerializer
 
+    def viewCurrent(self,request,pk): #no self.user.is_authenticated since this could be viewed by public
+        chosenOrgAccount = OrganizationAccount.objects.get(pk=pk)
+        OrgPublic = Organization.objects.filter(account = chosenOrgAccount)
+        if chosenOrgAccount:
+            serializer = OrganizationAccountSerializer(data=OrgPublic)
+            return Response(serializer.data)
 
+    @api_view(['POST'])   
+    def CreateAccount(self, request):
+        serializer = OrganizationAccountSerializer(data=request.data) 
+        if serializer.is_valid(raise_exception=True):
+            # A new OrgAccount object
+            instance = serializer.save()
+        return Response(instance)
+    
+    
 
 mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 # Lead Viewset
