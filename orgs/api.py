@@ -1,6 +1,6 @@
 import jwt
 from orgs.models import Event, Organization, StudentToEvent, Student, OrganizationAccount
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
@@ -16,33 +16,47 @@ from functools import wraps
 import os
 from mixpanel import Mixpanel
 
+mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
+
 # This View is for the Logged in Org
-# Displays Information in the Org Account
-class OrganizationAccountViewSet(viewsets.ModelViewSet):
+# Creates Organization Account and Displays Organization Accounts
+class OrganizationAccountCreateListViewSet(generics.ListCreateAPIView):
     query = Organization.objects.all()
+    serializer_class = OrganizationAccountSerializer
     permission_classes = [
         IsGetOrIsAuthenticated
     ]
-    serializer_class = OrganizationAccountSerializer
 
-    def viewCurrent(self,request,pk): #no self.user.is_authenticated since this could be viewed by public
-        chosenOrgAccount = OrganizationAccount.objects.get(pk=pk)
-        OrgPublic = Organization.objects.filter(account = chosenOrgAccount)
-        if chosenOrgAccount:
-            serializer = OrganizationAccountSerializer(data=OrgPublic)
-            return Response(serializer.data)
-
-    @api_view(['POST'])   
-    def CreateAccount(self, request):
-        serializer = OrganizationAccountSerializer(data=request.data) 
+    #This is automatically called if the action is "Creation" of an Organization account
+    #If action is simply viewing, then no creation
+    def CreateAccount(self, serializer):
+        orgs = OrganizationAccount.objects.all()
+        for user in orgs:
+            if serializer.data['user'] == user.user:
+                return Response('Username already exists.', 401)
         if serializer.is_valid(raise_exception=True):
             # A new OrgAccount object
             instance = serializer.save()
-        return Response(instance)
-    
-    
+            return Response(serializer.data)
+        else:
+            return Response('Eithe the username or the password is too long', 401)
+        
+class OrganizationAccountDetailViewSet(generics.RetrieveAPIView):
+    orgs = OrganizationAccount.objects.all()
+    serializer_class = OrganizationAccountSerializer
+    permission_classes = [
+        IsGetOrIsAuthenticated
+    ]
+    # Response will automatically return the OrgAccount model object
 
-mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
+
+'''
+OrgAccount
+    Delete ViewSet
+    Update ViewSet
+'''
+
+
 # Lead Viewset
 class EventsViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -52,7 +66,7 @@ class EventsViewSet(viewsets.ModelViewSet):
     serializer_class = EventsSerializer
 
     def retrieve(self, request, pk, *args, **kwargs):
-        current_event = Event.objects.get(pk=pk)
+        current_event = Event.objects.get(pk=pk) 
         query = current_event.student.all() #.student comes from related_name in models.py
         if query:
             serializer = StudentToEventSerializer(query, many=True)

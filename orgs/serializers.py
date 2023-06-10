@@ -66,6 +66,7 @@ class OrganizationAccountSerializer(serializers.ModelSerializer):
             'user',
             'password',
         )
+    
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='student-detail', lookup_field='id_number')

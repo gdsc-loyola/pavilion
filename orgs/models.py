@@ -9,7 +9,7 @@ This is separate from the Organization Object
 class OrganizationAccount(models.Model):
     user = models.CharField(max_length=100, null=False)
     password = models.CharField(max_length=100, null=False)
-
+    objects = models.manager
     def returnUser(self):
         return self.user
 
