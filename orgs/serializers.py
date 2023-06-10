@@ -1,7 +1,9 @@
 from dataclasses import fields
 from rest_framework import serializers
-from orgs.models import Event, Organization, StudentToEvent, Student
+from orgs.models import Event, Organization, StudentToEvent, Student, OrganizationAccount
 from django.contrib.auth.models import User
+from .models import *
+from django.shortcuts import get_object_or_404
 
 # Event serializer
 class UserSerializer(serializers.ModelSerializer):
@@ -60,13 +62,45 @@ This is the Serializer for Org Account
 Used to verify Org account details if needed
  '''
 class OrganizationAccountSerializer(serializers.ModelSerializer):
-    model = Organization
+    model = OrganizationAccount
     class Meta:
         fields = (
             'user',
             'password',
+            'organization',
+            'email'
         )
-    
+
+        '''
+        #Unclear of 'organization' data field will truly contain the Foreign Key Organization data 
+        when passed as JSON
+        '''
+
+class OrganizationAccountLoginSerializer(serializers.ModelSerializer):
+    model = OrganizationAccount
+    def get_Checker(self,obj):
+        #Obj is the model object
+        account = OrganizationAccount.objects.filter(pk=obj.id)
+        if account == None or obj.password != account.password:
+            return False
+        else:
+            return True
+
+    class Meta:
+        fields = (
+            'user',
+            'password',
+            'Checker'
+        )
+
+class OrganizationUpdateSerializer(serializers.ModelSerializer):
+    model = OrganizationAccount
+    class Meta:
+        fields = (
+            'user',
+            'password',
+            'email'
+        )
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='student-detail', lookup_field='id_number')

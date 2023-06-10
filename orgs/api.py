@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
-from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer, OrganizationAccountSerializer
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer, OrganizationAccountSerializer, OrganizationAccountLoginSerializer, OrganizationUpdateSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -19,7 +19,7 @@ from mixpanel import Mixpanel
 mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 
 # This View is for the Logged in Org
-# Creates Organization Account and Displays Organization Accounts
+# Creates Organization Account OR Displays Organization Accounts
 class OrganizationAccountCreateListViewSet(generics.ListCreateAPIView):
     query = Organization.objects.all()
     serializer_class = OrganizationAccountSerializer
@@ -28,7 +28,7 @@ class OrganizationAccountCreateListViewSet(generics.ListCreateAPIView):
     ]
 
     #This is automatically called if the action is "Creation" of an Organization account
-    #If action is simply viewing, then no creation
+    #If action is simply viewing a list, then no creation
     def CreateAccount(self, serializer):
         orgs = OrganizationAccount.objects.all()
         for user in orgs:
@@ -36,25 +36,54 @@ class OrganizationAccountCreateListViewSet(generics.ListCreateAPIView):
                 return Response('Username already exists.', 401)
         if serializer.is_valid(raise_exception=True):
             # A new OrgAccount object
-            instance = serializer.save()
+            serializer.save()
+
+            #Do something with the data of a newly registered OrgAccount Object
             return Response(serializer.data)
         else:
-            return Response('Eithe the username or the password is too long', 401)
+            return Response('Either the username or the password is too long', 401)
         
+#Login for Organization Account
+class OrganizationAccountLoginViewSet(generics.RetrieveAPIView):
+    org = OrganizationAccount.objects.all()
+    serializer_class = OrganizationAccountLoginSerializer
+    lookup_field = 'pk'
+    permission_classes = [
+        IsGetOrIsAuthenticated
+    ]
+
+    #Serializer for Organization Account Login will have their own checker method for validation
+    #Response will contain a 'checker' indicating if login is valid or not
+
+
+#Fetch data for an Organization account 
 class OrganizationAccountDetailViewSet(generics.RetrieveAPIView):
     orgs = OrganizationAccount.objects.all()
     serializer_class = OrganizationAccountSerializer
     permission_classes = [
         IsGetOrIsAuthenticated
     ]
+    lookup_field = 'pk'
     # Response will automatically return the OrgAccount model object
 
 
-'''
-OrgAccount
-    Delete ViewSet
-    Update ViewSet
-'''
+class OrganizationUpdateViewSet(viewsets.ModelViewSet):
+    orgs = OrganizationAccount.objects.all()
+    serializer_class = None
+    permission_classes = [
+        IsGetOrIsAuthenticated
+    ]
+    lookup_field = 'pk'
+
+    def update(self, request, pk, *args, **kwargs):
+        account = OrganizationAccount.objects.filter(pk=pk)
+        usernames = OrganizationAccount.objects.all().values('user')
+        if account.user in usernames:
+            return Response('Username already exists')
+        else:
+            newobject = OrganizationUpdateSerializer(data=request.data)
+            newobject.save()
+            return Response(newobject.data)
 
 
 # Lead Viewset
