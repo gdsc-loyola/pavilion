@@ -20,28 +20,46 @@ mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 
 # This View is for the Logged in Org
 # Creates Organization Account OR Displays Organization Accounts
-class OrganizationAccountCreateListViewSet(generics.ListCreateAPIView):
+class OrganizationAccountViewSet(viewsets.ModelViewSet):
     query = Organization.objects.all()
     serializer_class = OrganizationAccountSerializer
     permission_classes = [
-        IsGetOrIsAuthenticated
+        #IsGetOrIsAuthenticated
     ]
+    lookup_field = 'pk'
 
     #This is automatically called if the action is "Creation" of an Organization account
     #If action is simply viewing a list, then no creation
-    def CreateAccount(self, serializer):
+    def list(self, request, *args, **kwargs):
+        return self.list(request)
+
+    def retrieve(self, request, *args, **kwargs):
+        return self.retrieve(request)
+
+    def create(self, request):
         orgs = OrganizationAccount.objects.all()
         for user in orgs:
-            if serializer.data['user'] == user.user:
+            if request.data['user'] == user.user:
                 return Response('Username already exists.', 401)
+        
+        serializer = OrganizationAccountSerializer(request.data)
+
         if serializer.is_valid(raise_exception=True):
             # A new OrgAccount object
-            serializer.save()
+            OrgAccount = OrganizationAccount.objects.create(
+                user = request.data['user'],
+                password = request.data['password'],
+                email = request.data['email'],
+                organization = None
+            )
+            OrgAccount.save()
+            serializer = OrganizationAccount(OrgAccount)
 
             #Do something with the data of a newly registered OrgAccount Object
             return Response(serializer.data)
         else:
             return Response('Either the username or the password is too long', 401)
+
         
 #Login for Organization Account
 class OrganizationAccountLoginViewSet(generics.RetrieveAPIView):
@@ -49,29 +67,18 @@ class OrganizationAccountLoginViewSet(generics.RetrieveAPIView):
     serializer_class = OrganizationAccountLoginSerializer
     lookup_field = 'pk'
     permission_classes = [
-        IsGetOrIsAuthenticated
+        #IsGetOrIsAuthenticated
     ]
 
     #Serializer for Organization Account Login will have their own checker method for validation
     #Response will contain a 'checker' indicating if login is valid or not
 
 
-#Fetch data for an Organization account 
-class OrganizationAccountDetailViewSet(generics.RetrieveAPIView):
-    orgs = OrganizationAccount.objects.all()
-    serializer_class = OrganizationAccountSerializer
-    permission_classes = [
-        IsGetOrIsAuthenticated
-    ]
-    lookup_field = 'pk'
-    # Response will automatically return the OrgAccount model object
-
-
 class OrganizationUpdateViewSet(viewsets.ModelViewSet):
     orgs = OrganizationAccount.objects.all()
-    serializer_class = None
+    serializer_class = OrganizationUpdateSerializer
     permission_classes = [
-        IsGetOrIsAuthenticated
+        #IsGetOrIsAuthenticated
     ]
     lookup_field = 'pk'
 

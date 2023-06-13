@@ -39,7 +39,7 @@ class OrganizationAccount(models.Model):
     user = models.CharField(max_length=100, null=False)
     password = models.CharField(max_length=100, null=False)
     email = models.CharField(max_length=100, null=False)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank= True, default=None)
     objects = models.manager
     def returnUser(self):
         return self.user
