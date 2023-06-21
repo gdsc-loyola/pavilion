@@ -57,19 +57,33 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
             "events")
         lookup_field = 'slug'
 
+
+
+
+
+
 '''
 This is the Serializer for Org Account
 Used to verify Org account details if needed
  '''
-class OrganizationAccountSerializer(serializers.ModelSerializer):
-    model = OrganizationAccount
+class OrganizationAccountSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='orgdetail')
+
     class Meta:
-        fields = (
-            'user',
-            'password',
-            'organization',
-            'email'
-        )
+        model = OrganizationAccount
+        fields = '__all__'
+
+        '''
+        #Unclear of 'organization' data field will truly contain the Foreign Key Organization data 
+        when passed as JSON
+        '''
+
+class OrganizationCreateAccountSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='orgcreation')
+
+    class Meta:
+        model = OrganizationAccount
+        fields = '__all__'
 
         '''
         #Unclear of 'organization' data field will truly contain the Foreign Key Organization data 
@@ -101,6 +115,11 @@ class OrganizationUpdateSerializer(serializers.ModelSerializer):
             'password',
             'email'
         )
+
+
+
+
+
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='student-detail', lookup_field='id_number')

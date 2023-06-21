@@ -21,28 +21,34 @@ mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 # This View is for the Logged in Org
 # Creates Organization Account OR Displays Organization Accounts
 class OrganizationAccountViewSet(viewsets.ModelViewSet):
-    query = Organization.objects.all()
+    queryset = Organization.objects.all()
     serializer_class = OrganizationAccountSerializer
     permission_classes = [
-        #IsGetOrIsAuthenticated
+        IsGetOrIsAuthenticated
     ]
     lookup_field = 'pk'
 
     #This is automatically called if the action is "Creation" of an Organization account
     #If action is simply viewing a list, then no creation
-    def list(self, request, *args, **kwargs):
-        return self.list(request)
+    
+    def retrieve(self, request, pk):
+        print(request)
+        print(pk)
+        if pk is not None:
+            obj = OrganizationAccount.objects.filter(pk=pk)
+            response = OrganizationAccountSerializer(obj, many=True, context={'request':request})
+            return Response(response.data)
+        else:
+            return Response('No Organization Account Exists', 401)
 
-    def retrieve(self, request, *args, **kwargs):
-        return self.retrieve(request)
 
-    def create(self, request):
+    def create(self, request, pk, *args, **kwargs):
         orgs = OrganizationAccount.objects.all()
         for user in orgs:
             if request.data['user'] == user.user:
                 return Response('Username already exists.', 401)
         
-        serializer = OrganizationAccountSerializer(request.data)
+        serializer = OrganizationAccountSerializer(many=True, context={'request':request})
 
         if serializer.is_valid(raise_exception=True):
             # A new OrgAccount object
@@ -91,6 +97,9 @@ class OrganizationUpdateViewSet(viewsets.ModelViewSet):
             newobject = OrganizationUpdateSerializer(data=request.data)
             newobject.save()
             return Response(newobject.data)
+
+
+
 
 
 # Lead Viewset
