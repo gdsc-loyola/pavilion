@@ -36,7 +36,7 @@ This will be used for the creation of Organization Accounts
 This is separate from the Organization Object
 '''
 class OrganizationAccount(models.Model):
-    user = models.CharField(max_length=100, null=False)
+    name = models.CharField(max_length=100, null=False)
     password = models.CharField(max_length=100, null=False)
     email = models.CharField(max_length=100, null=False)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank= True, default=None)

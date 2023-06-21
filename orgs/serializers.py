@@ -68,10 +68,15 @@ Used to verify Org account details if needed
  '''
 class OrganizationAccountSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='orgdetail')
-
+    org = OrgsSerializer(read_only=True, many= True)
     class Meta:
         model = OrganizationAccount
-        fields = '__all__'
+        fields = (
+            'name',
+            'user',
+            'email',
+            'org'
+        )
 
         '''
         #Unclear of 'organization' data field will truly contain the Foreign Key Organization data 
@@ -83,7 +88,11 @@ class OrganizationCreateAccountSerializer(serializers.HyperlinkedModelSerializer
 
     class Meta:
         model = OrganizationAccount
-        fields = '__all__'
+        fields = (
+            'name',
+            'email',
+            'password'
+        )
 
         '''
         #Unclear of 'organization' data field will truly contain the Foreign Key Organization data 
@@ -94,7 +103,7 @@ class OrganizationAccountLoginSerializer(serializers.ModelSerializer):
     model = OrganizationAccount
     def get_Checker(self,obj):
         #Obj is the model object
-        account = OrganizationAccount.objects.filter(pk=obj.id)
+        account = OrganizationAccount.objects.filter(email=obj.email)
         if account == None or obj.password != account.password:
             return False
         else:
@@ -102,16 +111,17 @@ class OrganizationAccountLoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = (
-            'user',
+            'email',
             'password',
             'Checker'
         )
 
 class OrganizationUpdateSerializer(serializers.ModelSerializer):
-    model = OrganizationAccount
+
     class Meta:
+        model = OrganizationAccount
         fields = (
-            'user',
+            'name',
             'password',
             'email'
         )

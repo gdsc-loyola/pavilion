@@ -45,8 +45,8 @@ class OrganizationAccountViewSet(viewsets.ModelViewSet):
     def create(self, request, pk, *args, **kwargs):
         orgs = OrganizationAccount.objects.all()
         for user in orgs:
-            if request.data['user'] == user.user:
-                return Response('Username already exists.', 401)
+            if request.data['user'] == user.user or request.data['email' == user.email]:
+                return Response('Username or email already exists.', 401)
         
         serializer = OrganizationAccountSerializer(many=True, context={'request':request})
 
@@ -73,7 +73,7 @@ class OrganizationAccountLoginViewSet(generics.RetrieveAPIView):
     serializer_class = OrganizationAccountLoginSerializer
     lookup_field = 'pk'
     permission_classes = [
-        #IsGetOrIsAuthenticated
+        IsGetOrIsAuthenticated
     ]
 
     #Serializer for Organization Account Login will have their own checker method for validation
@@ -84,7 +84,7 @@ class OrganizationUpdateViewSet(viewsets.ModelViewSet):
     orgs = OrganizationAccount.objects.all()
     serializer_class = OrganizationUpdateSerializer
     permission_classes = [
-        #IsGetOrIsAuthenticated
+        IsPostAndIsAuthenticated
     ]
     lookup_field = 'pk'
 
