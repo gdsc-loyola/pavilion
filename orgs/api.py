@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
-from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer, OrganizationAccountSerializer, OrganizationAccountLoginSerializer, OrganizationUpdateSerializer
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer, OrganizationAccountSerializer, OrganizationCreateAccountSerializer, OrganizationAccountLoginSerializer, OrganizationUpdateSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -21,42 +21,67 @@ mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 # This View is for the Logged in Org
 # Creates Organization Account OR Displays Organization Accounts
 class OrganizationAccountViewSet(viewsets.ModelViewSet):
-    queryset = Organization.objects.all()
+    queryset = OrganizationAccount.objects.all()
     serializer_class = OrganizationAccountSerializer
-    permission_classes = [
-        IsGetOrIsAuthenticated
-    ]
+    # permission_classes = [
+    #     IsGetOrIsAuthenticated
+    # ]
     lookup_field = 'pk'
 
     #This is automatically called if the action is "Creation" of an Organization account
-    #If action is simply viewing a list, then no creation
-    
-    def retrieve(self, request, pk):
-        print(request)
-        print(pk)
+    #If action is simply viewing a list, then no creation   
+    def retrieve(self, request, pk=None):
         if pk is not None:
             obj = OrganizationAccount.objects.filter(pk=pk)
-            response = OrganizationAccountSerializer(obj, many=True, context={'request':request})
-            return Response(response.data)
+            if len(obj) != 0:
+                response = OrganizationAccountSerializer(obj, many=True, context={'request':request})
+                return Response(response.data)
+            else:
+                return Response({'Response' : 'No Org Account exists'})
         else:
-            return Response('No Organization Account Exists', 401)
+            return Response({'Response' : 'No Org Account exists'})
+        
+    
+    #Obtain information on all Organization Accounts
+    def list(self, request):
+        http_method_names = ["get","post"]
+        #We will redirect the backend if REQUEST is for Org Account Creation
+        if request.get_full_path() == '/api/orgcreation/':
+            #request.method = 'POST'
+            #Architecture of REQUEST data
+            '''
+                data = {
+                name: name
+                email: email
+                password: password
+                org: org (backend function must query the appropriate Organization Model 
+                    based on request data)
+                    }
+            '''
+            return Response(request.data)
+        
+        #If the REQUEST path is simply 'api/orgaccountlist/'
+        else:
+            queryset = OrganizationAccount.objects.all()
+            serializer = OrganizationAccountSerializer(queryset, many=True)
+            return Response(serializer.data)
 
 
-    def create(self, request, pk, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         orgs = OrganizationAccount.objects.all()
+        print(request.data)
         for user in orgs:
             if request.data['user'] == user.user or request.data['email' == user.email]:
                 return Response('Username or email already exists.', 401)
         
-        serializer = OrganizationAccountSerializer(many=True, context={'request':request})
+        serializer = OrganizationCreateAccountSerializer(many=True, context={'request':request})
 
         if serializer.is_valid(raise_exception=True):
             # A new OrgAccount object
             OrgAccount = OrganizationAccount.objects.create(
-                user = request.data['user'],
+                name = request.data['name'],
                 password = request.data['password'],
                 email = request.data['email'],
-                organization = None
             )
             OrgAccount.save()
             serializer = OrganizationAccount(OrgAccount)
@@ -65,6 +90,7 @@ class OrganizationAccountViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         else:
             return Response('Either the username or the password is too long', 401)
+
 
         
 #Login for Organization Account

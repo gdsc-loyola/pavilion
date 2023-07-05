@@ -9,8 +9,9 @@ router.register(r"register", RegisterViewSet, "register")
 router.register(r"users", UserViewSet, "users")
 router.register(r"event-student", StudentToEventViewSet, "event-student")
 router.register(r"students", StudentViewSet)
-router.register(r"orgcreation", OrganizationAccountViewSet, basename="orgcreation")
-router.register(r"orgdetail", OrganizationAccountViewSet, basename="orgdetail")
+router.register(r"orgcreation", OrganizationAccountViewSet)
+router.register(r"orgdetail", OrganizationAccountViewSet)
+router.register(r"orgaccountlist", OrganizationAccountViewSet)
 
 urlpatterns = [
     path("api/", include(router.urls))

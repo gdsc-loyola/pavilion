@@ -67,24 +67,22 @@ This is the Serializer for Org Account
 Used to verify Org account details if needed
  '''
 class OrganizationAccountSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='orgdetail')
     org = OrgsSerializer(read_only=True, many= True)
     class Meta:
         model = OrganizationAccount
         fields = (
             'name',
-            'user',
             'email',
+            'password',
             'org'
         )
-
         '''
         #Unclear of 'organization' data field will truly contain the Foreign Key Organization data 
         when passed as JSON
         '''
 
 class OrganizationCreateAccountSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='orgcreation')
+    #url = serializers.HyperlinkedIdentityField(view_name='orgcreation')
 
     class Meta:
         model = OrganizationAccount
