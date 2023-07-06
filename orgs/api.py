@@ -19,13 +19,13 @@ from mixpanel import Mixpanel
 mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 
 # This View is for the Logged in Org
-# Creates Organization Account OR Displays Organization Accounts
+# Displays Organization Accounts by DETAIL or LIST
 class OrganizationAccountViewSet(viewsets.ModelViewSet):
     queryset = OrganizationAccount.objects.all()
     serializer_class = OrganizationAccountSerializer
-    # permission_classes = [
-    #     IsGetOrIsAuthenticated
-    # ]
+    permission_classes = [
+        IsGetOrIsAuthenticated,
+    ]
     lookup_field = 'pk'
 
     #This is automatically called if the action is "Creation" of an Organization account
@@ -44,12 +44,24 @@ class OrganizationAccountViewSet(viewsets.ModelViewSet):
     
     #Obtain information on all Organization Accounts
     def list(self, request):
-        http_method_names = ["get","post"]
-        #We will redirect the backend if REQUEST is for Org Account Creation
-        if request.get_full_path() == '/api/orgcreation/':
-            #request.method = 'POST'
-            #Architecture of REQUEST data
-            '''
+        queryset = OrganizationAccount.objects.all()
+        serializer = OrganizationAccountSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+#Creating an organization account
+class OrganizationAccountRegisterViewSet(viewsets.ModelViewSet):
+    queryset = OrganizationAccount.objects.all()
+    serializer_class = OrganizationAccountSerializer
+    permission_classes = [
+        IsPostAndIsNotAuthenticated
+    ]
+    lookup_field = 'pk'
+
+    def create(self, request, *args, **kwargs):
+        orgs = OrganizationAccount.objects.all()
+        #request.data = Requested data to be made into object
+        '''
                 data = {
                 name: name
                 email: email
@@ -58,23 +70,13 @@ class OrganizationAccountViewSet(viewsets.ModelViewSet):
                     based on request data)
                     }
             '''
-            return Response(request.data)
-        
-        #If the REQUEST path is simply 'api/orgaccountlist/'
-        else:
-            queryset = OrganizationAccount.objects.all()
-            serializer = OrganizationAccountSerializer(queryset, many=True)
-            return Response(serializer.data)
-
-
-    def create(self, request, *args, **kwargs):
-        orgs = OrganizationAccount.objects.all()
-        print(request.data)
+        #To validate repetitiveness
         for user in orgs:
-            if request.data['user'] == user.user or request.data['email' == user.email]:
+            if request.data['name'] == user.name or request.data['email'] == user.email:
                 return Response('Username or email already exists.', 401)
+            
         
-        serializer = OrganizationCreateAccountSerializer(many=True, context={'request':request})
+        serializer = OrganizationCreateAccountSerializer(data=request.data, context={'request':request})
 
         if serializer.is_valid(raise_exception=True):
             # A new OrgAccount object
@@ -84,7 +86,6 @@ class OrganizationAccountViewSet(viewsets.ModelViewSet):
                 email = request.data['email'],
             )
             OrgAccount.save()
-            serializer = OrganizationAccount(OrgAccount)
 
             #Do something with the data of a newly registered OrgAccount Object
             return Response(serializer.data)
@@ -92,7 +93,7 @@ class OrganizationAccountViewSet(viewsets.ModelViewSet):
             return Response('Either the username or the password is too long', 401)
 
 
-        
+
 #Login for Organization Account
 class OrganizationAccountLoginViewSet(generics.RetrieveAPIView):
     org = OrganizationAccount.objects.all()

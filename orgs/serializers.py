@@ -66,7 +66,7 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
 This is the Serializer for Org Account
 Used to verify Org account details if needed
  '''
-class OrganizationAccountSerializer(serializers.HyperlinkedModelSerializer):
+class OrganizationAccountSerializer(serializers.ModelSerializer):
     org = OrgsSerializer(read_only=True, many= True)
     class Meta:
         model = OrganizationAccount
@@ -81,7 +81,7 @@ class OrganizationAccountSerializer(serializers.HyperlinkedModelSerializer):
         when passed as JSON
         '''
 
-class OrganizationCreateAccountSerializer(serializers.HyperlinkedModelSerializer):
+class OrganizationCreateAccountSerializer(serializers.ModelSerializer):
     #url = serializers.HyperlinkedIdentityField(view_name='orgcreation')
 
     class Meta:
@@ -89,7 +89,7 @@ class OrganizationCreateAccountSerializer(serializers.HyperlinkedModelSerializer
         fields = (
             'name',
             'email',
-            'password'
+            'password',
         )
 
         '''
