@@ -4,14 +4,16 @@ from orgs.models import Event, Organization, StudentToEvent, Student, Organizati
 from django.contrib.auth.models import User
 from .models import *
 from django.shortcuts import get_object_or_404
+import json
 
 # Event serializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            "id", 
-            "username")
+        # fields = (
+        #     "id", 
+        #     "username")
+        fields = '__all__'
 
 class UsernameSerializer(serializers.ModelSerializer):
     class Meta:
@@ -82,8 +84,6 @@ class OrganizationAccountSerializer(serializers.ModelSerializer):
         '''
 
 class OrganizationCreateAccountSerializer(serializers.ModelSerializer):
-    #url = serializers.HyperlinkedIdentityField(view_name='orgcreation')
-
     class Meta:
         model = OrganizationAccount
         fields = (
@@ -92,22 +92,26 @@ class OrganizationCreateAccountSerializer(serializers.ModelSerializer):
             'password',
         )
 
-        '''
-        #Unclear of 'organization' data field will truly contain the Foreign Key Organization data 
-        when passed as JSON
-        '''
 
 class OrganizationAccountLoginSerializer(serializers.ModelSerializer):
     model = OrganizationAccount
-    def get_Checker(self,obj):
-        #Obj is the model object
-        account = OrganizationAccount.objects.filter(email=obj.email)
-        if account == None or obj.password != account.password:
-            return False
+    Checker = serializers.SerializerMethodField('get_Checker')
+    def get_Checker(self, obj):
+        #self.context.get('request) fetches JSON data that we passed to the request parameter in backend
+        request = self.context.get('request')
+        account = OrganizationAccount.objects.filter(email=request['email'])
+
+        #If length is 0, then there are no results
+        if len(account) == 0:
+            return 'No Account exists'
+        
+        if request['password'] != account[0].password:
+            return 'Wrong Password'
         else:
-            return True
+            return 'Right Password'
 
     class Meta:
+        model = OrganizationAccount
         fields = (
             'email',
             'password',

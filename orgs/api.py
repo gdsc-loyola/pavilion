@@ -28,21 +28,20 @@ class OrganizationAccountViewSet(viewsets.ModelViewSet):
     ]
     lookup_field = 'pk'
 
-    #This is automatically called if the action is "Creation" of an Organization account
-    #If action is simply viewing a list, then no creation   
+    #Get 1 object
     def retrieve(self, request, pk=None):
         if pk is not None:
-            obj = OrganizationAccount.objects.filter(pk=pk)
-            if len(obj) != 0:
-                response = OrganizationAccountSerializer(obj, many=True, context={'request':request})
+            try: 
+                obj = OrganizationAccount.objects.get(pk=pk)
+                response = OrganizationAccountSerializer(obj)
                 return Response(response.data)
-            else:
+            except:
                 return Response({'Response' : 'No Org Account exists'})
         else:
             return Response({'Response' : 'No Org Account exists'})
         
     
-    #Obtain information on all Organization Accounts
+    #Obtain information on all Organization Accounts by getting ALL
     def list(self, request):
         queryset = OrganizationAccount.objects.all()
         serializer = OrganizationAccountSerializer(queryset, many=True)
@@ -95,14 +94,21 @@ class OrganizationAccountRegisterViewSet(viewsets.ModelViewSet):
 
 
 #Login for Organization Account
-class OrganizationAccountLoginViewSet(generics.RetrieveAPIView):
-    org = OrganizationAccount.objects.all()
-    serializer_class = OrganizationAccountLoginSerializer
+class OrganizationAccountLoginViewSet(viewsets.ModelViewSet):
+    queryset = OrganizationAccount.objects.all()
+    serializer_class = OrganizationAccountSerializer
     lookup_field = 'pk'
     permission_classes = [
-        IsGetOrIsAuthenticated
+        IsPostAndIsNotAuthenticated
     ]
-
+    
+    #Handles POST REQUEST for Login
+    def create(self, request, *args, **kwargs):
+        serializer = OrganizationAccountLoginSerializer(data=request.data, context={'request':request.data})
+        if serializer.is_valid():
+            return Response(serializer.data)
+        else:
+            return Response({'response' : 'Error in query'})
     #Serializer for Organization Account Login will have their own checker method for validation
     #Response will contain a 'checker' indicating if login is valid or not
 

@@ -12,6 +12,7 @@ router.register(r"students", StudentViewSet)
 router.register(r"orgcreation", OrganizationAccountRegisterViewSet)
 router.register(r"orgdetail", OrganizationAccountViewSet)
 router.register(r"orgaccountlist", OrganizationAccountViewSet)
+router.register(r"orgaccountlogin", OrganizationAccountLoginViewSet)
 
 urlpatterns = [
     path("api/", include(router.urls))
