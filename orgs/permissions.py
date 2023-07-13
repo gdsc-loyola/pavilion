@@ -14,6 +14,16 @@ class IsGetOrIsAuthenticated(BasePermission):
             return True
         else:
             return False
+        
+class IsGetAndIsAuthenticated(BasePermission):
+    """
+    Allow access to logged in Org Accounts if request method is GET
+    """
+    def has_permission(self, request, view):
+        if request.method == 'GET' and request.user.is_authenticated:
+            return True
+        else:
+            return False
 
 class IsPostAndIsAuthenticated(BasePermission): 
     """

@@ -4,8 +4,8 @@ from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
-from .permissions import IsGetOrIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
-from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer, OrganizationAccountSerializer, OrganizationCreateAccountSerializer, OrganizationAccountLoginSerializer, OrganizationUpdateSerializer
+from .permissions import IsGetOrIsAuthenticated, IsGetAndIsAuthenticated, IsPostAndIsAuthenticated, IsPostAndIsNotAuthenticated, IsGet
+from .serializers import UserSerializer, EventsSerializer, OrgsSerializer, UsernameSerializer, StudentToEventSerializer, StudentSerializer, OrganizationAccountSerializer, OrganizationAccountUserSerializer, OrganizationCreateAccountSerializer, OrganizationAccountLoginSerializer, OrganizationUpdateSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -47,6 +47,23 @@ class OrganizationAccountViewSet(viewsets.ModelViewSet):
         serializer = OrganizationAccountSerializer(queryset, many=True)
         return Response(serializer.data)
 
+#Obtain List of Organization Account models
+#These will get all Organization Account user identification
+class OrganizationAccountUserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = OrganizationAccountUserSerializer
+    permission_classes = [
+        IsGetOrIsAuthenticated,
+    ]
+    lookup_field = 'pk'
+
+    def list(self, request):
+        queryset = User.objects.filter(is_superuser = False)
+        serializer = OrganizationAccountUserSerializer(queryset, many=True)
+        return Response(serializer.data)
+        
+
+
 
 #Creating an organization account
 class OrganizationAccountRegisterViewSet(viewsets.ModelViewSet):
@@ -78,13 +95,63 @@ class OrganizationAccountRegisterViewSet(viewsets.ModelViewSet):
         serializer = OrganizationCreateAccountSerializer(data=request.data, context={'request':request})
 
         if serializer.is_valid(raise_exception=True):
-            # A new OrgAccount object
-            OrgAccount = OrganizationAccount.objects.create(
-                name = request.data['name'],
+            # A new OrgAccount object with 3 phases
+
+            #Organization Model
+            """
+            Method to create new orgs
+            data should be FormData in axios
+            """
+            # required attributes
+            name = request.data['name']
+            short_name = request.data['short_name']
+            slug = request.data['slug']
+            desc = request.data['desc']
+            org_body = request.data['org_body']
+            user = request.user
+
+            # optional attributes
+            # request.FILES=True if there's a file sent and request is sent with headers: { "Content-Type": "multipart/form-data" }
+            logo = request.FILES.get('logo') if request.FILES else ''
+            facebook = request.data['facebook'] if 'facebook' in request.data else ''
+            instagram = request.data['instagram'] if 'instagram' in request.data else ''
+            twitter = request.data['twitter'] if 'twitter' in request.data else ''
+            linkedin = request.data['linkedin'] if 'linkedin' in request.data else ''
+            website = request.data['website'] if 'website' in request.data else ''
+            
+            new_org = Organization.objects.create(
+                name=name,
+                short_name=short_name,
+                slug=slug,
+                desc=desc,
+                org_body=org_body,
+                user=user,
+                logo=logo,
+                facebook=facebook,
+                instagram=instagram,
+                twitter=twitter,
+                linkedin=linkedin,
+                website=website,
+            )
+            new_org.save()
+
+            #User Model
+            OrgUser = User.objects.create(
+                username = request.data['name'],
+                email = request.data['email'],
                 password = request.data['password'],
+            )
+
+            #OrgAccount Model
+            OrgAccount = OrganizationAccount.objects.create(
+                user = OrgUser,
+                name = request.data['name'],
+                password = request.data['password'], #to be removed
                 email = request.data['email'],
             )
+
             OrgAccount.save()
+            OrgUser.save()
 
             #Do something with the data of a newly registered OrgAccount Object
             return Response(serializer.data)
@@ -105,12 +172,34 @@ class OrganizationAccountLoginViewSet(viewsets.ModelViewSet):
     #Handles POST REQUEST for Login
     def create(self, request, *args, **kwargs):
         serializer = OrganizationAccountLoginSerializer(data=request.data, context={'request':request.data})
-        if serializer.is_valid():
+        if serializer.is_valid():      
+            username = serializer.data['Checker']['username']
+            password = serializer.data['Checker']['password']
+
+            user = User.objects.get(username = username, password = password)
+
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            
+            print('User {} has logged in!'.format(username))
             return Response(serializer.data)
         else:
             return Response({'response' : 'Error in query'})
+        
     #Serializer for Organization Account Login will have their own checker method for validation
     #Response will contain a 'checker' indicating if login is valid or not
+
+class OrganizationAccountLogoutViewSet(viewsets.ModelViewSet):
+    queryset = OrganizationAccount.objects.all()
+    serializer_class = User
+    lookup_field = 'pk'
+    permission_classes = [
+        IsGet
+    ]
+
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        print(request.user)
+        user = User.objects.filter(username = request.user.username)
+        return Response(user.username)
 
 
 class OrganizationUpdateViewSet(viewsets.ModelViewSet):
@@ -256,46 +345,6 @@ class OrgsViewSet(viewsets.ModelViewSet):
         })
         return Response(serializer.data, status=200)
 
-    def create(self, request):
-        """
-        Method to create new orgs
-        data should be FormData in axios
-        """
-        # required attributes
-        name = request.data['name']
-        short_name = request.data['short_name']
-        slug = request.data['slug']
-        desc = request.data['desc']
-        org_body = request.data['org_body']
-        user = request.user
-
-        # optional attributes
-        # request.FILES=True if there's a file sent and request is sent with headers: { "Content-Type": "multipart/form-data" }
-        logo = request.FILES.get('logo') if request.FILES else ''
-        facebook = request.data['facebook'] if 'facebook' in request.data else ''
-        instagram = request.data['instagram'] if 'instagram' in request.data else ''
-        twitter = request.data['twitter'] if 'twitter' in request.data else ''
-        linkedin = request.data['linkedin'] if 'linkedin' in request.data else ''
-        website = request.data['website'] if 'website' in request.data else ''
-        
-        new_org = Organization.objects.create(
-            name=name,
-            short_name=short_name,
-            slug=slug,
-            desc=desc,
-            org_body=org_body,
-            user=user,
-            logo=logo,
-            facebook=facebook,
-            instagram=instagram,
-            twitter=twitter,
-            linkedin=linkedin,
-            website=website,
-        )
-        new_org.save()
-
-        serializer = OrgsSerializer(new_org, context={'request': request})
-        return Response(serializer.data)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

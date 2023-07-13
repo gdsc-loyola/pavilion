@@ -65,24 +65,35 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
 
 
 '''
-This is the Serializer for Org Account
+These are the Serializers for Org Account
 Used to verify Org account details if needed
  '''
+
+#Gets all the data of users that ARE Organization Account
+class OrganizationAccountUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+#Used to Fetch Organization Account data with relation to user
 class OrganizationAccountSerializer(serializers.ModelSerializer):
-    org = OrgsSerializer(read_only=True, many= True)
+    org = OrgsSerializer(read_only=True)
+    user = OrganizationAccountUserSerializer(read_only=True)
     class Meta:
         model = OrganizationAccount
-        fields = (
+        fields = [
+            'user',
             'name',
             'email',
             'password',
             'org'
-        )
+        ]
         '''
         #Unclear of 'organization' data field will truly contain the Foreign Key Organization data 
         when passed as JSON
         '''
 
+#Serializer for the fields needed when creating an Organization Account
 class OrganizationCreateAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrganizationAccount
@@ -92,7 +103,7 @@ class OrganizationCreateAccountSerializer(serializers.ModelSerializer):
             'password',
         )
 
-
+#Serializer for validating the Login of an Organization Account
 class OrganizationAccountLoginSerializer(serializers.ModelSerializer):
     model = OrganizationAccount
     Checker = serializers.SerializerMethodField('get_Checker')
@@ -108,7 +119,11 @@ class OrganizationAccountLoginSerializer(serializers.ModelSerializer):
         if request['password'] != account[0].password:
             return 'Wrong Password'
         else:
-            return 'Right Password'
+            return {
+                'username' : account[0].name,
+                'password' : account[0].password,
+                'Response' : 'Login Success!'
+                    }
 
     class Meta:
         model = OrganizationAccount

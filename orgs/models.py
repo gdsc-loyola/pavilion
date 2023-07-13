@@ -36,6 +36,7 @@ This will be used for the creation of Organization Accounts
 This is separate from the Organization Object
 '''
 class OrganizationAccount(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100, null=False)
     password = models.CharField(max_length=100, null=False)
     email = models.CharField(max_length=100, null=False)
@@ -49,6 +50,7 @@ class OrganizationAccount(models.Model):
 
     def __str__(self):
         return "Username:{}, Password:{}".format(self.user,self.password)
+
 
 class Event(models.Model):
     status_choices = [
