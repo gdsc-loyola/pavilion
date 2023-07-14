@@ -18,8 +18,10 @@ from mixpanel import Mixpanel
 
 mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 
-# This View is for the Logged in Org
-# Displays Organization Accounts by DETAIL or LIST
+'''
+Organization Account APIs
+'''
+
 class OrganizationAccountViewSet(viewsets.ModelViewSet):
     queryset = OrganizationAccount.objects.all()
     serializer_class = OrganizationAccountSerializer
@@ -188,6 +190,7 @@ class OrganizationAccountLoginViewSet(viewsets.ModelViewSet):
     #Serializer for Organization Account Login will have their own checker method for validation
     #Response will contain a 'checker' indicating if login is valid or not
 
+#To be confirmed with frontend
 class OrganizationAccountLogoutViewSet(viewsets.ModelViewSet):
     queryset = OrganizationAccount.objects.all()
     serializer_class = User
@@ -201,7 +204,7 @@ class OrganizationAccountLogoutViewSet(viewsets.ModelViewSet):
         user = User.objects.filter(username = request.user.username)
         return Response(user.username)
 
-
+#Incomplete as of now
 class OrganizationUpdateViewSet(viewsets.ModelViewSet):
     orgs = OrganizationAccount.objects.all()
     serializer_class = OrganizationUpdateSerializer
@@ -210,6 +213,7 @@ class OrganizationUpdateViewSet(viewsets.ModelViewSet):
     ]
     lookup_field = 'pk'
 
+    #PUT Request
     def update(self, request, pk, *args, **kwargs):
         account = OrganizationAccount.objects.filter(pk=pk)
         usernames = OrganizationAccount.objects.all().values('user')
@@ -222,7 +226,9 @@ class OrganizationUpdateViewSet(viewsets.ModelViewSet):
 
 
 
-
+'''
+Events Viewset
+'''
 
 # Lead Viewset
 class EventsViewSet(viewsets.ModelViewSet):
@@ -288,6 +294,9 @@ class EventsViewSet(viewsets.ModelViewSet):
             return Response("Must be authenticated", status=401)
 
 
+'''
+Students Viewset
+'''
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
@@ -301,6 +310,11 @@ class StudentToEventViewSet(viewsets.ModelViewSet):
         IsGetOrIsAuthenticated
     ]
     serializer_class = StudentToEventSerializer
+
+
+'''
+Organization Viewset
+'''
 
 class OrgsViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()
@@ -345,6 +359,9 @@ class OrgsViewSet(viewsets.ModelViewSet):
         })
         return Response(serializer.data, status=200)
 
+'''
+User and User Token
+'''
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
