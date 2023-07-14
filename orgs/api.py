@@ -20,6 +20,7 @@ mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 
 '''
 Organization Account APIs
+Will not be used, but it is a template 
 '''
 
 class OrganizationAccountViewSet(viewsets.ModelViewSet):
@@ -98,44 +99,6 @@ class OrganizationAccountRegisterViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             # A new OrgAccount object with 3 phases
-
-            #Organization Model
-            """
-            Method to create new orgs
-            data should be FormData in axios
-            """
-            # required attributes
-            name = request.data['name']
-            short_name = request.data['short_name']
-            slug = request.data['slug']
-            desc = request.data['desc']
-            org_body = request.data['org_body']
-            user = request.user
-
-            # optional attributes
-            # request.FILES=True if there's a file sent and request is sent with headers: { "Content-Type": "multipart/form-data" }
-            logo = request.FILES.get('logo') if request.FILES else ''
-            facebook = request.data['facebook'] if 'facebook' in request.data else ''
-            instagram = request.data['instagram'] if 'instagram' in request.data else ''
-            twitter = request.data['twitter'] if 'twitter' in request.data else ''
-            linkedin = request.data['linkedin'] if 'linkedin' in request.data else ''
-            website = request.data['website'] if 'website' in request.data else ''
-            
-            new_org = Organization.objects.create(
-                name=name,
-                short_name=short_name,
-                slug=slug,
-                desc=desc,
-                org_body=org_body,
-                user=user,
-                logo=logo,
-                facebook=facebook,
-                instagram=instagram,
-                twitter=twitter,
-                linkedin=linkedin,
-                website=website,
-            )
-            new_org.save()
 
             #User Model
             OrgUser = User.objects.create(
@@ -251,8 +214,6 @@ class EventsViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             
             user = request.user
-            
-
              # required attributes
             name = request.data['name']
             cover_photo = request.data['cover_photo'] if 'cover_photo' in request.data else ''
@@ -323,6 +284,55 @@ class OrgsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = OrgsSerializer
     lookup_field = 'slug'
+
+    def create(self, request, *args, **kwargs):
+        #Organization Model
+        """
+        Method to create new orgs
+        data should be FormData in axios
+        """
+
+        OrgUser = User.objects.create(
+                username = request.data['name'],
+                email = request.data['email'],
+                password = request.data['password'],
+            )
+        
+        # required attributes
+        name = request.data['name']
+        short_name = request.data['short_name']
+        slug = request.data['slug']
+        desc = request.data['desc']
+        org_body = request.data['org_body']
+        user = OrgUser
+
+        # optional attributes
+        # request.FILES=True if there's a file sent and request is sent with headers: { "Content-Type": "multipart/form-data" }
+        logo = request.FILES.get('logo') if request.FILES else ''
+        facebook = request.data['facebook'] if 'facebook' in request.data else ''
+        instagram = request.data['instagram'] if 'instagram' in request.data else ''
+        twitter = request.data['twitter'] if 'twitter' in request.data else ''
+        linkedin = request.data['linkedin'] if 'linkedin' in request.data else ''
+        website = request.data['website'] if 'website' in request.data else ''
+        
+        new_org = Organization.objects.create(
+            name=name,
+            short_name=short_name,
+            slug=slug,
+            desc=desc,
+            org_body=org_body,
+            user=user,
+            logo=logo,
+            facebook=facebook,
+            instagram=instagram,
+            twitter=twitter,
+            linkedin=linkedin,
+            website=website,
+        )
+        new_org.save()
+        
+        serializer = OrgsSerializer(new_org, context={'request': request})
+        return Response(serializer.data)
 
     def list(self, *args, **kwargs):
         #getByOrgUser
