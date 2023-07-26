@@ -1,0 +1,7 @@
+site_name: Pavilion
+theme: readthedocs
+nav:
+  - Home: index.md
+  - orgs: orgs.md
+  - pavilion.orgs: pavilion.orgs.md
+  - frontend: frontend.md

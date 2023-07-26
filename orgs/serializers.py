@@ -6,35 +6,38 @@ from .models import *
 from django.shortcuts import get_object_or_404
 import json
 
+
 # Event serializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        # fields = (
-        #     "id", 
-        #     "username")
-        fields = '__all__'
+        fields = ("id", "username")
+
 
 class UsernameSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            "id",
-            "username")
+        fields = ("id", "username")
 
 
-class OrgDetailInEventSerializer(serializers.HyperlinkedModelSerializer):    
-    url = serializers.HyperlinkedIdentityField(view_name='orgs-detail', lookup_field='slug')
+class OrgDetailInEventSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name="orgs-detail", lookup_field="slug"
+    )
+
     class Meta:
         model = Organization
-        fields = [ 'url', 'name', 'short_name', 'slug' ]
-        lookup_field = 'slug'
+        fields = ["url", "name", "short_name", "slug"]
+        lookup_field = "slug"
+
 
 class EventsSerializer(serializers.ModelSerializer):
     org = OrgDetailInEventSerializer(read_only=True)
+
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = "__all__"
+
 
 class OrgsSerializer(serializers.HyperlinkedModelSerializer):
     events = EventsSerializer(read_only=True, many=True)
@@ -44,20 +47,21 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
         model = Organization
         fields = (
             "id",
-            "name", 
+            "name",
             "short_name",
-            "slug", 
-            "desc", 
+            "slug",
+            "desc",
             "org_body",
             "logo",
-            "facebook", 
-            "instagram", 
-            "twitter", 
-            "linkedin", 
+            "facebook",
+            "instagram",
+            "twitter",
+            "linkedin",
             "website",
             "user",
-            "events")
-        lookup_field = 'slug'
+            "events",
+        )
+        lookup_field = "slug"
 
 
 
@@ -149,16 +153,20 @@ class OrganizationUpdateSerializer(serializers.ModelSerializer):
 
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='student-detail', lookup_field='id_number')
+    url = serializers.HyperlinkedIdentityField(
+        view_name="student-detail", lookup_field="id_number"
+    )
+
     class Meta:
         model = Student
-        fields = '__all__'
-        lookup_field = 'id_number'
+        fields = "__all__"
+        lookup_field = "id_number"
 
 
 class StudentToEventSerializer(serializers.ModelSerializer):
     event = EventsSerializer(read_only=True)
     student = StudentSerializer(read_only=True, many=True)
+
     class Meta:
         model = StudentToEvent
-        fields = '__all__'
+        fields = "__all__"
