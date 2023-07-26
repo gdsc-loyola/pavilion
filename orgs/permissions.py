@@ -1,5 +1,9 @@
 from rest_framework.permissions import BasePermission
 
+# class IsAccount(BasePermission):
+#     def has_permission(self, request, view):
+#         if request.method == 'GET' and request
+
 class IsGetOrIsAuthenticated(BasePermission):
     """
     Allow access authenticated users OR if request method is GET.
@@ -7,6 +11,16 @@ class IsGetOrIsAuthenticated(BasePermission):
     def has_permission(self, request, view):
         
         if request.method == 'GET' or request.user.is_authenticated:
+            return True
+        else:
+            return False
+        
+class IsGetAndIsAuthenticated(BasePermission):
+    """
+    Allow access to logged in Org Accounts if request method is GET
+    """
+    def has_permission(self, request, view):
+        if request.method == 'GET' and request.user.is_authenticated:
             return True
         else:
             return False

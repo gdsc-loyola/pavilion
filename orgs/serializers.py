@@ -1,7 +1,10 @@
 from dataclasses import fields
 from rest_framework import serializers
-from orgs.models import Event, Organization, StudentToEvent, Student
+from orgs.models import Event, Organization, StudentToEvent, Student, OrganizationAccount
 from django.contrib.auth.models import User
+from .models import *
+from django.shortcuts import get_object_or_404
+import json
 
 
 # Event serializer
@@ -59,6 +62,94 @@ class OrgsSerializer(serializers.HyperlinkedModelSerializer):
             "events",
         )
         lookup_field = "slug"
+
+
+
+
+
+
+'''
+These are the Serializers for Org Account
+Used to verify Org account details if needed
+ '''
+
+#Gets all the data of users that ARE Organization Account
+class OrganizationAccountUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+#Used to Fetch Organization Account data with relation to user
+class OrganizationAccountSerializer(serializers.ModelSerializer):
+    org = OrgsSerializer(read_only=True)
+    user = OrganizationAccountUserSerializer(read_only=True)
+    class Meta:
+        model = OrganizationAccount
+        fields = [
+            'user',
+            'name',
+            'email',
+            'password',
+            'org'
+        ]
+        '''
+        #Unclear of 'organization' data field will truly contain the Foreign Key Organization data 
+        when passed as JSON
+        '''
+
+#Serializer for the fields needed when creating an Organization Account
+class OrganizationCreateAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrganizationAccount
+        fields = (
+            'name',
+            'email',
+            'password',
+        )
+
+#Serializer for validating the Login of an Organization Account
+class OrganizationAccountLoginSerializer(serializers.ModelSerializer):
+    model = OrganizationAccount
+    Checker = serializers.SerializerMethodField('get_Checker')
+    def get_Checker(self, obj):
+        #self.context.get('request) fetches JSON data that we passed to the request parameter in backend
+        request = self.context.get('request')
+        account = OrganizationAccount.objects.filter(email=request['email'])
+
+        #If length is 0, then there are no results
+        if len(account) == 0:
+            return 'No Account exists'
+        
+        if request['password'] != account[0].password:
+            return 'Wrong Password'
+        else:
+            return {
+                'username' : account[0].name,
+                'password' : account[0].password,
+                'Response' : 'Login Success!'
+                    }
+
+    class Meta:
+        model = OrganizationAccount
+        fields = (
+            'email',
+            'password',
+            'Checker'
+        )
+
+class OrganizationUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrganizationAccount
+        fields = (
+            'name',
+            'password',
+            'email'
+        )
+
+
+
+
 
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):

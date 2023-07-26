@@ -6,7 +6,13 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.utils import timezone
+    
 
+
+'''
+This object represents the Organization's data and information
+This object commonly interacts with the Frontend through its fields
+'''
 
 class Organization(models.Model):
     org_body_choices = [("COA", "COA"), ("LIONS", "LIONS"), ("Sanggu", "Sanggu")]
@@ -28,6 +34,28 @@ class Organization(models.Model):
         return "{}({}), {}. {}".format(
             self.name, self.short_name, self.org_body, self.user
         )
+
+
+
+'''
+This will be used for the creation of Organization Accounts
+This is separate from the Organization Object
+'''
+class OrganizationAccount(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=100, null=False)
+    password = models.CharField(max_length=100, null=False)
+    email = models.CharField(max_length=100, null=False)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank= True, default=None)
+    objects = models.manager
+    def returnUser(self):
+        return self.user
+
+    def returnPassword(self):
+        return self.password
+
+    def __str__(self):
+        return "Username:{}, Password:{}".format(self.user,self.password)
 
 
 class Event(models.Model):

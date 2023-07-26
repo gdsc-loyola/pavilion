@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
+# Gael's Proxy Client to test REQUESTS
+gael_client/
+
 ### Django ###
 *.log
 *.pot
@@ -10,6 +13,7 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media
+*.txt
 
 # Distribution / packaging
 .Python
@@ -54,3 +58,4 @@ pavenv/
 notes/
 
 !frontend/dist/manifest.json
+

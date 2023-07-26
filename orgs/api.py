@@ -1,8 +1,9 @@
 import jwt
-from orgs.models import Event, Organization, StudentToEvent, Student
-from rest_framework import viewsets, permissions
-from rest_framework.response import Response
+from orgs.models import Event, Organization, StudentToEvent, Student, OrganizationAccount
+from rest_framework import viewsets, permissions, generics
+from rest_framework.response import Response 
 from rest_framework.permissions import IsAuthenticated
+
 from .permissions import (
     IsGetOrIsAuthenticated,
     IsPostAndIsAuthenticated,
@@ -17,6 +18,7 @@ from .serializers import (
     StudentToEventSerializer,
     StudentSerializer,
 )
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -27,8 +29,170 @@ from functools import wraps
 import os
 from mixpanel import Mixpanel
 
-mp = Mixpanel(os.environ["MIXPANEL_API_TOKEN"])
+mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 
+'''
+Organization Account APIs
+Will not be used for production,
+but it is a template to understand the inner workings of 
+ViewSets and Serializers
+'''
+
+class OrganizationAccountViewSet(viewsets.ModelViewSet):
+    queryset = OrganizationAccount.objects.all()
+    serializer_class = OrganizationAccountSerializer
+    permission_classes = [
+        IsGetOrIsAuthenticated,
+    ]
+    lookup_field = 'pk'
+
+    #Get 1 object
+    def retrieve(self, request, pk=None):
+        if pk is not None:
+            try: 
+                obj = OrganizationAccount.objects.get(pk=pk)
+                response = OrganizationAccountSerializer(obj)
+                return Response(response.data)
+            except:
+                return Response({'Response' : 'No Org Account exists'})
+        else:
+            return Response({'Response' : 'No Org Account exists'})
+        
+    
+    #Obtain information on all Organization Accounts by getting ALL
+    def list(self, request):
+        queryset = OrganizationAccount.objects.all()
+        serializer = OrganizationAccountSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+#Obtain List of Organization Account models
+#These will get all Organization Account user identification
+class OrganizationAccountUserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = OrganizationAccountUserSerializer
+    permission_classes = [
+        IsGetOrIsAuthenticated,
+    ]
+    lookup_field = 'pk'
+
+    def list(self, request):
+        queryset = User.objects.filter(is_superuser = False)
+        serializer = OrganizationAccountUserSerializer(queryset, many=True)
+        return Response(serializer.data)
+        
+
+
+
+#Creating an organization account
+class OrganizationAccountRegisterViewSet(viewsets.ModelViewSet):
+    queryset = OrganizationAccount.objects.all()
+    serializer_class = OrganizationAccountSerializer
+    permission_classes = [
+        IsPostAndIsNotAuthenticated
+    ]
+    lookup_field = 'pk'
+
+    def create(self, request, *args, **kwargs):
+        orgs = OrganizationAccount.objects.all()
+        #request.data = Requested data to be made into object
+        '''
+                data = {
+                name: name
+                email: email
+                password: password
+                org: org (backend function must query the appropriate Organization Model 
+                    based on request data)
+                    }
+            '''
+        #To validate repetitiveness
+        for user in orgs:
+            if request.data['name'] == user.name or request.data['email'] == user.email:
+                return Response('Username or email already exists.', 401)
+            
+        
+        serializer = OrganizationCreateAccountSerializer(data=request.data, context={'request':request})
+
+        if serializer.is_valid(raise_exception=True):
+            # A new OrgAccount object with 3 phases
+
+            #User Model
+            OrgUser = User.objects.create(
+                username = request.data['name'],
+                email = request.data['email'],
+                password = request.data['password'],
+            )
+
+            #OrgAccount Model
+            OrgAccount = OrganizationAccount.objects.create(
+                user = OrgUser,
+                name = request.data['name'],
+                password = request.data['password'], #to be removed
+                email = request.data['email'],
+            )
+
+            OrgAccount.save()
+            OrgUser.save()
+
+            #Do something with the data of a newly registered OrgAccount Object
+            return Response(serializer.data)
+        else:
+            return Response('Either the username or the password is too long', 401)
+
+
+
+#Login for Organization Account
+class OrganizationAccountLoginViewSet(viewsets.ModelViewSet):
+    queryset = OrganizationAccount.objects.all()
+    serializer_class = OrganizationAccountSerializer
+    lookup_field = 'pk'
+    permission_classes = [
+        IsPostAndIsNotAuthenticated
+    ]
+    
+    #Handles POST REQUEST for Login
+    def create(self, request, *args, **kwargs):
+        serializer = OrganizationAccountLoginSerializer(data=request.data, context={'request':request.data})
+        if serializer.is_valid():      
+            username = serializer.data['Checker']['username']
+            password = serializer.data['Checker']['password']
+
+            user = User.objects.get(username = username, password = password)
+
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            
+            print('User {} has logged in!'.format(username))
+            return Response(serializer.data)
+        else:
+            return Response({'response' : 'Error in query'})
+        
+    #Serializer for Organization Account Login will have their own checker method for validation
+    #Response will contain a 'checker' indicating if login is valid or not
+
+
+class OrganizationUpdateViewSet(viewsets.ModelViewSet):
+    orgs = OrganizationAccount.objects.all()
+    serializer_class = OrganizationUpdateSerializer
+    permission_classes = [
+        IsPostAndIsAuthenticated
+    ]
+    lookup_field = 'pk'
+
+    #PUT Request
+    def update(self, request, pk, *args, **kwargs):
+        account = OrganizationAccount.objects.filter(pk=pk)
+        usernames = OrganizationAccount.objects.all().values('user')
+        if account.user in usernames:
+            return Response('Username already exists')
+        else:
+            newobject = OrganizationUpdateSerializer(data=request.data)
+            newobject.save()
+            return Response(newobject.data)
+
+
+
+'''
+Events Viewset
+'''
 
 # Lead Viewset
 class EventsViewSet(viewsets.ModelViewSet):
@@ -37,10 +201,8 @@ class EventsViewSet(viewsets.ModelViewSet):
     serializer_class = EventsSerializer
 
     def retrieve(self, request, pk, *args, **kwargs):
-        current_event = Event.objects.get(pk=pk)
-        query = (
-            current_event.student.all()
-        )  # .student comes from related_name in models.py
+        current_event = Event.objects.get(pk=pk) 
+        query = current_event.student.all() #.student comes from related_name in models.py
         if query:
             serializer = StudentToEventSerializer(query, many=True)
             return Response(serializer.data)
@@ -110,6 +272,11 @@ class EventsViewSet(viewsets.ModelViewSet):
             return Response("Must be authenticated", status=401)
 
 
+
+'''
+Students Viewset
+'''
+
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     permission_classes = [IsGetOrIsAuthenticated]
@@ -123,11 +290,16 @@ class StudentToEventViewSet(viewsets.ModelViewSet):
     serializer_class = StudentToEventSerializer
 
 
+'''
+Organization Viewset
+'''
+
 class OrgsViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()
     permission_classes = [IsGetOrIsAuthenticated]
     serializer_class = OrgsSerializer
     lookup_field = "slug"
+
 
     def list(self, *args, **kwargs):
         # getByOrgUser
@@ -172,19 +344,29 @@ class OrgsViewSet(viewsets.ModelViewSet):
             },
         )
         return Response(serializer.data, status=200)
+      
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
+        #Organization Model
+
         """
         Method to create new orgs
         data should be FormData in axios
         """
+
+        OrgUser = User.objects.create(
+                username = request.data['name'],
+                email = request.data['email'],
+                password = request.data['password'],
+            )
+        
         # required attributes
-        name = request.data["name"]
-        short_name = request.data["short_name"]
-        slug = request.data["slug"]
-        desc = request.data["desc"]
-        org_body = request.data["org_body"]
-        user = request.user
+        name = request.data['name']
+        short_name = request.data['short_name']
+        slug = request.data['slug']
+        desc = request.data['desc']
+        org_body = request.data['org_body']
+        user = OrgUser
 
         # optional attributes
         # request.FILES=True if there's a file sent and request is sent with headers: { "Content-Type": "multipart/form-data" }
@@ -209,11 +391,15 @@ class OrgsViewSet(viewsets.ModelViewSet):
             linkedin=linkedin,
             website=website,
         )
+        
         new_org.save()
-
-        serializer = OrgsSerializer(new_org, context={"request": request})
+       
+        serializer = OrgsSerializer(new_org, context={'request': request})
         return Response(serializer.data)
 
+'''
+User and User Token
+'''
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
