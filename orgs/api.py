@@ -20,7 +20,9 @@ mp = Mixpanel(os.environ['MIXPANEL_API_TOKEN'])
 
 '''
 Organization Account APIs
-Will not be used, but it is a template 
+Will not be used for production,
+but it is a template to understand the inner workings of 
+ViewSets and Serializers
 '''
 
 class OrganizationAccountViewSet(viewsets.ModelViewSet):
@@ -153,21 +155,7 @@ class OrganizationAccountLoginViewSet(viewsets.ModelViewSet):
     #Serializer for Organization Account Login will have their own checker method for validation
     #Response will contain a 'checker' indicating if login is valid or not
 
-#To be confirmed with frontend
-class OrganizationAccountLogoutViewSet(viewsets.ModelViewSet):
-    queryset = OrganizationAccount.objects.all()
-    serializer_class = User
-    lookup_field = 'pk'
-    permission_classes = [
-        IsGet
-    ]
 
-    def retrieve(self, request, pk=None, *args, **kwargs):
-        print(request.user)
-        user = User.objects.filter(username = request.user.username)
-        return Response(user.username)
-
-#Incomplete as of now
 class OrganizationUpdateViewSet(viewsets.ModelViewSet):
     orgs = OrganizationAccount.objects.all()
     serializer_class = OrganizationUpdateSerializer
