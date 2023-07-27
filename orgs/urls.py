@@ -14,7 +14,6 @@ router.register(r"orgdetail", OrganizationAccountViewSet)
 router.register(r"orgaccountlist", OrganizationAccountViewSet)
 router.register(r"orgaccountlogin", OrganizationAccountLoginViewSet)
 router.register(r"orgaccountusers", OrganizationAccountUserViewSet)
-router.register(r"orgaccountlogout", OrganizationAccountLogoutViewSet)
 
 urlpatterns = [
     path("api/", include(router.urls))

@@ -17,6 +17,11 @@ from .serializers import (
     UsernameSerializer,
     StudentToEventSerializer,
     StudentSerializer,
+    OrganizationAccountSerializer,
+    OrganizationAccountUserSerializer,
+    OrganizationCreateAccountSerializer,
+    OrganizationAccountLoginSerializer,
+    OrganizationUpdateSerializer
 )
 
 from django.contrib.auth import authenticate, login, logout
@@ -356,8 +361,9 @@ class OrgsViewSet(viewsets.ModelViewSet):
 
         OrgUser = User.objects.create(
                 username = request.data['name'],
-                email = request.data['email'],
-                password = request.data['password'],
+                password = 'ghiasohasklh214124'
+                #email = request.data['email'],
+                #password = request.data['password'],
             )
         
         # required attributes
