@@ -359,20 +359,21 @@ class OrgsViewSet(viewsets.ModelViewSet):
         data should be FormData in axios
         """
 
-        OrgUser = User.objects.create(
-                username = request.data['name'],
-                password = 'ghiasohasklh214124'
-                #email = request.data['email'],
-                #password = request.data['password'],
-            )
+        # OrgUser = User.objects.create(
+        #         username = request.data['name'],
+        #         password = 'ghiasohasklh214124'
+        #         #email = request.data['email'],
+        #         #password = request.data['password'],
+        #     )
         
+
         # required attributes
         name = request.data['name']
         short_name = request.data['short_name']
         slug = request.data['slug']
         desc = request.data['desc']
         org_body = request.data['org_body']
-        user = OrgUser
+        user = request.user
 
         # optional attributes
         # request.FILES=True if there's a file sent and request is sent with headers: { "Content-Type": "multipart/form-data" }

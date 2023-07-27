@@ -23,6 +23,8 @@ export const Admin = ({ component: Component, ...rest }) => {
   const pathKind = checkPathKind(location.pathname);
 
   const admin = useAdminUser();
+  console.log(admin);
+  console.log(pathKind);
 
   return (
     <>

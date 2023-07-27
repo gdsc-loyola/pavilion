@@ -301,7 +301,7 @@ const Settings = () => {
         <FormField
           margin="dense"
           variant={'outlined'}
-          value={orgForm.website}
+          defaultValue={orgForm.website}
           style={{ width: '464px', marginBottom: '44px' }}
           onChange={(e) => {
             handleWebsiteChange(e.target.value);
