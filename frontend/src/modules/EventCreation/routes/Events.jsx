@@ -172,53 +172,53 @@ const Events = () => {
         withTextField={false}
       >
         <Grid container spacing={4} paddingTop={3}>
-          <Grid
-            item
-            xs={6}
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            display="flex"
-            onClick={async () => {
-              // Prevent from creating multiple events;
-              if (isCreatingRef.current) return;
+        {/* <Grid
+          item
+          xs={6}
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          display="flex"
+          onClick={async () => {
+            // Prevent from creating multiple events;
+            if (isCreatingRef.current) return;
 
-              isCreatingRef.current = true;
+            isCreatingRef.current = true;
 
-              const res = await http.post(
-                '/events/',
-                {
-                  name: 'Untitled Event',
-                  start_date: new Date().toISOString().split('T')[0],
-                  end_date: new Date().toISOString().split('T')[0],
-                  location: '',
-                  desc: '',
-                  status: 'Completed',
-                  is_past_event: true,
+            const res = await http.post(
+              '/events/',
+              {
+                name: 'Untitled Event',
+                start_date: new Date().toISOString().split('T')[0],
+                end_date: new Date().toISOString().split('T')[0],
+                location: '',
+                desc: '',
+                status: 'Completed',
+                is_past_event: true,
+              },
+              {
+                headers: {
+                  authorization: `Bearer ${accessToken}`,
                 },
-                {
-                  headers: {
-                    authorization: `Bearer ${accessToken}`,
-                  },
-                }
-              );
-              isCreatingRef.current = false;
+              }
+            );
+            isCreatingRef.current = false;
 
-              router.push(`/admin/events/${res.data.id}/details`);
+            router.push(`/admin/events/${res.data.id}/details`);
+          }}
+        >
+          <Box
+            sx={{
+              background: '#F8F9FF',
+              height: '140px',
+              width: '200px',
+              boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25);',
+              borderRadius: '4px',
+              cursor: 'pointer',
             }}
-          >
-            <Box
-              sx={{
-                background: '#F8F9FF',
-                height: '140px',
-                width: '200px',
-                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25);',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
-            ></Box>
-            <p>Past Event</p>
-          </Grid>
+          ></Box>
+          <p>Past Event</p>
+        </Grid> */}
           <Grid
             item
             xs={6}
@@ -226,6 +226,7 @@ const Events = () => {
             alignItems="center"
             flexDirection="column"
             display="flex"
+            style={{margin: 'auto'}}
             onClick={async () => {
               // Prevent from creating multiple events;
               if (isCreatingRef.current) return;
