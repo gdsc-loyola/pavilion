@@ -172,7 +172,7 @@ const Events = () => {
         withTextField={false}
       >
         <Grid container spacing={4} paddingTop={3}>
-        {/* <Grid
+          {/* <Grid
           item
           xs={6}
           justifyContent="center"
@@ -226,7 +226,7 @@ const Events = () => {
             alignItems="center"
             flexDirection="column"
             display="flex"
-            style={{margin: 'auto'}}
+            style={{ margin: 'auto' }}
             onClick={async () => {
               // Prevent from creating multiple events;
               if (isCreatingRef.current) return;

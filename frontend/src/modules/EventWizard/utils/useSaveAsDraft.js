@@ -5,7 +5,7 @@ import { safeFormDataAppend } from '$lib/utils/safeFormDataAppend';
 import { useHistory } from 'react-router-dom';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import { isFile } from './isFile';
-import { object, string, date, number } from 'yup'
+import { object, string, date } from 'yup';
 
 /**
  *
@@ -42,33 +42,37 @@ export const useSaveAsDraft = (params = {}) => {
     fd.append('old_respondents', details.responsesSheet);
     fd.append('form_description', details.formDescription);
 
-     //validation using Yup
+    //validation using Yup
     const eventSchema = object({
       location: string().required('You must provide an Event Location'),
       name: string().test({
-        test(value, ctx){
-          if(value.trim().startsWith('Untitled Event') || value === '' || value === undefined){
-            return ctx.createError({message: 'Provide an event Name'})
+        test(value, ctx) {
+          if (value.trim().startsWith('Untitled Event') || value === '' || value === undefined) {
+            return ctx.createError({ message: 'Provide an event Name' });
           }
-          return true
-        }
+          return true;
+        },
       }),
       desc: string().required('You must provide an Event Description'),
-      start_date: date().required('You must provide a Start Date').typeError('You must provide a Start Date'),
-      end_date: date().required('You must provide an End Date').typeError('You must provide an End Date'),
-    })
+      start_date: date()
+        .required('You must provide a Start Date')
+        .typeError('You must provide a Start Date'),
+      end_date: date()
+        .required('You must provide an End Date')
+        .typeError('You must provide an End Date'),
+    });
 
-    await eventSchema.validate({
-      location: fd.get('location'),
-      name: fd.get('name'),
-      desc: fd.get('desc'),
-      start_date: fd.get('start_date'),
-      end_date: fd.get('end_date'),
-    })
-    .catch((e) => {
-      return alert(e);
-    })
-
+    await eventSchema
+      .validate({
+        location: fd.get('location'),
+        name: fd.get('name'),
+        desc: fd.get('desc'),
+        start_date: fd.get('start_date'),
+        end_date: fd.get('end_date'),
+      })
+      .catch((e) => {
+        return alert(e);
+      });
 
     await http.put(`events/${details.id}/`, fd, {
       headers: {
