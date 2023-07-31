@@ -116,7 +116,22 @@ const Header = (props) => {
         }}
         rightButtonProps={{
           label: warning ? 'Discard Event' : 'Save as draft',
-          onClick: warning ? deleteEvent : saveAsDraft,
+          onClick: () => {
+            if (warning) {
+              deleteEvent()
+            } else {
+              saveAsDraft()
+              .then((e) => {
+                if (e === 'ERROR'){
+                  return closeModal()
+                } else {
+                  return router.push('/admin/events');
+                }
+                
+              })
+              
+            } 
+          }, 
           sx: {
             fontSize: typography.fontSize.sm,
             fontWeight: typography.fontWeight.med,

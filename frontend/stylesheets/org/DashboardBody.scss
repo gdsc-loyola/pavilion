@@ -1,49 +1,49 @@
-@import "../variables.scss";
+@import '../variables.scss';
 
 section {
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    img {
-        position: static;
-        width: 179px;
-        height: 167.14px;
-        left: 0px;
-        top: 0px;
-    }
-    h1 {
-        position: static;
-        width: 744px;
-        height: 56px;
-        left: 0px;
-        top: 0px;
-        /* text-2xl / bold */
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  img {
+    position: static;
+    width: 179px;
+    height: 167.14px;
+    left: 0px;
+    top: 0px;
+  }
+  h1 {
+    position: static;
+    width: 744px;
+    height: 56px;
+    left: 0px;
+    top: 0px;
+    /* text-2xl / bold */
 
-        font-family: Rubik;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 40px;
-        line-height: 56px;
-        /* identical to box height, or 140% */
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 56px;
+    /* identical to box height, or 140% */
 
-        color: $blue-300;
-    }
-    p {
-        position: static;
-        width: 744px;
-        height: 64px;
-        left: 0px;
-        top: 72px;
+    color: $blue-300;
+  }
+  p {
+    position: static;
+    width: 744px;
+    height: 64px;
+    left: 0px;
+    top: 72px;
 
-        /* text-md / reg */
+    /* text-md / reg */
 
-        font-family: Rubik;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 20px;
-        line-height: 32px;
-        /* or 160% */
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 32px;
+    /* or 160% */
 
-        color: $gray-700;
-    }
+    color: $gray-700;
+  }
 }

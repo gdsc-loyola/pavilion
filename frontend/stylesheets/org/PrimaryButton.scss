@@ -1,21 +1,21 @@
-@import "variables.scss";
+@import 'variables.scss';
 
 .primary_button {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 32px;
-    position: static;
-    width: 171px;
-    height: 56px;
-    left: 0px;
-    top: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 32px;
+  position: static;
+  width: 171px;
+  height: 56px;
+  left: 0px;
+  top: 0px;
 
-    /* gradient/left-right */
-    background: linear-gradient(90deg, $blue-300 0%, $blue-400 100%);
-    
-    /* shadows/black-1 */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
-    border-radius: 5px;
+  /* gradient/left-right */
+  background: linear-gradient(90deg, $blue-300 0%, $blue-400 100%);
+
+  /* shadows/black-1 */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
 }

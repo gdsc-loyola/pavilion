@@ -393,7 +393,7 @@ const Preview = () => {
               if (publish) {
                 publishEvent();
               } else {
-                saveAsDraft();
+                saveAsDraft()
               }
             },
             sx: {
