@@ -19,7 +19,7 @@ import { hasDetailsExceptEventPhotos } from '../utils/hasProperties';
  */
 const Header = (props) => {
   const { id: eventId } = useParams();
-  const { pastevent } = props;
+  //const { pastevent } = props;
 
   const router = useHistory();
 
@@ -118,20 +118,29 @@ const Header = (props) => {
           label: warning ? 'Discard Event' : 'Save as draft',
           onClick: () => {
             if (warning) {
-              deleteEvent()
+              deleteEvent();
             } else {
-              saveAsDraft()
-              .then((e) => {
-                if (e === 'ERROR'){
-                  return closeModal()
+              saveAsDraft().then((e) => {
+                if (e === 'ERROR') {
+                  //The logic is sound, but MUI Alert cannot be displayed
+                  /*closeModal();
+                  return (
+                    <>
+                      <mui.Snackbar open={true} autoHideDuration={6000}> 
+                        <mui.Alert severity="error">
+                          <mui.AlertTitle>Error</mui.AlertTitle>
+                          This is an error alert — <strong>check it out!</strong>
+                        </mui.Alert>
+                      </mui.Snackbar>
+                    </>
+                  ) */
+                  return closeModal();
                 } else {
                   return router.push('/admin/events');
                 }
-                
-              })
-              
-            } 
-          }, 
+              });
+            }
+          },
           sx: {
             fontSize: typography.fontSize.sm,
             fontWeight: typography.fontWeight.med,

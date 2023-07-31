@@ -120,9 +120,9 @@ const Details = (props) => {
     for (let i = last.length - 1, j = 0; j < 4; i--, j++) {
       cons += last[i];
     }
-    console.log(!isNaN(date.getTime()))
+    console.log(!isNaN(date.getTime()));
     if (cons === 'etaD' || cons.includes('/') || date === 'Invalid Date') {
-      console.log(`bad dates`)
+      console.log(`bad dates`);
       setDetails({
         startDate: 'Invalid Date',
       });

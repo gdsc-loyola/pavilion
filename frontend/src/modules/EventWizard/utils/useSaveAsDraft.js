@@ -63,10 +63,7 @@ export const useSaveAsDraft = (params = {}) => {
       end_date: date()
         .required('You must provide an End Date')
         .typeError('You must provide an End Date')
-        .min(
-          ref('start_date'),
-          "End Date cannot be earlier than start date"
-        ),
+        .min(ref('start_date'), 'End Date cannot be earlier than start date'),
     });
 
     const result = await eventSchema
@@ -83,16 +80,18 @@ export const useSaveAsDraft = (params = {}) => {
       });
 
     if (result === 'ERROR') {
-      return ('ERROR');
+      return 'ERROR';
     } else {
-      await http.put(`events/${details.id}/`, fd, {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      }).catch(
-        (e) => {console.log(e)} 
-      );
+      await http
+        .put(`events/${details.id}/`, fd, {
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .catch((e) => {
+          console.log(e);
+        });
 
       await refetchOrg();
       // if (pathAfterUpdate) {
