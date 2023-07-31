@@ -13,7 +13,7 @@ import { object, string, date, ref } from 'yup';
  * pathAfterUpdate?: string
  * }} params
  */
-export const useSaveAsDraft = (params = {}) => {
+export const useSaveAsDraft = (/*params = {}*/) => {
   const { accessToken, refetchOrg } = useAdminUser();
   //const { pathAfterUpdate = '' } = params;
 
