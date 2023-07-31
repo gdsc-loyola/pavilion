@@ -2,11 +2,10 @@ import { useAdminUser } from '$lib/context/AdminContext';
 import http from '$lib/http';
 import { formatDate } from '$lib/utils/formatDate';
 import { safeFormDataAppend } from '$lib/utils/safeFormDataAppend';
-import { useHistory } from 'react-router-dom';
+//import { useHistory } from 'react-router-dom';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import { isFile } from './isFile';
 import { object, string, date, ref } from 'yup';
-import * as mui from '@mui/material';
 
 /**
  *
@@ -16,9 +15,9 @@ import * as mui from '@mui/material';
  */
 export const useSaveAsDraft = (params = {}) => {
   const { accessToken, refetchOrg } = useAdminUser();
-  const { pathAfterUpdate = '' } = params;
+  //const { pathAfterUpdate = '' } = params;
 
-  const router = useHistory();
+  //const router = useHistory();
 
   const { details } = useEventDetailsStore();
 
