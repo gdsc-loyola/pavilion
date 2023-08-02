@@ -372,7 +372,7 @@ const Details = (props) => {
           fullWidth
           size="normal"
           variant="outlined"
-          label="Where was the event held?"
+          label="Please provide an event location"
           value={details.location}
           error={details.location.trim() === ''}
           helperText={`${details.location.trim().length !== 0 ? details.location.length : '0'}/100`}
