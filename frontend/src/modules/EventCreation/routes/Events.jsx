@@ -98,7 +98,34 @@ const Events = () => {
           </Grid>
           <Grid item container xs={4} sm={7} md={6} lg={7} xl={9} justifyItems="flex-end">
             <Button
-              onClick={openModal}
+              onClick={async () => {
+                // Prevent from creating multiple events;
+                if (isCreatingRef.current) return;
+              
+                isCreatingRef.current = true;
+              
+                const res = await http.post(
+                  '/events/',
+                  {
+                    name: 'Untitled Event',
+                    start_date: new Date().toISOString().split('T')[0],
+                    end_date: new Date().toISOString().split('T')[0],
+                    location: '',
+                    desc: '',
+                    status: 'Draft',
+                    is_past_event: true
+                  },
+                  {
+                    headers: {
+                      authorization: `Bearer ${accessToken}`,
+                    },
+                  }
+                );
+                isCreatingRef.current = false;
+              
+                router.push(`/admin/events/${res.data.id}/details`);
+              }
+              }
               size="small"
               sx={{
                 height: '100%',
@@ -158,11 +185,39 @@ const Events = () => {
           >
             <img src={emptyState} style={{ width: '400px' }} />
             <h4>You don&apos;t have any event yet!</h4>
-            <Button onClick={openModal}>Create an event</Button>
+            <Button onClick={async () => {
+              // Prevent from creating multiple events;
+              if (isCreatingRef.current) return;
+
+              isCreatingRef.current = true;
+
+              const res = await http.post(
+                '/events/',
+                {
+                  name: 'Untitled Event',
+                  start_date: new Date().toISOString().split('T')[0],
+                  end_date: new Date().toISOString().split('T')[0],
+                  location: '',
+                  desc: '',
+                  status: 'Draft',
+                  is_past_event: true,
+                },
+                {
+                  headers: {
+                    authorization: `Bearer ${accessToken}`,
+                  },
+                }
+              );
+              isCreatingRef.current = false;
+
+              router.push(`/admin/events/${res.data.id}/details`);
+            }
+
+            }>Create an event</Button>
           </Box>
         )}
       </Container>
-      <Modal
+      {/* <Modal
         open={isModalOpen}
         onClose={closeModal}
         asForm={true}
@@ -226,32 +281,6 @@ const Events = () => {
             alignItems="center"
             flexDirection="column"
             display="flex"
-            onClick={async () => {
-              // Prevent from creating multiple events;
-              if (isCreatingRef.current) return;
-
-              isCreatingRef.current = true;
-
-              const res = await http.post(
-                '/events/',
-                {
-                  name: 'Untitled Event',
-                  start_date: new Date().toISOString().split('T')[0],
-                  end_date: new Date().toISOString().split('T')[0],
-                  location: '',
-                  desc: '',
-                  status: 'Draft',
-                },
-                {
-                  headers: {
-                    authorization: `Bearer ${accessToken}`,
-                  },
-                }
-              );
-              isCreatingRef.current = false;
-
-              router.push(`/admin/events/${res.data.id}/details`);
-            }}
           >
             <Box
               sx={{
@@ -266,7 +295,7 @@ const Events = () => {
             <p>New Event</p>
           </Grid>
         </Grid>
-      </Modal>
+      </Modal> */}
     </AdminLayout>
   );
 };

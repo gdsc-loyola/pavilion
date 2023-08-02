@@ -76,16 +76,16 @@ const Sidebar = () => {
             href={`/admin/events/${eventId}/details`}
             label="Event Details"
           />
-          {!details.is_past_event && (
+          {/* {!details.is_past_event && (
             <SidebarLink
               active={path.includes('/registration')}
               href={`/admin/events/${eventId}/registration`}
               label="Registration"
             />
-          )}
+          )} */}
         </SidebarSection>
 
-        {!details.is_past_event && (
+        {/* {!details.is_past_event && (
           <SidebarSection name="TRACK">
             <SidebarLink
               active={path.includes('/responses')}
@@ -93,7 +93,7 @@ const Sidebar = () => {
               label="Responses"
             />
           </SidebarSection>
-        )}
+        )} */}
       </div>
     </Container>
   );
