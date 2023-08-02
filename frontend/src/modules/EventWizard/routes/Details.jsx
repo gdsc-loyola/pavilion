@@ -23,6 +23,8 @@ import { safeFormDataAppend } from '$lib/utils/safeFormDataAppend';
 import { isFile } from '../utils/isFile';
 import Header from '../components/Header';
 import { useEvent } from '../utils/useEvent';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const Label = styled('label')({
   display: 'flex',
@@ -174,6 +176,14 @@ const Details = (props) => {
   const handleResponsesSheetChange = (e) => {
     setDetails({
       responsesSheet: e,
+    });
+  };
+
+  const [checked, setChecked] = React.useState(false);
+
+  const handleStatusChange = (e) => {
+    setDetails({
+      is_past_event: e,
     });
   };
 
@@ -483,6 +493,21 @@ const Details = (props) => {
             </FormHelperText>
           </>
         ) : null}
+      </Box>
+      <Box>
+        <FormControlLabel
+            control={
+              <Checkbox
+                checked={setChecked}
+                onChange={(e) => {
+                  handleStatusChange(e.target.checked)
+                  console.log(e);
+                }}
+                color="primary"
+              />
+            }
+            label="Is Past Event"
+        />
       </Box>
       <Box
         sx={{
