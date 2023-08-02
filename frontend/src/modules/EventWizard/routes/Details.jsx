@@ -114,16 +114,49 @@ const Details = (props) => {
     });
   };
 
+  function startdateChecker(date) {
+    const last = new Date(date).toLocaleDateString();
+    let cons = '';
+    for (let i = last.length - 1, j = 0; j < 4; i--, j++) {
+      cons += last[i];
+    }
+    console.log(!isNaN(date.getTime()));
+    if (cons === 'etaD' || cons.includes('/') || date === 'Invalid Date') {
+      console.log(`bad dates`);
+      setDetails({
+        startDate: 'Invalid Date',
+      });
+    } else {
+      setDetails({
+        startDate: date,
+      });
+    }
+  }
+
+  function enddateChecker(date) {
+    const last = new Date(date).toLocaleDateString();
+    let cons = '';
+    for (let i = last.length - 1, j = 0; j < 4; i--, j++) {
+      cons += last[i];
+    }
+    console.log(date);
+    if (cons === 'etaD' || cons.includes('/') || date === 'Invalid Date') {
+      setDetails({
+        endDate: 'Invalid Date',
+      });
+    } else {
+      setDetails({
+        endDate: date,
+      });
+    }
+  }
+
   const handleStartDateChange = (e) => {
-    setDetails({
-      startDate: e,
-    });
+    startdateChecker(e);
   };
 
   const handleEndDateChange = (e) => {
-    setDetails({
-      endDate: e,
-    });
+    enddateChecker(e);
   };
 
   const handleLocationChange = (e) => {
@@ -165,34 +198,34 @@ const Details = (props) => {
 
   useEvent(eventId);
 
-  const pushDetails = async () => {
-    const fd = new FormData();
-    fd.append('desc', details.description);
-    safeFormDataAppend(fd, 'cover_photo', details.coverphoto, isFile);
-    safeFormDataAppend(fd, 'event_photo1', details.eventphoto1, isFile);
-    safeFormDataAppend(fd, 'event_photo2', details.eventphoto2, isFile);
-    safeFormDataAppend(fd, 'event_photo3', details.eventphoto3, isFile);
-    safeFormDataAppend(fd, 'event_photo4', details.eventphoto4, isFile);
+  // const pushDetails = async () => {
+  //   const fd = new FormData();
+  //   fd.append('desc', details.description);
+  //   safeFormDataAppend(fd, 'cover_photo', details.coverphoto, isFile);
+  //   safeFormDataAppend(fd, 'event_photo1', details.eventphoto1, isFile);
+  //   safeFormDataAppend(fd, 'event_photo2', details.eventphoto2, isFile);
+  //   safeFormDataAppend(fd, 'event_photo3', details.eventphoto3, isFile);
+  //   safeFormDataAppend(fd, 'event_photo4', details.eventphoto4, isFile);
 
-    fd.append('location', details.location);
-    fd.append('name', details.name);
-    fd.append('start_date', details.startDate);
-    fd.append('end_date', details.endDate);
-    var utc = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
-    fd.append('last_updated', utc);
-    fd.append('status', 'Draft');
-    fd.append('accepting_responses', details.acceptingResponses);
-    fd.append('is_past_event', details.is_past_event);
-    fd.append('old_respondents', details.responsesSheet);
-    fd.append('form_description', details.formDescription);
-    await http.put(`events/${eventId}/`, fd, {
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    router.push('registration');
-  };
+  //   fd.append('location', details.location);
+  //   fd.append('name', details.name);
+  //   fd.append('start_date', details.startDate);
+  //   fd.append('end_date', details.endDate);
+  //   var utc = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+  //   fd.append('last_updated', utc);
+  //   fd.append('status', 'Draft');
+  //   fd.append('accepting_responses', details.acceptingResponses);
+  //   fd.append('is_past_event', details.is_past_event);
+  //   fd.append('old_respondents', details.responsesSheet);
+  //   fd.append('form_description', details.formDescription);
+  //   await http.put(`events/${eventId}/`, fd, {
+  //     headers: {
+  //       authorization: `Bearer ${accessToken}`,
+  //       'Content-Type': 'multipart/form-data',
+  //     },
+  //   });
+  //   router.push('registration');
+  // };
   return (
     <Layout>
       <Header pastevent={details.is_past_event} />
@@ -272,9 +305,16 @@ const Details = (props) => {
               }}
               renderInput={(params) => (
                 <TextField
+                  error={details.startDate === 'Invalid Date' || details.startDate === 'etaD'}
+                  helperText={
+                    details.startDate === 'Invalid Date' || details.startDate === 'etaD'
+                      ? 'Invalid Date'
+                      : ''
+                  }
                   fullWidth
                   size="normal"
                   variant="outlined"
+                  id="standard-error-helper-text"
                   sx={{
                     fontWeight: typography.fontWeight.reg,
                     color: colors.gray[400],
@@ -306,6 +346,12 @@ const Details = (props) => {
               }}
               renderInput={(params) => (
                 <TextField
+                  error={details.endDate === 'Invalid Date' || details.endDate === 'etaD'}
+                  helperText={
+                    details.endDate === 'Invalid Date' || details.endDate === 'etaD'
+                      ? 'Invalid Date'
+                      : ''
+                  }
                   fullWidth
                   size="normal"
                   variant="outlined"
@@ -326,9 +372,10 @@ const Details = (props) => {
           fullWidth
           size="normal"
           variant="outlined"
-          label="Where was the event held?"
+          label="Please provide an event location"
           value={details.location}
-          helperText={`${details.location ? details.location.length : '0'}/100`}
+          error={details.location.trim() === ''}
+          helperText={`${details.location.trim().length !== 0 ? details.location.length : '0'}/100`}
           onChange={(e) => {
             handleLocationChange(e.target.value);
           }}
@@ -356,7 +403,10 @@ const Details = (props) => {
           variant="outlined"
           label="Describe this event!"
           value={details.description}
-          helperText={`${details.description ? details.description.length : '0'}/500`}
+          error={details.description.trim().length === 0}
+          helperText={`${
+            details.description.trim().length === 0 ? details.description.length : '0'
+          }/500`}
           onChange={(e) => {
             handleDescriptionChange(e.target.value);
           }}

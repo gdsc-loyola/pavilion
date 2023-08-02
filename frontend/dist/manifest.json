@@ -3,9 +3,7 @@
     "file": "assets/index.17d6b0eb.js",
     "src": "index.html",
     "isEntry": true,
-    "css": [
-      "assets/index.192523e9.css"
-    ],
+    "css": ["assets/index.192523e9.css"],
     "assets": [
       "assets/pav_logo.78537690.svg",
       "assets/dashboard_empty.77c5f37b.svg",
