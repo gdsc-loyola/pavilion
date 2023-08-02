@@ -273,7 +273,7 @@ const Events = () => {
             }}
           ></Box>
           <p>Past Event</p>
-        </Grid> */}
+        </Grid> 
           <Grid
             item
             xs={6}
