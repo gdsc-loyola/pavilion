@@ -171,11 +171,11 @@ const Details = (props) => {
     });
   };
 
-  const handleResponsesSheetChange = (e) => {
-    setDetails({
-      responsesSheet: e,
-    });
-  };
+  // const handleResponsesSheetChange = (e) => {
+  //   setDetails({
+  //     responsesSheet: e,
+  //   });
+  // };
 
   const isURLHttps = (url) => {
     if (!url) return null;
@@ -425,7 +425,7 @@ const Details = (props) => {
             },
           }}
         />
-        {details.is_past_event ? (
+        {/* {details.is_past_event ? (
           <>
             <TextField
               fullWidth
@@ -482,7 +482,7 @@ const Details = (props) => {
               </Typography>
             </FormHelperText>
           </>
-        ) : null}
+        ) : null} */}
       </Box>
       <Box
         sx={{
