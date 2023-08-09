@@ -1,7 +1,7 @@
 import { useBoolean } from '$lib/utils/useBoolean';
 import { useDeleteEvent } from '../utils/useDeleteEvent';
 import { Box, Button } from '@mui/material';
-import * as mui from '@mui/material'
+import * as mui from '@mui/material';
 import React, { useState } from 'react';
 import Modal from '../components/Modal';
 import { colors, typography } from '$lib/theme';
@@ -44,8 +44,8 @@ const Header = (props) => {
   );
   return (
     <>
-    {/* Error Message using MUI Modals */}
-    
+      {/* Error Message using MUI Modals */}
+
       {/* <mui.Modal
       open={open}
       onClose={() => setOpen(false)}
@@ -140,34 +140,25 @@ const Header = (props) => {
               deleteEvent();
             } else {
               saveAsDraft().then((e) => {
-                console.log(e)
+                console.log(e);
                 if (e === undefined) {
                   return router.push('/admin/events');
-                }
-                else if (e.result === 'ERROR') {
+                } else if (e.result === 'ERROR') {
                   closeModal();
 
-                  if (e.error === 'name'){
-                    setError('You must provide an Event Name')
-                  }
-
-                  else if (e.error === 'desc'){
-                    setError('You must provide an Event Description')
-                  }
-
-                  else if (e.error === 'start_date'){
-                    setError('You must provide a valid Start Date for the Event')
-                  }
-
-                  else if (e.error === 'end_date'){
-                    setError('You must provide a valid End Date for the Event')
-                  }
-
-                  else if (e.error === 'location'){
-                    setError('You must provide an Event Location')
+                  if (e.error === 'name') {
+                    setError('You must provide an Event Name');
+                  } else if (e.error === 'desc') {
+                    setError('You must provide an Event Description');
+                  } else if (e.error === 'start_date') {
+                    setError('You must provide a valid Start Date for the Event');
+                  } else if (e.error === 'end_date') {
+                    setError('You must provide a valid End Date for the Event');
+                  } else if (e.error === 'location') {
+                    setError('You must provide an Event Location');
                   }
                   setOpen(true);
-                } 
+                }
               });
             }
           },

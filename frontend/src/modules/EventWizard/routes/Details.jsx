@@ -290,7 +290,8 @@ const Details = (props) => {
                     or
                   </Typography>{' '}
                   browse through your files
-                  <Typography display="inline" sx={{ color: colors.gray[700] }}>{' '}
+                  <Typography display="inline" sx={{ color: colors.gray[700] }}>
+                    {' '}
                     to publish this event.
                   </Typography>{' '}
                 </Typography>
@@ -499,18 +500,18 @@ const Details = (props) => {
       </Box>
       <Box>
         <FormControlLabel
-          style={{ display: 'none'}}
-            control={
-              <Checkbox
-                checked={setChecked}
-                onChange={(e) => {
-                  handleStatusChange(e.target.checked)
-                  console.log(e);
-                }}
-                color="primary"
-              />
-            }
-            label="Is Past Event"
+          style={{ display: 'none' }}
+          control={
+            <Checkbox
+              checked={setChecked}
+              onChange={(e) => {
+                handleStatusChange(e.target.checked);
+                console.log(e);
+              }}
+              color="primary"
+            />
+          }
+          label="Is Past Event"
         />
       </Box>
       <Box

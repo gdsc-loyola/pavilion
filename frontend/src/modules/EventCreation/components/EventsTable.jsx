@@ -189,7 +189,7 @@ const EventsTable = ({ data }) => {
           <>
             <Box>
               <Checkbox
-                key='a'
+                key="a"
                 sx={{ pr: 2 }}
                 checked={selectedEventsCount >= rows.length}
                 onChange={(e) => {
@@ -205,10 +205,10 @@ const EventsTable = ({ data }) => {
               />
               {selectedEventsCount} of {rows.length} events
             </Box>
-            <Divider orientation='vertical' variant='middle' flexItem />
+            <Divider orientation="vertical" variant="middle" flexItem />
             <Button
-              size='small'
-              variant='blank'
+              size="small"
+              variant="blank"
               sx={{ display: 'flex', alignItems: 'center' }}
               onClick={openModal}
             >
@@ -222,7 +222,7 @@ const EventsTable = ({ data }) => {
           <>
             <Box>
               <Checkbox
-                key='b'
+                key="b"
                 onChange={(e) => {
                   if (e.currentTarget.checked) {
                     setSelectedEvents(
@@ -236,11 +236,11 @@ const EventsTable = ({ data }) => {
               />
               Select All Events
             </Box>
-            <Divider orientation='vertical' variant='middle' flexItem />
+            <Divider orientation="vertical" variant="middle" flexItem />
           </>
         )}
       </Box>
-      <StyledTable sx={{ minWidth: 900 }} aria-label='simple table' padding='normal'>
+      <StyledTable sx={{ minWidth: 900 }} aria-label="simple table" padding="normal">
         <TableHead>
           <TableRow
             sx={({ colors }) => ({
@@ -251,10 +251,10 @@ const EventsTable = ({ data }) => {
               },
             })}
           >
-            <TableCell align='center' padding='checkbox'></TableCell>
+            <TableCell align="center" padding="checkbox"></TableCell>
             {headCells.map((headCell) => {
               return (
-                <TableCell align='left' key={headCell.id} padding={headCell.padding || 'normal'}>
+                <TableCell align="left" key={headCell.id} padding={headCell.padding || 'normal'}>
                   <TableSortLabel
                     direction={orderBy === headCell.id ? order : 'asc'}
                     onClick={createSortHandler(headCell.id)}
@@ -265,7 +265,7 @@ const EventsTable = ({ data }) => {
                 </TableCell>
               );
             })}
-            <TableCell align='center' padding='checkbox'></TableCell>
+            <TableCell align="center" padding="checkbox"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -292,7 +292,7 @@ const EventsTable = ({ data }) => {
             }}
           >
             <EmptyState style={{ margin: '0 auto' }} width={320} />
-            <Typography variant='h6' align='center'>
+            <Typography variant="h6" align="center">
               We can't seem to find what you were looking for...
             </Typography>
           </Box>
@@ -305,7 +305,7 @@ const EventsTable = ({ data }) => {
           isDanger
           withTextField={false}
           title={`Delete ${selectedEventsCount} Event${selectedEventsCount > 1 ? 's' : ''}`}
-          subtitle='This will delete all the information you’ve added so far.'
+          subtitle="This will delete all the information you’ve added so far."
           leftButtonProps={{
             label: 'Never Mind',
             onClick: closeModal,

@@ -188,11 +188,9 @@ const Settings = () => {
         authorization: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
       },
-    })
+    });
 
-    history.push('/admin')
-
-    
+    history.push('/admin');
   };
   return (
     <AdminLayout>
@@ -315,11 +313,11 @@ const Settings = () => {
             handleWebsiteChange(e.target.value);
           }}
         />
-          <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '64px' }}>
-            <Button size="small" sx={{ marginRight: '80px' }} onClick={saveChanges}>
-              Save Changes
-            </Button>
-          </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '64px' }}>
+          <Button size="small" sx={{ marginRight: '80px' }} onClick={saveChanges}>
+            Save Changes
+          </Button>
+        </Box>
       </div>
     </AdminLayout>
   );

@@ -9,7 +9,7 @@ import {
   CardHeader,
   Avatar,
   createTheme,
-  styled
+  styled,
 } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 
@@ -39,7 +39,6 @@ const getStatus = (startDate, endDate, status) => {
     return 'Completed';
   }
 };
-
 
 const EventCard = (props) => {
   const theme = createTheme({
@@ -71,18 +70,21 @@ const EventCard = (props) => {
       background: theme.colors.yellow[200],
       color: theme.colors.yellow[500],
     },
-  
-    '.status--ongoing': { //used to be yellow
+
+    '.status--ongoing': {
+      //used to be yellow
       background: theme.colors.green[200],
       color: theme.colors.green[500],
     },
-    '.status--completed': { //used to be green
+    '.status--completed': {
+      //used to be green
       background: theme.colors.blue[200],
       color: theme.colors.blue[500],
     },
   }));
 
-  const { imgSrc, alt, eventName, startDate, endDate, logoSrc, logoName, eventId, eventStatus } = props;
+  const { imgSrc, alt, eventName, startDate, endDate, logoSrc, logoName, eventId, eventStatus } =
+    props;
   const history = useHistory();
 
   let formattedStartDate = new Date(startDate).toDateString();
@@ -139,11 +141,12 @@ const EventCard = (props) => {
           >
             {formattedStartDate} - {formattedEndDate}
           </Typography>
-          
         </CardContent>
         <CardContent>
           <StyledTag>
-            <span className={`status status--${formattedStatus.toLowerCase()}`}>{formattedStatus}</span>
+            <span className={`status status--${formattedStatus.toLowerCase()}`}>
+              {formattedStatus}
+            </span>
           </StyledTag>
         </CardContent>
         <CardHeader

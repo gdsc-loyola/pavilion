@@ -75,11 +75,11 @@ export const useSaveAsDraft = (/*params = {}*/) => {
       })
       .catch((e) => {
         console.log(e.path);
-        return {result: 'ERROR', error: e.path};
+        return { result: 'ERROR', error: e.path };
       });
 
     if (result.result === 'ERROR') {
-      return {result: 'ERROR', error: result.error};
+      return { result: 'ERROR', error: result.error };
     } else {
       await http
         .put(`events/${details.id}/`, fd, {

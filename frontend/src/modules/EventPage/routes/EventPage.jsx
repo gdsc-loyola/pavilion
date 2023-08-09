@@ -59,7 +59,7 @@ const EventPage = (props) => {
         ].filter((x) => !!x),
         // The filter removes potential null values
         isAcceptingResponses: eventRes.data.accepting_responses,
-        formLink: eventRes.data.old_respondents
+        formLink: eventRes.data.old_respondents,
       });
 
       OrgsDataService.get(shortName).then((res) => {

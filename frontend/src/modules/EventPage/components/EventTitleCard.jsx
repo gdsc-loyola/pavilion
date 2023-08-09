@@ -11,7 +11,7 @@ const EventTitleCard = (props) => {
     children,
     isAcceptingResponses,
     startRegistering,
-    formLink
+    formLink,
   } = props;
 
   let formattedStartDate = new Date(startDate).toDateString();
