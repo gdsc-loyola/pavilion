@@ -7,8 +7,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import OrgsDataService from '../../services/orgs.service';
-import { styled, Button, Alert, Box } from '@mui/material';
-import { colors } from '$lib/theme';
+import { Typography, styled, Button, Alert, Box } from '@mui/material';
+import { colors, typography } from '$lib/theme';
 import AdminLayout from '$components/Admin/AdminLayout';
 import { useAdminUser } from '$lib/context/AdminContext';
 import http from '$lib/http';
@@ -31,6 +31,8 @@ const StyledControl = styled(FormControl)({
 });
 
 const Settings = () => {
+  const [banner, setBanner] = React.useState(false);
+
   const [orgForm, setOrgForm] = React.useState({
     name: '',
     short_name: '',
@@ -186,10 +188,51 @@ const Settings = () => {
         'Content-Type': 'multipart/form-data',
       },
     });
+    window.scrollTo({
+      behavior: 'smooth',
+      top: 0,
+    });
+    setBanner(true);
+    router.push('');
   };
   return (
     <AdminLayout>
+      {banner ? ( <Box
+          sx={{
+            marginBottom: '40px',
+            padding: '24px 32px',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: colors.green[100],
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+            }}
+          >
+            <svg style={{ marginRight: '14.67px' }} width="28" height="28">
+              <path
+                d="M14 .667C6.64.667.665 6.64.665 14s5.973 13.333 13.333 13.333S27.333 21.36 27.333 14 21.359.667 13.999.667Zm1.333 20h-2.667v-8h2.667v8Zm0-10.667h-2.667V7.333h2.667V10Z"
+                fill={colors.green[300]}
+              />
+            </svg>
+            <Typography
+              color={colors.green[300]}
+              fontWeight={typography.fontWeight.reg}
+              fontSize={typography.fontSize.base}
+            >
+              Org Information successfully updated!
+            </Typography>
+          </Box>
+        </Box> ) : ( <> </>)}
       <div className="settings">
+      
         <h1 className="title">Org Information</h1>
         <FormField
           label={'Organization Name*'}
@@ -301,7 +344,7 @@ const Settings = () => {
         <FormField
           margin="dense"
           variant={'outlined'}
-          defaultValue={orgForm.website}
+          value={orgForm.website}
           style={{ width: '464px', marginBottom: '44px' }}
           onChange={(e) => {
             handleWebsiteChange(e.target.value);
