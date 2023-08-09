@@ -13,6 +13,8 @@ import AdminLayout from '$components/Admin/AdminLayout';
 import { useAdminUser } from '$lib/context/AdminContext';
 import http from '$lib/http';
 import { kebabCase } from '$lib/utils/kebabCase';
+import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const FormField = styled(TextField)({
   '& .MuiOutlinedInput-root': {
@@ -31,6 +33,7 @@ const StyledControl = styled(FormControl)({
 });
 
 const Settings = () => {
+  let history = useHistory();
   const [orgForm, setOrgForm] = React.useState({
     name: '',
     short_name: '',
@@ -185,7 +188,11 @@ const Settings = () => {
         authorization: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
       },
-    });
+    })
+
+    history.push('/admin')
+
+    
   };
   return (
     <AdminLayout>
@@ -302,16 +309,17 @@ const Settings = () => {
           margin="dense"
           variant={'outlined'}
           defaultValue={orgForm.website}
+          value={orgForm.website}
           style={{ width: '464px', marginBottom: '44px' }}
           onChange={(e) => {
             handleWebsiteChange(e.target.value);
           }}
         />
-        <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '64px' }}>
-          <Button size="small" sx={{ marginRight: '80px' }} onClick={saveChanges}>
-            Save Changes
-          </Button>
-        </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '64px' }}>
+            <Button size="small" sx={{ marginRight: '80px' }} onClick={saveChanges}>
+              Save Changes
+            </Button>
+          </Box>
       </div>
     </AdminLayout>
   );

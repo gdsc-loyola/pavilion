@@ -289,7 +289,10 @@ const Details = (props) => {
                   <Typography display="inline" sx={{ color: colors.gray[700] }}>
                     or
                   </Typography>{' '}
-                  browse through your files.
+                  browse through your files
+                  <Typography display="inline" sx={{ color: colors.gray[700] }}>{' '}
+                    to publish this event.
+                  </Typography>{' '}
                 </Typography>
               </p>
             )}
