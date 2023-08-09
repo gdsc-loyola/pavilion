@@ -173,11 +173,11 @@ const Details = (props) => {
     });
   };
 
-  // const handleResponsesSheetChange = (e) => {
-  //   setDetails({
-  //     responsesSheet: e,
-  //   });
-  // };
+  const handleResponsesSheetChange = (e) => {
+    setDetails({
+      responsesSheet: e,
+    });
+  };
 
   const [checked, setChecked] = React.useState(false);
 
@@ -435,14 +435,14 @@ const Details = (props) => {
             },
           }}
         />
-        {/* {details.is_past_event ? (
+        {details.is_past_event ? (
           <>
             <TextField
               fullWidth
               margin="normal"
               size="normal"
               variant="outlined"
-              label="Link to responses"
+              label="Link to Registration Form"
               value={details.responsesSheet}
               onChange={(e) => {
                 handleResponsesSheetChange(e.target.value);
@@ -477,7 +477,7 @@ const Details = (props) => {
                     fill="#498AF4"
                   />
                 </svg>
-                Sheet of registration responses for your event, if any.
+                Registration form for your event, if any.
               </Typography>
               <Typography
                 display="inline-block"
@@ -492,10 +492,11 @@ const Details = (props) => {
               </Typography>
             </FormHelperText>
           </>
-        ) : null} */}
+        ) : null}
       </Box>
       <Box>
         <FormControlLabel
+          style={{ display: 'none'}}
             control={
               <Checkbox
                 checked={setChecked}
