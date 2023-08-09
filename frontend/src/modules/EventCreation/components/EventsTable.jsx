@@ -297,7 +297,7 @@ const EventsTable = ({ data }) => {
             </Typography>
           </Box>
         ) : (
-          <p>Error!</p>
+          <p></p>
         )}
         <Modal
           open={isModalOpen}
