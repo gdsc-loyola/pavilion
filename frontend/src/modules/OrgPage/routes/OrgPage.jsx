@@ -167,7 +167,7 @@ const OrgPage = (props) => {
             fontWeight={typography.fontWeight.bold}
             marginBottom="24px"
           >
-            Past Events
+            Events
           </Typography>
           <Grid container spacing={2} columns={3} marginBottom="120px">
             {orgForm.events
