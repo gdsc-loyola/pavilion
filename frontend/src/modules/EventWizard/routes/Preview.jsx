@@ -373,7 +373,7 @@ const Preview = () => {
           warning={false}
           open={isModalOpen}
           onClose={closeModal}
-          title={publish ? 'Publish this to your Pavillion Page?' : 'Close and save as draft'}
+          title={publish ? 'Publish this to your Pavilion Page?' : 'Close and save as draft'}
           subtitle={
             publish
               ? 'You can still edit event details, but can no longer edit registration forms after publishing and receiving responses.'
@@ -388,7 +388,7 @@ const Preview = () => {
             },
           }}
           rightButtonProps={{
-            label: publish ? 'Publish to Pavillion' : 'Save as draft',
+            label: publish ? 'Publish to Pavilion' : 'Save as draft',
             onClick: () => {
               if (publish) {
                 publishEvent();

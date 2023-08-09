@@ -288,6 +288,7 @@ const Landing = () => {
                     endDate={event.end_date}
                     logoSrc={org ? org.logo : ''}
                     logoName={org ? org.short_name : ''}
+                    eventStatus={event.status}
                   />
                 </Grid>
               );

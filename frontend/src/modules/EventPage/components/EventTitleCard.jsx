@@ -11,6 +11,7 @@ const EventTitleCard = (props) => {
     children,
     isAcceptingResponses,
     startRegistering,
+    formLink
   } = props;
 
   let formattedStartDate = new Date(startDate).toDateString();
@@ -74,13 +75,15 @@ const EventTitleCard = (props) => {
             {orgName}
           </Typography>
         </Box>
-        {isAcceptingResponses && (
+        {formLink != '' && (
           <Button
             sx={{
               padding: '8px 24px',
               marginTop: '24px',
             }}
-            onClick={startRegistering}
+            // onClick={startRegistering}
+            target="_blank"
+            href={formLink}
           >
             Register
           </Button>

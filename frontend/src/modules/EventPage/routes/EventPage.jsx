@@ -28,6 +28,7 @@ const EventPage = (props) => {
     featuredEvents: [],
     eventPhotos: [],
     isAcceptingResponses: false,
+    formLink: '',
   });
 
   const [otherEvents, setOtherEvents] = useState([]);
@@ -58,6 +59,7 @@ const EventPage = (props) => {
         ].filter((x) => !!x),
         // The filter removes potential null values
         isAcceptingResponses: eventRes.data.accepting_responses,
+        formLink: eventRes.data.old_respondents
       });
 
       OrgsDataService.get(shortName).then((res) => {
@@ -161,6 +163,7 @@ const EventPage = (props) => {
               orgName={orgForm.orgName}
               isAcceptingResponses={eventForm.isAcceptingResponses}
               startRegistering={startRegistering}
+              formLink={eventForm.formLink}
             />
             <Typography
               sx={{ marginTop: '40px' }}
