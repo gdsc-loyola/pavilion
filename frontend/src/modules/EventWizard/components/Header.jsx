@@ -10,6 +10,7 @@ import TopBar from './TopBar';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import { useSaveAsDraft } from '../utils/useSaveAsDraft';
 import { hasDetailsExceptEventPhotos } from '../utils/hasProperties';
+import Banner from './Banner';
 
 /**
  *
@@ -43,7 +44,9 @@ const Header = (props) => {
   );
   return (
     <>
-      <mui.Modal
+    {/* Error Message using MUI Modals */}
+    
+      {/* <mui.Modal
       open={open}
       onClose={() => setOpen(false)}
       >
@@ -51,7 +54,9 @@ const Header = (props) => {
           {errorname}
         </Box>
 
-      </mui.Modal>
+      </mui.Modal> */}
+
+      <Banner show={open} warning={true} label={errorname} />
 
       <TopBar sidebar>
         <Box
