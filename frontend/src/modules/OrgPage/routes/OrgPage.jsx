@@ -183,6 +183,7 @@ const OrgPage = (props) => {
                     endDate={event.end_date}
                     logoSrc={orgForm.logo}
                     logoName={orgForm.short_name}
+                    eventStatus={event.status}
                   />
                 </Grid>
               ))}

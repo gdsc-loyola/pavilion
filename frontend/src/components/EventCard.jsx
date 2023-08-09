@@ -9,6 +9,7 @@ import {
   CardHeader,
   Avatar,
   createTheme,
+  styled
 } from '@mui/material';
 import { colors, typography } from '$lib/theme';
 
@@ -17,6 +18,29 @@ import { colors, typography } from '$lib/theme';
  * @param {Omit<ControllerProps, 'render'> & React.ComponentPropsWithoutRef<typeof TextField>} props
  * @returns {React.Component}
  */
+
+const getStatus = (startDate, endDate, status) => {
+  const now = new Date().getTime();
+  const end = new Date(endDate).getTime();
+  const start = new Date(startDate).getTime();
+
+  if (status === 'Draft') {
+    return 'Draft';
+  }
+  if (start > now) {
+    return 'Upcoming';
+  }
+
+  if (start <= now && end >= now) {
+    return 'Ongoing';
+  }
+
+  if (end < now) {
+    return 'Completed';
+  }
+};
+
+
 const EventCard = (props) => {
   const theme = createTheme({
     breakpoints: {
@@ -29,7 +53,36 @@ const EventCard = (props) => {
       },
     },
   });
-  const { imgSrc, alt, eventName, startDate, endDate, logoSrc, logoName, eventId } = props;
+
+  const StyledTag = styled('span')(({ theme }) => ({
+    '.status': {
+      padding: '4px 8px',
+      fontFamily: 'Rubik',
+      fontSize: '12px',
+      textTransform: 'uppercase',
+      letterSpacing: '0.1em',
+      textAlign: 'center',
+    },
+    '.status--draft': {
+      background: theme.colors.gray[200],
+      color: theme.colors.gray[500],
+    },
+    '.status--upcoming': {
+      background: theme.colors.yellow[200],
+      color: theme.colors.yellow[500],
+    },
+  
+    '.status--ongoing': { //used to be yellow
+      background: theme.colors.green[200],
+      color: theme.colors.green[500],
+    },
+    '.status--completed': { //used to be green
+      background: theme.colors.blue[200],
+      color: theme.colors.blue[500],
+    },
+  }));
+
+  const { imgSrc, alt, eventName, startDate, endDate, logoSrc, logoName, eventId, eventStatus } = props;
   const history = useHistory();
 
   let formattedStartDate = new Date(startDate).toDateString();
@@ -47,13 +100,14 @@ const EventCard = (props) => {
   formattedEndDate =
     formattedEndDateArray[0] + ' ' + formattedEndDateArray[1] + ', ' + formattedEndDateArray[2];
 
+  let formattedStatus = getStatus(startDate, endDate, eventStatus);
   return (
     <Card sx={{ width: '100%', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.08)' }}>
       <CardActionArea
         onClick={() => history.push(`/organizations/${logoName.toLowerCase()}/${eventId}`)}
       >
         <CardMedia component="img" height="92" image={imgSrc} alt={alt} />
-        <CardContent sx={{ paddingBottom: '0', marginBottom: '16px' }}>
+        <CardContent sx={{ paddingBottom: '0', marginBottom: '0' }}>
           <Typography
             sx={{
               fontWeight: 600,
@@ -85,6 +139,12 @@ const EventCard = (props) => {
           >
             {formattedStartDate} - {formattedEndDate}
           </Typography>
+          
+        </CardContent>
+        <CardContent>
+          <StyledTag>
+            <span className={`status status--${formattedStatus.toLowerCase()}`}>{formattedStatus}</span>
+          </StyledTag>
         </CardContent>
         <CardHeader
           sx={{ paddingTop: '0' }}
