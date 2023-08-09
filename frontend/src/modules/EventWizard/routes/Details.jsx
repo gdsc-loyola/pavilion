@@ -173,11 +173,11 @@ const Details = (props) => {
     });
   };
 
-  const handleResponsesSheetChange = (e) => {
-    setDetails({
-      responsesSheet: e,
-    });
-  };
+  // const handleResponsesSheetChange = (e) => {
+  //   setDetails({
+  //     responsesSheet: e,
+  //   });
+  // };
 
   const [checked, setChecked] = React.useState(false);
 
@@ -435,7 +435,7 @@ const Details = (props) => {
             },
           }}
         />
-        {details.is_past_event ? (
+        {/* {details.is_past_event ? (
           <>
             <TextField
               fullWidth
@@ -492,7 +492,7 @@ const Details = (props) => {
               </Typography>
             </FormHelperText>
           </>
-        ) : null}
+        ) : null} */}
       </Box>
       <Box>
         <FormControlLabel

@@ -74,12 +74,12 @@ export const useSaveAsDraft = (/*params = {}*/) => {
         end_date: fd.get('end_date'),
       })
       .catch((e) => {
-        console.log(e);
-        return 'ERROR';
+        console.log(e.path);
+        return {result: 'ERROR', error: e.path};
       });
 
-    if (result === 'ERROR') {
-      return 'ERROR';
+    if (result.result === 'ERROR') {
+      return {result: 'ERROR', error: result.error};
     } else {
       await http
         .put(`events/${details.id}/`, fd, {

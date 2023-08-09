@@ -93,7 +93,7 @@ const OrgPage = (props) => {
               Back to organizations
             </Typography>
           </a>
-          {openForSignUps ? (
+          {/* {openForSignUps ? (
             <Box
               sx={{
                 marginBottom: '40px',
@@ -140,7 +140,7 @@ const OrgPage = (props) => {
             </Box>
           ) : (
             <></>
-          )}
+          )} */}
           <OrgTitleCard
             orgBody={orgForm.orgBody}
             logoSrc={orgForm.logo}
