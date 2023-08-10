@@ -289,7 +289,11 @@ const Details = (props) => {
                   <Typography display="inline" sx={{ color: colors.gray[700] }}>
                     or
                   </Typography>{' '}
-                  browse through your files.
+                  browse through your files
+                  <Typography display="inline" sx={{ color: colors.gray[700] }}>
+                    {' '}
+                    to publish this event.
+                  </Typography>{' '}
                 </Typography>
               </p>
             )}
@@ -440,7 +444,7 @@ const Details = (props) => {
               margin="normal"
               size="normal"
               variant="outlined"
-              label="Link to responses"
+              label="Link to Registration Form"
               value={details.responsesSheet}
               onChange={(e) => {
                 handleResponsesSheetChange(e.target.value);
@@ -475,7 +479,7 @@ const Details = (props) => {
                     fill="#498AF4"
                   />
                 </svg>
-                Sheet of registration responses for your event, if any.
+                Registration form for your event, if any.
               </Typography>
               <Typography
                 display="inline-block"
@@ -494,17 +498,18 @@ const Details = (props) => {
       </Box>
       <Box>
         <FormControlLabel
-            control={
-              <Checkbox
-                checked={setChecked}
-                onChange={(e) => {
-                  handleStatusChange(e.target.checked)
-                  console.log(e);
-                }}
-                color="primary"
-              />
-            }
-            label="Is Past Event"
+          style={{ display: 'none' }}
+          control={
+            <Checkbox
+              checked={setChecked}
+              onChange={(e) => {
+                handleStatusChange(e.target.checked);
+                console.log(e);
+              }}
+              color="primary"
+            />
+          }
+          label="Is Past Event"
         />
       </Box>
       <Box

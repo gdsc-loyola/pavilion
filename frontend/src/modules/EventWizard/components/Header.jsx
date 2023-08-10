@@ -1,7 +1,8 @@
 import { useBoolean } from '$lib/utils/useBoolean';
 import { useDeleteEvent } from '../utils/useDeleteEvent';
 import { Box, Button } from '@mui/material';
-import React from 'react';
+import * as mui from '@mui/material';
+import React, { useState } from 'react';
 import Modal from '../components/Modal';
 import { colors, typography } from '$lib/theme';
 import { useHistory, useParams } from 'react-router-dom';
@@ -9,6 +10,7 @@ import TopBar from './TopBar';
 import { useEventDetailsStore } from '../store/useEventDetailsStore';
 import { useSaveAsDraft } from '../utils/useSaveAsDraft';
 import { hasDetailsExceptEventPhotos } from '../utils/hasProperties';
+import Banner from './Banner';
 
 /**
  *
@@ -27,6 +29,9 @@ const Header = (props) => {
   const { value: isModalOpen, setFalse: closeModal, setTrue: openModal } = useBoolean();
   const { details } = useEventDetailsStore();
 
+  const [open, setOpen] = useState(false);
+  const [errorname, setError] = useState('');
+
   const { saveAsDraft } = useSaveAsDraft({
     pathAfterUpdate: '/admin/events/',
   });
@@ -39,6 +44,20 @@ const Header = (props) => {
   );
   return (
     <>
+      {/* Error Message using MUI Modals */}
+
+      {/* <mui.Modal
+      open={open}
+      onClose={() => setOpen(false)}
+      >
+        <Box style={{position: 'absolute', borderRadius: '9px', boxShadow: '0 0 10px #000c', minWidth: '50vw', color: 'white', textAlign: 'center', maxWidth: '50vw', backgroundColor: 'red', padding: '30px', transform: 'translate(-50%, -50%)', left: '50%', top: '50%'}}>
+          {errorname}
+        </Box>
+
+      </mui.Modal> */}
+
+      <Banner show={open} warning={true} label={errorname} />
+
       <TopBar sidebar>
         <Box
           sx={{
@@ -121,22 +140,24 @@ const Header = (props) => {
               deleteEvent();
             } else {
               saveAsDraft().then((e) => {
-                if (e === 'ERROR') {
-                  //The logic is sound, but MUI Alert cannot be displayed
-                  /*closeModal();
-                  return (
-                    <>
-                      <mui.Snackbar open={true} autoHideDuration={6000}> 
-                        <mui.Alert severity="error">
-                          <mui.AlertTitle>Error</mui.AlertTitle>
-                          This is an error alert — <strong>check it out!</strong>
-                        </mui.Alert>
-                      </mui.Snackbar>
-                    </>
-                  ) */
-                  return closeModal();
-                } else {
+                console.log(e);
+                if (e === undefined) {
                   return router.push('/admin/events');
+                } else if (e.result === 'ERROR') {
+                  closeModal();
+
+                  if (e.error === 'name') {
+                    setError('You must provide an Event Name');
+                  } else if (e.error === 'desc') {
+                    setError('You must provide an Event Description');
+                  } else if (e.error === 'start_date') {
+                    setError('You must provide a valid Start Date for the Event');
+                  } else if (e.error === 'end_date') {
+                    setError('You must provide a valid End Date for the Event');
+                  } else if (e.error === 'location') {
+                    setError('You must provide an Event Location');
+                  }
+                  setOpen(true);
                 }
               });
             }

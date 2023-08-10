@@ -13,6 +13,8 @@ import AdminLayout from '$components/Admin/AdminLayout';
 import { useAdminUser } from '$lib/context/AdminContext';
 import http from '$lib/http';
 import { kebabCase } from '$lib/utils/kebabCase';
+import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const FormField = styled(TextField)({
   '& .MuiOutlinedInput-root': {
@@ -31,7 +33,9 @@ const StyledControl = styled(FormControl)({
 });
 
 const Settings = () => {
+
   const [banner, setBanner] = React.useState(false);
+  let history = useHistory();
 
   const [orgForm, setOrgForm] = React.useState({
     name: '',
@@ -193,7 +197,7 @@ const Settings = () => {
       top: 0,
     });
     setBanner(true);
-    router.push('');
+    history.push('/admin/settings');
   };
   return (
     <AdminLayout>

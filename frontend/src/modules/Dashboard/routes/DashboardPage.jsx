@@ -45,7 +45,7 @@ const DashboardPage = () => {
           <h2>Your dashboard&apos;s coming soon 😉</h2>
           <p>
             We&apos;re still working on creating a big experience for you and your organization. For
-            now, try adding a past event to your organization&apos;s web page!
+            now, try adding an event to your organization&apos;s web page!
           </p>
           <div className="btn-container">
             <Button variant="contained" onClick={() => router.push('/admin/events')}>

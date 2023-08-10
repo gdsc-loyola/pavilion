@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
+import EmptyState from '../../../modules/OrgCatalogue/components/EmptyState';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Box, Divider, Checkbox, Button, TableSortLabel } from '@mui/material';
+import { Box, Divider, Checkbox, Button, TableSortLabel, useMediaQuery } from '@mui/material';
 import * as dayjs from 'dayjs';
 import Modal from './Modal';
 import { Delete } from '@mui/icons-material';
@@ -17,6 +18,7 @@ import { colors } from '$lib/theme';
 import http from '$lib/http';
 import { useAdminUser } from '$lib/context/AdminContext';
 import { useBoolean } from '$lib/utils/useBoolean';
+import { Typography } from '@mui/material';
 
 const StyledTable = styled(Table)(() => ({
   'td, th': {
@@ -277,6 +279,26 @@ const EventsTable = ({ data }) => {
             />
           ))}
         </TableBody>
+        {rows.length == 0 ? (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              alignItems: 'center',
+              pt: 4,
+              pl: 4,
+              pr: 4,
+            }}
+          >
+            <EmptyState style={{ margin: '0 auto' }} width={320} />
+            <Typography variant="h6" align="center">
+              We can't seem to find what you were looking for...
+            </Typography>
+          </Box>
+        ) : (
+          <p></p>
+        )}
         <Modal
           open={isModalOpen}
           onClose={closeModal}
