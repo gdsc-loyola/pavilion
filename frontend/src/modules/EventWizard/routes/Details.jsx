@@ -414,9 +414,7 @@ const Details = (props) => {
           label="Describe this event!"
           value={details.description}
           error={details.description.trim().length === 0}
-          helperText={`${
-            details.description.trim().length === 0 ? details.description.length : '0'
-          }/500`}
+          helperText={`${details.description.trim().length !== 0 ? details.description.length : '0'}/500`}
           onChange={(e) => {
             handleDescriptionChange(e.target.value);
           }}
