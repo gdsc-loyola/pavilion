@@ -54,7 +54,7 @@ const DashboardPage = () => {
 
             <Button
               variant="outlined"
-              onClick={() => router.push(`/organizations/${org.short_name}`)}
+              onClick={() => router.push(`/organizations/${org.short_name.toLowerCase()}`)}
             >
               View my webpage
             </Button>

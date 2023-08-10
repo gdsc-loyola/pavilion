@@ -34,12 +34,12 @@ const StyledTableRow = styled(MUITableRow)(({ theme }) => ({
   },
 
   '.status--ongoing': {
-    background: theme.colors.yellow[200],
-    color: theme.colors.yellow[500],
-  },
-  '.status--completed': {
     background: theme.colors.green[200],
     color: theme.colors.green[500],
+  },
+  '.status--completed': {
+    background: theme.colors.blue[200],
+    color: theme.colors.blue[500],
   },
 }));
 
