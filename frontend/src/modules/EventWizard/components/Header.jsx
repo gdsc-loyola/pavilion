@@ -105,7 +105,29 @@ const Header = (props) => {
               fontWeight: typography.fontWeight.med,
             }}
             disabled={!canPreview}
-            onClick={() => router.push('preview')}
+            onClick={() => {
+              saveAsDraft().then((e) => {
+                if (e === undefined){
+                  return router.push('preview')
+                } else if (e.result === 'ERROR') {
+                  console.log(e)
+                  if (e.error === 'name') {
+                    setError('You must provide an Event Name');
+                  } else if (e.error === 'desc') {
+                    setError('You must provide an Event Description');
+                  } else if (e.error === 'start_date') {
+                    setError('You must provide a valid Start Date for the Event');
+                  } else if (e.error === 'end_date') {
+                    setError('You must provide a valid End Date for the Event');
+                  } else if (e.error === 'location') {
+                    setError('You must provide an Event Location');
+                  }
+                  setOpen(true);
+                }
+              })
+              
+            
+            }}
             size="small"
             variant="outlined"
           >
